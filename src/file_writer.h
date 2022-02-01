@@ -4,19 +4,27 @@
 #include <cstdint>
 #include <fstream>
 
+#include "absl/status/statusor.h"
+
 namespace karu {
 namespace io {
 class FileWriter {
-public:
+ public:
   ~FileWriter() { file_.close(); }
-  [[nodiscard]] uint64_t append();
+  FileWriter(const std::string &fname, std::ofstream &&file,
+             std::uint64_t offset)
+      : file_(std::move(file)), filename_(fname), offset_(offset) {}
+  [[nodiscard]] absl::StatusOr<std::uint64_t> Append(
+      absl::Span<const std::uint64_t> src) noexcept;
+  void Sync() noexcept;
+  std::uint64_t Size() const noexcept { return offset_; }
 
-private:
+ private:
   std::ofstream file_;
   uint64_t offset_;
   std::string filename_;
 };
-} // namespace io
-} // namespace karu
+}  // namespace io
+}  // namespace karu
 
 #endif

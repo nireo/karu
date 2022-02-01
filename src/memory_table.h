@@ -1,28 +1,35 @@
 #ifndef _KARU_MEMORY_TABLE_H
 #define _KARU_MEMORY_TABLE_H
 
+#include <fstream>
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
-#include <fstream>
 
-struct MemoryEntry {
-  std::string key_, value_;
-};
+#include "absl/container/btree_map.h"
+#include "absl/status/status.h"
+#include "absl/status/statusor.h"
 
-constexpr uint64_t MAX_MEM_SIZE = 32 * 1024 * 1024; // 32 mb
+namespace karu {
+namespace memory_table {
+constexpr std::uint64_t kMaxMemSize = 8 * 1024 * 1024;  // 8 mb
 class MemoryTable {
-public:
-  MemoryTable();
-
+ public:
+  explicit MemoryTable(const std::string &dir);
   MemoryTable(const MemoryTable &) = delete;
   MemoryTable &operator=(const MemoryTable &) = delete;
+  [[nodiscard]] absl::Status Insert(const std::string &key,
+                                    const std::string &value) noexcept;
+  [[nodiscard]] absl::StatusOr<std::string> Get(
+      const std::string &key) const noexcept;
+  [[nodiscard]] absl::Status AppendToLog(const std::string &key,
+                                         const std::string &value) noexcept;
 
-private:
+ private:
   std::string log_path_;
-  std::ofstream log_file_;
-  mutable std::shared_mutex mutex_;
-  std::unordered_map<char *, MemoryEntry> mp_;
+  absl::btree_map<std::string, std::string> map_;
 };
+}  // namespace memory_table
+}  // namespace karu
 
 #endif

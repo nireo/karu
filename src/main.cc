@@ -1,6 +1,6 @@
 #include <iostream>
 
 int main() {
-    std::cout << "karu\n";
-    return 0;
+  std::cout << "karu\n";
+  return 0;
 }
