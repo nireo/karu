@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/karu.cc.o -c /home/eemil/dev/karu/src/karu.cc",
+  "file": "/home/eemil/dev/karu/src/karu.cc"
+},
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/main.cc.o -c /home/eemil/dev/karu/src/main.cc",
+  "file": "/home/eemil/dev/karu/src/main.cc"
+},
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/memory_table.cc.o -c /home/eemil/dev/karu/src/memory_table.cc",
+  "file": "/home/eemil/dev/karu/src/memory_table.cc"
+}
+]

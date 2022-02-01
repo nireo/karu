@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/karu.dir/src/karu.cc.o CMakeFiles/karu.dir/src/main.cc.o CMakeFiles/karu.dir/src/memory_table.cc.o -o karu 
