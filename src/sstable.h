@@ -1,6 +1,8 @@
 #ifndef _KARU_SSTABLE_H
 #define _KARU_SSTABLE_H
 
+#include <absl/strings/string_view.h>
+
 #include <cstddef>
 #include <string>
 
@@ -17,6 +19,9 @@ class SSTable {
 
   absl::Status InitWriterAndReader() noexcept;
   absl::Status InitOnlyReader() noexcept;
+  absl::StatusOr<std::string> Get(absl::string_view key) noexcept;
+  absl::Status BuildFromBTree(
+      const absl::btree_map<std::string, std::string>& btree) noexcept;
 
  private:
   std::string fname_;

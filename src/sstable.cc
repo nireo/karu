@@ -1,5 +1,7 @@
 #include "sstable.h"
 
+#include <absl/status/status.h>
+
 #include "file_writer.h"
 
 namespace karu {
@@ -31,6 +33,16 @@ absl::Status SSTable::InitOnlyReader() noexcept {
   reader_ = std::move(reader.value());
 
   return absl::OkStatus();
+}
+
+absl::Status SSTable::BuildFromBTree(
+    const absl::btree_map<std::string, std::string> &btree) noexcept {
+  if (write_ == nullptr) {
+    return absl::InternalError("file writen has been initialized");
+  }
+
+  for (const auto &[key, value] : btree) {
+  }
 }
 }  // namespace sstable
 }  // namespace karu
