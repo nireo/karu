@@ -2,6 +2,7 @@
 #define _KARU_MEMORY_TABLE_H
 
 #include <fstream>
+#include <memory>
 #include <shared_mutex>
 #include <string>
 #include <unordered_map>
@@ -9,6 +10,7 @@
 #include "absl/container/btree_map.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "file_writer.h"
 
 namespace karu {
 namespace memory_table {
@@ -28,6 +30,8 @@ class MemoryTable {
  private:
   std::string log_path_;
   absl::btree_map<std::string, std::string> map_;
+  std::unique_ptr<io::FileWriter> fw_;
+  absl::Mutex file_lock_;
 };
 }  // namespace memory_table
 }  // namespace karu

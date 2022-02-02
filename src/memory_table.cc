@@ -2,6 +2,8 @@
 
 #include <chrono>
 
+#include "file_writer.h"
+
 namespace karu {
 namespace memory_table {
 MemoryTable::MemoryTable(const std::string &directory) {
@@ -27,6 +29,5 @@ absl::Status MemoryTable::AppendToLog(const std::string &key,
                                       const std::string &value) noexcept {
   return absl::OkStatus();
 }
-
 }  // namespace memory_table
 }  // namespace karu
