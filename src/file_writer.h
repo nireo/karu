@@ -34,7 +34,7 @@ class FileReader {
   FileReader(const int fd) : fd_(fd) {}
   FileReader(const FileReader &) = delete;
   FileReader &operator=(const FileReader &) = delete;
-  ~FileReader() = default;
+  ~FileReader() { ::close(fd_); }
 
   [[nodiscard]] absl::StatusOr<std::uint64_t> ReadAt(
       std::uint64_t offset, absl::Span<std::uint8_t> dst) noexcept;
