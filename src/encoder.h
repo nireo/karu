@@ -6,8 +6,6 @@
 #include <cstdint>
 #include <memory>
 
-namespace karu {
-namespace encoder {
 constexpr std::uint16_t kTombstone = 0xFFFF;
 constexpr std::uint8_t kKeyByteCount = 1;
 constexpr std::uint8_t kValueByteCount = 2;
@@ -44,7 +42,5 @@ class FullEncoding {
   std::unique_ptr<std::uint8_t[]> main_data_;
   std::uint16_t RawValueLength() const noexcept;
 };
-}  // namespace encoder
-}  // namespace karu
 
 #endif

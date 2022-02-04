@@ -83,10 +83,24 @@ CMakeFiles/karu.dir/src/tests.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/karu.dir/src/tests.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/eemil/dev/karu/src/tests.cc -o CMakeFiles/karu.dir/src/tests.cc.s
 
+CMakeFiles/karu.dir/src/file_writer.cc.o: CMakeFiles/karu.dir/flags.make
+CMakeFiles/karu.dir/src/file_writer.cc.o: ../src/file_writer.cc
+CMakeFiles/karu.dir/src/file_writer.cc.o: CMakeFiles/karu.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/karu.dir/src/file_writer.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/karu.dir/src/file_writer.cc.o -MF CMakeFiles/karu.dir/src/file_writer.cc.o.d -o CMakeFiles/karu.dir/src/file_writer.cc.o -c /home/eemil/dev/karu/src/file_writer.cc
+
+CMakeFiles/karu.dir/src/file_writer.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/karu.dir/src/file_writer.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/eemil/dev/karu/src/file_writer.cc > CMakeFiles/karu.dir/src/file_writer.cc.i
+
+CMakeFiles/karu.dir/src/file_writer.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/karu.dir/src/file_writer.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/eemil/dev/karu/src/file_writer.cc -o CMakeFiles/karu.dir/src/file_writer.cc.s
+
 CMakeFiles/karu.dir/src/karu.cc.o: CMakeFiles/karu.dir/flags.make
 CMakeFiles/karu.dir/src/karu.cc.o: ../src/karu.cc
 CMakeFiles/karu.dir/src/karu.cc.o: CMakeFiles/karu.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/karu.dir/src/karu.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/karu.dir/src/karu.cc.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/karu.dir/src/karu.cc.o -MF CMakeFiles/karu.dir/src/karu.cc.o.d -o CMakeFiles/karu.dir/src/karu.cc.o -c /home/eemil/dev/karu/src/karu.cc
 
 CMakeFiles/karu.dir/src/karu.cc.i: cmake_force
@@ -100,7 +114,7 @@ CMakeFiles/karu.dir/src/karu.cc.s: cmake_force
 CMakeFiles/karu.dir/src/memory_table.cc.o: CMakeFiles/karu.dir/flags.make
 CMakeFiles/karu.dir/src/memory_table.cc.o: ../src/memory_table.cc
 CMakeFiles/karu.dir/src/memory_table.cc.o: CMakeFiles/karu.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/karu.dir/src/memory_table.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/karu.dir/src/memory_table.cc.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/karu.dir/src/memory_table.cc.o -MF CMakeFiles/karu.dir/src/memory_table.cc.o.d -o CMakeFiles/karu.dir/src/memory_table.cc.o -c /home/eemil/dev/karu/src/memory_table.cc
 
 CMakeFiles/karu.dir/src/memory_table.cc.i: cmake_force
@@ -114,7 +128,7 @@ CMakeFiles/karu.dir/src/memory_table.cc.s: cmake_force
 CMakeFiles/karu.dir/src/sstable.cc.o: CMakeFiles/karu.dir/flags.make
 CMakeFiles/karu.dir/src/sstable.cc.o: ../src/sstable.cc
 CMakeFiles/karu.dir/src/sstable.cc.o: CMakeFiles/karu.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/karu.dir/src/sstable.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/karu.dir/src/sstable.cc.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/karu.dir/src/sstable.cc.o -MF CMakeFiles/karu.dir/src/sstable.cc.o.d -o CMakeFiles/karu.dir/src/sstable.cc.o -c /home/eemil/dev/karu/src/sstable.cc
 
 CMakeFiles/karu.dir/src/sstable.cc.i: cmake_force
@@ -128,7 +142,7 @@ CMakeFiles/karu.dir/src/sstable.cc.s: cmake_force
 CMakeFiles/karu.dir/src/encoder.cc.o: CMakeFiles/karu.dir/flags.make
 CMakeFiles/karu.dir/src/encoder.cc.o: ../src/encoder.cc
 CMakeFiles/karu.dir/src/encoder.cc.o: CMakeFiles/karu.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/karu.dir/src/encoder.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/karu.dir/src/encoder.cc.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/karu.dir/src/encoder.cc.o -MF CMakeFiles/karu.dir/src/encoder.cc.o.d -o CMakeFiles/karu.dir/src/encoder.cc.o -c /home/eemil/dev/karu/src/encoder.cc
 
 CMakeFiles/karu.dir/src/encoder.cc.i: cmake_force
@@ -139,40 +153,27 @@ CMakeFiles/karu.dir/src/encoder.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/karu.dir/src/encoder.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/eemil/dev/karu/src/encoder.cc -o CMakeFiles/karu.dir/src/encoder.cc.s
 
-CMakeFiles/karu.dir/src/file_writer.cc.o: CMakeFiles/karu.dir/flags.make
-CMakeFiles/karu.dir/src/file_writer.cc.o: ../src/file_writer.cc
-CMakeFiles/karu.dir/src/file_writer.cc.o: CMakeFiles/karu.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/karu.dir/src/file_writer.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/karu.dir/src/file_writer.cc.o -MF CMakeFiles/karu.dir/src/file_writer.cc.o.d -o CMakeFiles/karu.dir/src/file_writer.cc.o -c /home/eemil/dev/karu/src/file_writer.cc
-
-CMakeFiles/karu.dir/src/file_writer.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/karu.dir/src/file_writer.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/eemil/dev/karu/src/file_writer.cc > CMakeFiles/karu.dir/src/file_writer.cc.i
-
-CMakeFiles/karu.dir/src/file_writer.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/karu.dir/src/file_writer.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/eemil/dev/karu/src/file_writer.cc -o CMakeFiles/karu.dir/src/file_writer.cc.s
-
 # Object files for target karu
 karu_OBJECTS = \
 "CMakeFiles/karu.dir/src/tests.cc.o" \
+"CMakeFiles/karu.dir/src/file_writer.cc.o" \
 "CMakeFiles/karu.dir/src/karu.cc.o" \
 "CMakeFiles/karu.dir/src/memory_table.cc.o" \
 "CMakeFiles/karu.dir/src/sstable.cc.o" \
-"CMakeFiles/karu.dir/src/encoder.cc.o" \
-"CMakeFiles/karu.dir/src/file_writer.cc.o"
+"CMakeFiles/karu.dir/src/encoder.cc.o"
 
 # External object files for target karu
 karu_EXTERNAL_OBJECTS =
 
 karu: CMakeFiles/karu.dir/src/tests.cc.o
+karu: CMakeFiles/karu.dir/src/file_writer.cc.o
 karu: CMakeFiles/karu.dir/src/karu.cc.o
 karu: CMakeFiles/karu.dir/src/memory_table.cc.o
 karu: CMakeFiles/karu.dir/src/sstable.cc.o
 karu: CMakeFiles/karu.dir/src/encoder.cc.o
-karu: CMakeFiles/karu.dir/src/file_writer.cc.o
 karu: CMakeFiles/karu.dir/build.make
 karu: /usr/lib/libabsl_statusor.so.2111.0.0
+karu: lib/libgtest_main.a
 karu: /usr/lib/libabsl_status.so.2111.0.0
 karu: /usr/lib/libabsl_str_format_internal.so.2111.0.0
 karu: /usr/lib/libabsl_bad_variant_access.so.2111.0.0
@@ -201,6 +202,7 @@ karu: /usr/lib/libabsl_spinlock_wait.so.2111.0.0
 karu: /usr/lib/libabsl_raw_logging_internal.so.2111.0.0
 karu: /usr/lib/libabsl_log_severity.so.2111.0.0
 karu: /usr/lib/libabsl_int128.so.2111.0.0
+karu: lib/libgtest.a
 karu: CMakeFiles/karu.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable karu"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/karu.dir/link.txt --verbose=$(VERBOSE)

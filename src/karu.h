@@ -10,7 +10,6 @@
 #include "memory_table.h"
 #include "sstable.h"
 
-namespace karu {
 using file_id_t = std::uint64_t;
 class DB {
   DB(absl::string_view directory);
@@ -25,13 +24,12 @@ class DB {
   absl::Status Delete(const std::string &key) noexcept;
 
  private:
-  std::unique_ptr<memory_table::MemoryTable> current_memtable_;
-  absl::btree_map<file_id_t, std::unique_ptr<sstable::SSTable>> sstable_map_;
+  std::unique_ptr<MemoryTable> current_memtable_;
+  absl::btree_map<file_id_t, std::unique_ptr<SSTable>> sstable_map_;
   std::string database_directory_;
 
   absl::Mutex sstable_mutex_;
   absl::Mutex memtable_mutex_;
 };
-}  // namespace karu
 
 #endif

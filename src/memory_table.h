@@ -11,8 +11,6 @@
 #include "absl/status/statusor.h"
 #include "file_writer.h"
 
-namespace karu {
-namespace memory_table {
 constexpr std::uint64_t kMaxMemSize = 8 * 1024 * 1024;  // 8 mb
 class MemoryTable {
  public:
@@ -28,16 +26,14 @@ class MemoryTable {
   [[nodiscard]] absl::Status AppendToLog(const std::string &key,
                                          const std::string &value) noexcept;
   std::string log_path_;
-  std::unique_ptr<io::FileWriter> fw_;
+  std::unique_ptr<FileWriter> fw_;
 
  private:
-  absl::btree_map<std::string, std::string> map_;
+  absl::btree_map<std::string, size_t> map_;
   absl::Mutex file_lock_;
 };
 
 absl::StatusOr<std::unique_ptr<MemoryTable>> CreateMemtableWithDir(
     const std::string &dir) noexcept;
-}  // namespace memory_table
-}  // namespace karu
 
 #endif

@@ -6,8 +6,6 @@
 
 #include "absl/status/statusor.h"
 
-namespace karu {
-namespace io {
 class FileWriter {
  public:
   ~FileWriter() { file_.close(); }
@@ -44,10 +42,8 @@ class FileReader {
 };
 
 absl::StatusOr<std::unique_ptr<FileWriter>> CreateFileWriter(
-    const std::string &fname) noexcept;
+    const std::string &fname);
 absl::StatusOr<std::unique_ptr<FileReader>> OpenFileReader(
-    const std::string &fname) noexcept;
-}  // namespace io
-}  // namespace karu
+    const std::string &fname);
 
 #endif

@@ -1,4 +1,4 @@
-Start testing: Feb 04 22:06 EET
+Start testing: Feb 04 23:13 EET
 ----------------------------------------------------------
 Unable to find executable: karu_NOT_BUILT
 1/1 Testing: karu_NOT_BUILT
@@ -12,8 +12,8 @@ Output:
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"karu_NOT_BUILT" end time: Feb 04 22:06 EET
+"karu_NOT_BUILT" end time: Feb 04 23:13 EET
 "karu_NOT_BUILT" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Feb 04 22:06 EET
+End testing: Feb 04 23:13 EET

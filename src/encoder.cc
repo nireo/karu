@@ -2,8 +2,6 @@
 
 #include "absl/base/internal/endian.h"
 
-namespace karu {
-namespace encoder {
 std::uint8_t HintHeader::KeyLength() const noexcept { return data_[0]; }
 
 std::uint16_t HintHeader::ValueLength() const noexcept {
@@ -27,5 +25,3 @@ void HintHeader::SetValueLength(std::uint16_t vlen) noexcept {
 }
 
 void HintHeader::MakeTombstone() noexcept { SetValueLength(kTombstone); }
-}  // namespace encoder
-}  // namespace karu

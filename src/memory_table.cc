@@ -5,8 +5,6 @@
 
 #include "file_writer.h"
 
-namespace karu {
-namespace memory_table {
 MemoryTable::MemoryTable(const std::string &directory) {
   // other functions already ensure that the directory in fact does exist.
   // get the unix timestamp
@@ -26,11 +24,6 @@ MemoryTable::MemoryTable(const std::string &directory) {
 
 absl::Status MemoryTable::Insert(const std::string &key,
                                  const std::string &value) noexcept {
-  // insert into table
-  map_.insert(key, value);
-
-  // write into logs.
-
   return absl::OkStatus();
 }
 
@@ -43,7 +36,7 @@ absl::StatusOr<std::unique_ptr<MemoryTable>> CreateMemtableWithDir(
     const std::string &dir) noexcept {
   auto memtable_ptr = std::make_unique<MemoryTable>(dir);
 
-  auto writer = io::CreateFileWriter(memtable_ptr->log_path_);
+  auto writer = CreateFileWriter(memtable_ptr->log_path_);
   if (!writer.ok()) {
     return writer.status();
   }
@@ -51,5 +44,3 @@ absl::StatusOr<std::unique_ptr<MemoryTable>> CreateMemtableWithDir(
   memtable_ptr->fw_ = std::move(writer.value());
   return memtable_ptr;
 }
-}  // namespace memory_table
-}  // namespace karu
