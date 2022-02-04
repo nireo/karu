@@ -1,0 +1,4 @@
+/home/eemil/dev/karu/build/CMakeFiles/karu.dir
+/home/eemil/dev/karu/build/CMakeFiles/test.dir
+/home/eemil/dev/karu/build/CMakeFiles/edit_cache.dir
+/home/eemil/dev/karu/build/CMakeFiles/rebuild_cache.dir

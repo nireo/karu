@@ -13,9 +13,9 @@ constexpr std::uint8_t kKeyByteCount = 1;
 constexpr std::uint8_t kValueByteCount = 2;
 constexpr std::uint8_t kPosByteCount = 4;
 
-class HintEncoding {
+class HintHeader {
  public:
-  HintEncoding(std::uint8_t* const data) : data_(data){};
+  HintHeader(std::uint8_t* const data) : data_(data){};
   std::uint8_t KeyLength() const noexcept;
   std::uint16_t ValueLength() const noexcept;
   bool IsTombstoneValue() const noexcept;

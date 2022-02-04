@@ -1,0 +1,32 @@
+[
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/karu.cc.o -c /home/eemil/dev/karu/src/karu.cc",
+  "file": "/home/eemil/dev/karu/src/karu.cc"
+},
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/main.cc.o -c /home/eemil/dev/karu/src/main.cc",
+  "file": "/home/eemil/dev/karu/src/main.cc"
+},
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/memory_table.cc.o -c /home/eemil/dev/karu/src/memory_table.cc",
+  "file": "/home/eemil/dev/karu/src/memory_table.cc"
+},
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/sstable.cc.o -c /home/eemil/dev/karu/src/sstable.cc",
+  "file": "/home/eemil/dev/karu/src/sstable.cc"
+},
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/encoder.cc.o -c /home/eemil/dev/karu/src/encoder.cc",
+  "file": "/home/eemil/dev/karu/src/encoder.cc"
+},
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/file_writer.cc.o -c /home/eemil/dev/karu/src/file_writer.cc",
+  "file": "/home/eemil/dev/karu/src/file_writer.cc"
+}
+]
