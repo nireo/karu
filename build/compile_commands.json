@@ -1,13 +1,13 @@
 [
 {
   "directory": "/home/eemil/dev/karu/build",
-  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/karu.cc.o -c /home/eemil/dev/karu/src/karu.cc",
-  "file": "/home/eemil/dev/karu/src/karu.cc"
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/tests.cc.o -c /home/eemil/dev/karu/src/tests.cc",
+  "file": "/home/eemil/dev/karu/src/tests.cc"
 },
 {
   "directory": "/home/eemil/dev/karu/build",
-  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/main.cc.o -c /home/eemil/dev/karu/src/main.cc",
-  "file": "/home/eemil/dev/karu/src/main.cc"
+  "command": "/usr/bin/c++   -std=gnu++17 -o CMakeFiles/karu.dir/src/karu.cc.o -c /home/eemil/dev/karu/src/karu.cc",
+  "file": "/home/eemil/dev/karu/src/karu.cc"
 },
 {
   "directory": "/home/eemil/dev/karu/build",

@@ -1,0 +1,19 @@
+Start testing: Feb 04 22:06 EET
+----------------------------------------------------------
+Unable to find executable: karu_NOT_BUILT
+1/1 Testing: karu_NOT_BUILT
+1/1 Test: karu_NOT_BUILT
+Command: ""
+Directory: /home/eemil/dev/karu/build
+"karu_NOT_BUILT" start time: 
+Output:
+----------------------------------------------------------
+<end of output>
+Test time =   0.00 sec
+----------------------------------------------------------
+Test Passed.
+"karu_NOT_BUILT" end time: Feb 04 22:06 EET
+"karu_NOT_BUILT" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Feb 04 22:06 EET

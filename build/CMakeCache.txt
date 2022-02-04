@@ -222,9 +222,6 @@ FETCHCONTENT_UPDATES_DISCONNECTED:BOOL=OFF
 //The directory containing a CMake configuration file for absl.
 absl_DIR:PATH=/usr/lib64/cmake/absl
 
-//The directory containing a CMake configuration file for gtest.
-gtest_DIR:PATH=gtest_DIR-NOTFOUND
-
 //Value Computed by CMake
 karu_BINARY_DIR:STATIC=/home/eemil/dev/karu/build
 

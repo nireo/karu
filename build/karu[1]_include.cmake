@@ -1,0 +1,5 @@
+if(EXISTS "/home/eemil/dev/karu/build/karu[1]_tests.cmake")
+  include("/home/eemil/dev/karu/build/karu[1]_tests.cmake")
+else()
+  add_test(karu_NOT_BUILT karu_NOT_BUILT)
+endif()

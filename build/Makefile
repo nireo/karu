@@ -211,30 +211,6 @@ src/karu.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/karu.cc.s
 .PHONY : src/karu.cc.s
 
-src/main.o: src/main.cc.o
-.PHONY : src/main.o
-
-# target to build an object file
-src/main.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/main.cc.o
-.PHONY : src/main.cc.o
-
-src/main.i: src/main.cc.i
-.PHONY : src/main.i
-
-# target to preprocess a source file
-src/main.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/main.cc.i
-.PHONY : src/main.cc.i
-
-src/main.s: src/main.cc.s
-.PHONY : src/main.s
-
-# target to generate assembly for a file
-src/main.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/main.cc.s
-.PHONY : src/main.cc.s
-
 src/memory_table.o: src/memory_table.cc.o
 .PHONY : src/memory_table.o
 
@@ -283,6 +259,30 @@ src/sstable.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/sstable.cc.s
 .PHONY : src/sstable.cc.s
 
+src/tests.o: src/tests.cc.o
+.PHONY : src/tests.o
+
+# target to build an object file
+src/tests.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/tests.cc.o
+.PHONY : src/tests.cc.o
+
+src/tests.i: src/tests.cc.i
+.PHONY : src/tests.i
+
+# target to preprocess a source file
+src/tests.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/tests.cc.i
+.PHONY : src/tests.cc.i
+
+src/tests.s: src/tests.cc.s
+.PHONY : src/tests.s
+
+# target to generate assembly for a file
+src/tests.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/tests.cc.s
+.PHONY : src/tests.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -302,15 +302,15 @@ help:
 	@echo "... src/karu.o"
 	@echo "... src/karu.i"
 	@echo "... src/karu.s"
-	@echo "... src/main.o"
-	@echo "... src/main.i"
-	@echo "... src/main.s"
 	@echo "... src/memory_table.o"
 	@echo "... src/memory_table.i"
 	@echo "... src/memory_table.s"
 	@echo "... src/sstable.o"
 	@echo "... src/sstable.i"
 	@echo "... src/sstable.s"
+	@echo "... src/tests.o"
+	@echo "... src/tests.i"
+	@echo "... src/tests.s"
 .PHONY : help
 
 

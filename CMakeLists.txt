@@ -8,8 +8,8 @@ find_package(absl REQUIRED)
 
 add_executable(
   karu
+  src/tests.cc
   src/karu.cc
-  src/main.cc
   src/memory_table.cc
   src/sstable.cc
   src/encoder.cc
@@ -22,6 +22,8 @@ FetchContent_Declare(
   URL https://github.com/google/googletest/archive/609281088cfefc76f9d0ce82e1ff6c30cc3591e5.zip
 )
 
+enable_testing()
+
 target_link_libraries(${PROJECT_NAME}
   absl::status
   absl::statusor
@@ -30,15 +32,8 @@ target_link_libraries(${PROJECT_NAME}
   absl::strings
   absl::btree
   absl::strings
+  gtest_main
 )
 
-enable_testing()
 include(GoogleTest)
-
-function(karu_test test_file)
-  get_filename_component(test_target_name ${test_file} NAME_WE)
-
-  add_executable(${test_target_name} ${test_file})
-  target_link_libraries(${test_target_name} ${PROJECT_NAME} gtest_main)
-  gtest_discover_tests(${test_target_name})
-endfunction(karu_test)
+gtest_discover_tests(karu)
