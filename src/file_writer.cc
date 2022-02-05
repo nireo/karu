@@ -7,8 +7,10 @@
 
 #include "absl/status/status.h"
 
+namespace karu {
+namespace io {
 absl::StatusOr<std::uint64_t> FileWriter::Append(
-    absl::Span<const std::uint64_t> src) noexcept {
+    absl::Span<const std::uint8_t> src) noexcept {
   file_.write(reinterpret_cast<const char *>(src.data()), src.size());
   if (file_.fail()) {
     return absl::InternalError("file write failed.");
@@ -22,8 +24,8 @@ absl::StatusOr<std::uint64_t> FileWriter::Append(
 
 void FileWriter::Sync() noexcept { file_.flush(); }
 
-absl::StatusOr<std::unique_ptr<FileWriter>> CreateFileWrite(
-    const std::string &fname) {
+absl::StatusOr<std::unique_ptr<FileWriter>> OpenFileWriter(
+    const std::string &fname) noexcept {
   // get size of file.
   struct ::stat fileStat;
   if (::stat(fname.c_str(), &fileStat) == -1) {
@@ -41,8 +43,8 @@ absl::StatusOr<std::unique_ptr<FileWriter>> CreateFileWrite(
                                       file_size);
 }
 
-absl::StatusOr<std::unique_ptr<FileReader>> CreateFileReader(
-    const std::string &fname) {
+absl::StatusOr<std::unique_ptr<FileReader>> OpenFileReader(
+    const std::string &fname) noexcept {
   int fd = ::open(fname.c_str(), O_RDWR | O_CREAT, 0644);
   if (fd < 0) {
     return absl::InternalError("could not open file.");
@@ -61,3 +63,6 @@ absl::StatusOr<std::uint64_t> FileReader::ReadAt(
 
   return size;
 }
+
+}  // namespace io
+}  // namespace karu

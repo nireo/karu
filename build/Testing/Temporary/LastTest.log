@@ -1,19 +1,57 @@
-Start testing: Feb 04 23:13 EET
+Start testing: Feb 05 22:29 EET
 ----------------------------------------------------------
-Unable to find executable: karu_NOT_BUILT
-1/1 Testing: karu_NOT_BUILT
-1/1 Test: karu_NOT_BUILT
-Command: ""
+1/2 Testing: EncoderTest.RawHeader
+1/2 Test: EncoderTest.RawHeader
+Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=EncoderTest.RawHeader" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"karu_NOT_BUILT" start time: 
+"EncoderTest.RawHeader" start time: Feb 05 22:29 EET
 Output:
 ----------------------------------------------------------
+Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = EncoderTest.RawHeader
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from EncoderTest
+[ RUN      ] EncoderTest.RawHeader
+[       OK ] EncoderTest.RawHeader (0 ms)
+[----------] 1 test from EncoderTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"karu_NOT_BUILT" end time: Feb 04 23:13 EET
-"karu_NOT_BUILT" time elapsed: 00:00:00
+"EncoderTest.RawHeader" end time: Feb 05 22:29 EET
+"EncoderTest.RawHeader" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Feb 04 23:13 EET
+2/2 Testing: MemtableTest.LogFileCreated
+2/2 Test: MemtableTest.LogFileCreated
+Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=MemtableTest.LogFileCreated" "--gtest_also_run_disabled_tests"
+Directory: /home/eemil/dev/karu/build
+"MemtableTest.LogFileCreated" start time: Feb 05 22:29 EET
+Output:
+----------------------------------------------------------
+Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = MemtableTest.LogFileCreated
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from MemtableTest
+[ RUN      ] MemtableTest.LogFileCreated
+[       OK ] MemtableTest.LogFileCreated (0 ms)
+[----------] 1 test from MemtableTest (0 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (0 ms total)
+[  PASSED  ] 1 test.
+<end of output>
+Test time =   0.01 sec
+----------------------------------------------------------
+Test Passed.
+"MemtableTest.LogFileCreated" end time: Feb 05 22:29 EET
+"MemtableTest.LogFileCreated" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Feb 05 22:29 EET

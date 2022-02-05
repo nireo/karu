@@ -6,6 +6,8 @@
 
 #include "absl/status/statusor.h"
 
+namespace karu {
+namespace io {
 class FileWriter {
  public:
   ~FileWriter() { file_.close(); }
@@ -13,7 +15,7 @@ class FileWriter {
              std::uint64_t offset)
       : file_(std::move(file)), filename_(fname), offset_(offset) {}
   [[nodiscard]] absl::StatusOr<std::uint64_t> Append(
-      absl::Span<const std::uint64_t> src) noexcept;
+      absl::Span<const std::uint8_t> src) noexcept;
   void Sync() noexcept;
   std::uint64_t Size() const noexcept { return offset_; }
 
@@ -41,9 +43,12 @@ class FileReader {
   const int fd_;
 };
 
-absl::StatusOr<std::unique_ptr<FileWriter>> CreateFileWriter(
-    const std::string &fname);
+absl::StatusOr<std::unique_ptr<FileWriter>> OpenFileWriter(
+    const std::string &fname) noexcept;
 absl::StatusOr<std::unique_ptr<FileReader>> OpenFileReader(
-    const std::string &fname);
+    const std::string &fname) noexcept;
+
+}  // namespace io
+}  // namespace karu
 
 #endif

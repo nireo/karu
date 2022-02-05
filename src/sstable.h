@@ -9,6 +9,8 @@
 #include "absl/container/btree_map.h"
 #include "file_writer.h"
 
+namespace karu {
+namespace sstable {
 class SSTable {
   SSTable(const std::string& fname)
       : fname_(fname), size_(0), reader_(nullptr), write_(nullptr){};
@@ -27,10 +29,12 @@ class SSTable {
   absl::btree_map<std::string, std::uint64_t> offset_map_;
   absl::Mutex mutex_;
 
-  std::unique_ptr<FileReader> reader_;
+  std::unique_ptr<io::FileReader> reader_;
   // this is only used when creating the sstable. When loading files after
   // reopening database we just initialize the reader_ field.
-  std::unique_ptr<FileWriter> write_;
+  std::unique_ptr<io::FileWriter> write_;
 };
+}  // namespace sstable
+}  // namespace karu
 
 #endif

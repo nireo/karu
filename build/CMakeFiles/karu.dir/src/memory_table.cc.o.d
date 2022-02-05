@@ -1,8 +1,6 @@
 CMakeFiles/karu.dir/src/memory_table.cc.o: \
  /home/eemil/dev/karu/src/memory_table.cc /usr/include/stdc-predef.h \
- /home/eemil/dev/karu/src/memory_table.h /usr/include/c++/11.1.0/fstream \
- /usr/include/c++/11.1.0/istream /usr/include/c++/11.1.0/ios \
- /usr/include/c++/11.1.0/iosfwd \
+ /home/eemil/dev/karu/src/memory_table.h /usr/include/c++/11.1.0/cstdint \
  /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/c++config.h \
  /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/os_defines.h \
  /usr/include/features.h /usr/include/sys/cdefs.h \
@@ -10,15 +8,21 @@ CMakeFiles/karu.dir/src/memory_table.cc.o: \
  /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
  /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/cpu_defines.h \
  /usr/include/c++/11.1.0/pstl/pstl_config.h \
- /usr/include/c++/11.1.0/bits/stringfwd.h \
+ /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdint.h \
+ /usr/include/stdint.h /usr/include/bits/libc-header-start.h \
+ /usr/include/bits/types.h /usr/include/bits/timesize.h \
+ /usr/include/bits/typesizes.h /usr/include/bits/time64.h \
+ /usr/include/bits/wchar.h /usr/include/bits/stdint-intn.h \
+ /usr/include/bits/stdint-uintn.h /usr/include/c++/11.1.0/fstream \
+ /usr/include/c++/11.1.0/istream /usr/include/c++/11.1.0/ios \
+ /usr/include/c++/11.1.0/iosfwd /usr/include/c++/11.1.0/bits/stringfwd.h \
  /usr/include/c++/11.1.0/bits/memoryfwd.h \
  /usr/include/c++/11.1.0/bits/postypes.h /usr/include/c++/11.1.0/cwchar \
- /usr/include/wchar.h /usr/include/bits/libc-header-start.h \
- /usr/include/bits/floatn.h /usr/include/bits/floatn-common.h \
+ /usr/include/wchar.h /usr/include/bits/floatn.h \
+ /usr/include/bits/floatn-common.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stddef.h \
  /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdarg.h \
- /usr/include/bits/wchar.h /usr/include/bits/types/wint_t.h \
- /usr/include/bits/types/mbstate_t.h \
+ /usr/include/bits/types/wint_t.h /usr/include/bits/types/mbstate_t.h \
  /usr/include/bits/types/__mbstate_t.h /usr/include/bits/types/__FILE.h \
  /usr/include/bits/types/FILE.h /usr/include/bits/types/locale_t.h \
  /usr/include/bits/types/__locale_t.h /usr/include/c++/11.1.0/exception \
@@ -45,12 +49,6 @@ CMakeFiles/karu.dir/src/memory_table.cc.o: \
  /usr/include/c++/11.1.0/bits/ptr_traits.h \
  /usr/include/c++/11.1.0/debug/debug.h \
  /usr/include/c++/11.1.0/bits/predefined_ops.h \
- /usr/include/c++/11.1.0/cstdint \
- /usr/lib/gcc/x86_64-pc-linux-gnu/11.1.0/include/stdint.h \
- /usr/include/stdint.h /usr/include/bits/types.h \
- /usr/include/bits/timesize.h /usr/include/bits/typesizes.h \
- /usr/include/bits/time64.h /usr/include/bits/stdint-intn.h \
- /usr/include/bits/stdint-uintn.h \
  /usr/include/c++/11.1.0/bits/localefwd.h \
  /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/c++locale.h \
  /usr/include/c++/11.1.0/clocale /usr/include/locale.h \
@@ -292,4 +290,5 @@ CMakeFiles/karu.dir/src/memory_table.cc.o: \
  /usr/include/absl/base/internal/spinlock_wait.h \
  /usr/include/absl/status/internal/statusor_internal.h \
  /usr/include/absl/types/variant.h /usr/include/c++/11.1.0/variant \
- /home/eemil/dev/karu/src/file_writer.h
+ /home/eemil/dev/karu/src/file_writer.h \
+ /home/eemil/dev/karu/src/encoder.h /home/eemil/dev/karu/src/util.h
