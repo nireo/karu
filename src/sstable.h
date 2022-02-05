@@ -13,7 +13,7 @@ namespace karu {
 namespace sstable {
 class SSTable {
   SSTable(const std::string& fname)
-      : fname_(fname), size_(0), reader_(nullptr), write_(nullptr){};
+      : fname_(fname), reader_(nullptr), write_(nullptr){};
   SSTable& operator=(const SSTable&) = delete;
   SSTable(const SSTable&) = delete;
 
@@ -22,10 +22,10 @@ class SSTable {
   absl::StatusOr<std::string> Get(absl::string_view key) noexcept;
   absl::Status BuildFromBTree(
       const absl::btree_map<std::string, std::string>& btree) noexcept;
+  absl::StatusOr<std::string> Find(const std::string& key) noexcept;
 
  private:
   std::string fname_;
-  std::uint64_t size_;
   absl::btree_map<std::string, std::uint64_t> offset_map_;
   absl::Mutex mutex_;
 
