@@ -289,4 +289,5 @@ CMakeFiles/karu.dir/src/sstable.cc.o: /home/eemil/dev/karu/src/sstable.cc \
  /usr/include/absl/status/internal/statusor_internal.h \
  /usr/include/absl/status/status.h \
  /usr/include/absl/status/internal/status_internal.h \
- /usr/include/absl/types/variant.h /usr/include/c++/11.1.0/variant
+ /usr/include/absl/types/variant.h /usr/include/c++/11.1.0/variant \
+ /home/eemil/dev/karu/src/encoder.h

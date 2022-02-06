@@ -4,10 +4,14 @@
 
 #include "encoder.h"
 #include "file_writer.h"
-#include "util.h"
 
 namespace karu {
 namespace sstable {
+
+#define STRING_TO_SPAN(str)       \
+  absl::Span<const std::uint8_t>{ \
+      reinterpret_cast<const std::uint8_t *>(str.data()), str.size()};
+
 absl::Status SSTable::InitWriterAndReader() noexcept {
   // this is only called when we are creating a new sstable, such that we don't
   // need the file size. After creating an sstable, we still need to take care
@@ -73,8 +77,8 @@ absl::Status SSTable::BuildFromBTree(
   }
 
   for (const auto &[key, value] : btree) {
-    auto key_span = util::StringToSpan(key);
-    auto value_span = util::StringToSpan(value);
+    auto key_span = STRING_TO_SPAN(key);
+    auto value_span = STRING_TO_SPAN(value);
 
     auto klen = static_cast<std::uint8_t>(key.size());
     auto vlen = static_cast<std::uint16_t>(value.size());

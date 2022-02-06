@@ -154,7 +154,7 @@ CMakeFiles/karu.dir/src/tests.cc.o: /home/eemil/dev/karu/src/tests.cc \
  /usr/include/c++/11.1.0/bits/refwrap.h \
  /usr/include/c++/11.1.0/ext/aligned_buffer.h \
  /usr/include/c++/11.1.0/bits/fs_dir.h \
- /usr/include/c++/11.1.0/bits/fs_ops.h \
+ /usr/include/c++/11.1.0/bits/fs_ops.h /usr/include/c++/11.1.0/iostream \
  /home/eemil/dev/karu/build/_deps/googletest-src/googletest/include/gtest/gtest.h \
  /usr/include/c++/11.1.0/cstddef /usr/include/c++/11.1.0/memory \
  /usr/include/c++/11.1.0/bits/stl_uninitialized.h \
@@ -183,7 +183,7 @@ CMakeFiles/karu.dir/src/tests.cc.o: /home/eemil/dev/karu/src/tests.cc \
  /usr/include/asm/posix_types_64.h /usr/include/asm-generic/posix_types.h \
  /usr/include/bits/statx-generic.h \
  /usr/include/bits/types/struct_statx_timestamp.h \
- /usr/include/bits/types/struct_statx.h /usr/include/c++/11.1.0/iostream \
+ /usr/include/bits/types/struct_statx.h \
  /home/eemil/dev/karu/build/_deps/googletest-src/googletest/include/gtest/internal/custom/gtest-port.h \
  /home/eemil/dev/karu/build/_deps/googletest-src/googletest/include/gtest/internal/gtest-port-arch.h \
  /usr/include/unistd.h /usr/include/bits/posix_opt.h \

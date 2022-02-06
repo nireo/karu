@@ -9,10 +9,14 @@
 
 #include "encoder.h"
 #include "file_writer.h"
-#include "util.h"
 
 namespace karu {
 namespace memtable {
+
+#define STRING_TO_SPAN(str)       \
+  absl::Span<const std::uint8_t>{ \
+      reinterpret_cast<const std::uint8_t *>(str.data()), str.size()};
+
 Memtable::Memtable(const std::string &directory) {
   // other functions already ensure that the directory in fact does exist.
   // get the unix timestamp
@@ -28,6 +32,12 @@ Memtable::Memtable(const std::string &directory) {
   // create the file
   std::ofstream temp{log_path_};
   temp.close();
+
+  auto writer = io::OpenFileWriter(log_path_);
+  if (!writer.ok()) {
+    exit(1);  // TODO: Make a function which can fail this
+  }
+  fw_ = std::move(*writer);
 }
 
 absl::Status Memtable::Insert(const std::string &key,
@@ -41,10 +51,20 @@ absl::Status Memtable::Insert(const std::string &key,
   return absl::OkStatus();
 }
 
+absl::StatusOr<std::string> Memtable::Get(
+    const std::string &key) const noexcept {
+  auto it = map_.find(key);
+  if (it == map_.end()) {
+    return absl::NotFoundError("couldn't find entry in memtable.");
+  }
+
+  return it->second;
+}
+
 absl::Status Memtable::AppendToLog(const std::string &key_str,
                                    const std::string &value_str) noexcept {
-  auto key = util::StringToSpan(key_str);
-  auto value = util::StringToSpan(value_str);
+  auto key = STRING_TO_SPAN(key_str);
+  auto value = STRING_TO_SPAN(value_str);
 
   if (key.size() == 0 || key.size() > 255) {
     return absl::InternalError("bad key length");

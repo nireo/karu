@@ -1,4 +1,6 @@
 karu_NOT_BUILT 0 0
-EncoderTest.RawHeader 4 0.00117927
-MemtableTest.LogFileCreated 1 0.00512322
+EncoderTest.RawHeader 14 0.000258844
+MemtableTest.LogFileCreated 11 0.000323979
+MemtableTest.BasicOperations 0 0
 ---
+MemtableTest.BasicOperations

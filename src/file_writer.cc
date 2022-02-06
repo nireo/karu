@@ -35,12 +35,13 @@ absl::StatusOr<std::unique_ptr<FileWriter>> OpenFileWriter(
 
   std::ofstream file(
       fname, std::fstream::out | std::fstream::app | std::fstream::binary);
+
   if (!file.is_open()) {
     return absl::InternalError("could not open file.");
   }
 
-  return std::make_unique<FileWriter>(std::move(fname), std::move(file),
-                                      file_size);
+  return std::unique_ptr<FileWriter>(
+      new FileWriter(fname, std::move(file), file_size));
 }
 
 absl::StatusOr<std::unique_ptr<FileReader>> OpenFileReader(
