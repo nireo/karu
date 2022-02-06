@@ -12,11 +12,13 @@
 namespace karu {
 namespace sstable {
 class SSTable {
+ public:
   SSTable(const std::string& fname)
       : fname_(fname), reader_(nullptr), write_(nullptr){};
   SSTable& operator=(const SSTable&) = delete;
   SSTable(const SSTable&) = delete;
 
+  absl::Status PopulateFromFile() noexcept;
   absl::Status InitWriterAndReader() noexcept;
   absl::Status InitOnlyReader() noexcept;
   absl::StatusOr<std::string> Get(absl::string_view key) noexcept;
@@ -34,6 +36,9 @@ class SSTable {
   // reopening database we just initialize the reader_ field.
   std::unique_ptr<io::FileWriter> write_;
 };
+
+absl::StatusOr<std::unique_ptr<SSTable>> ParseSSTableFromFile(
+    const std::string& key) noexcept;
 }  // namespace sstable
 }  // namespace karu
 

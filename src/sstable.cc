@@ -65,6 +65,14 @@ absl::StatusOr<std::string> SSTable::Find(const std::string &key) noexcept {
       absl::little_endian::Load16(&header_buffer.get()[encoder::kKeyByteCount]);
 
   std::unique_ptr<std::uint8_t> value_buffer(new std::uint8_t[value_length]);
+  status = reader_->ReadAt(
+      starting_offset,
+      {value_buffer.get(),
+       encoder::kFullHeader + static_cast<std::uint32_t>(key_length)});
+
+  if (!status.ok()) {
+    return status.status();
+  }
   std::string result = reinterpret_cast<char *>(value_buffer.get());
 
   return result;
@@ -103,6 +111,61 @@ absl::Status SSTable::BuildFromBTree(
 
   write_->Sync();  // we don't need to sync after every turn
   return absl::OkStatus();
+}
+
+absl::Status SSTable::PopulateFromFile() noexcept {
+  if (reader_ == nullptr) {
+    return absl::InternalError("reader is nullptr when reading.");
+  }
+
+  std::uint64_t offset = 0;
+  while (true) {
+    // read the header of the entry.
+    std::unique_ptr<std::uint8_t[]> header(
+        new std::uint8_t[encoder::kFullHeader]);
+
+    auto status = reader_->ReadAt(offset, {header.get(), encoder::kFullHeader});
+    if (!status.ok()) {
+      break;
+    }
+
+    std::uint8_t key_length = header.get()[0];
+    std::uint16_t value_length =
+        absl::little_endian::Load16(&header.get()[encoder::kKeyByteCount]);
+
+    std::unique_ptr<std::uint8_t> key_buffer(new std::uint8_t[key_length]);
+    status = reader_->ReadAt(
+        offset + encoder::kFullHeader,
+        {key_buffer.get(),
+         encoder::kFullHeader + static_cast<std::uint32_t>(key_length)});
+
+    if (!status.ok()) {
+      return status.status();
+    }
+    std::string key_str = reinterpret_cast<char *>(key_buffer.get());
+
+    offset_map_[key_str] = offset;
+    offset += encoder::kFullHeader + key_length + value_length;
+  }
+
+  return absl::OkStatus();
+}
+
+absl::StatusOr<std::unique_ptr<SSTable>> ParseSSTableFromFile(
+    const std::string &fname) noexcept {
+  auto sstable = std::make_unique<SSTable>(fname);
+  auto status =
+      sstable->InitOnlyReader();  // we don't care about the file writer.
+  if (!status.ok()) {
+    return status;
+  }
+
+  status = sstable->PopulateFromFile();
+  if (!status.ok()) {
+    return status;
+  }
+
+  return sstable;
 }
 }  // namespace sstable
 }  // namespace karu
