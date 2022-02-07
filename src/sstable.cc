@@ -1,6 +1,8 @@
 #include "sstable.h"
 
 #include <absl/status/status.h>
+#include <fcntl.h>
+#include <sys/stat.h>
 
 #include "encoder.h"
 #include "file_writer.h"
@@ -44,11 +46,17 @@ absl::Status SSTable::InitOnlyReader() noexcept {
 absl::StatusOr<std::string> SSTable::Find(const std::string &key) noexcept {
   auto offset_it = offset_map_.find(key);
   if (offset_it == offset_map_.end()) {
+    for (const auto &[k, value] : offset_map_) {
+      if (k == key) {
+        std::cerr << "XD";
+      }
+      std::cerr << key << ' ' << value << '\n';
+    }
     return absl::NotFoundError("could not find offset for key");
   }
 
   std::uint64_t starting_offset = offset_it->second;
-  std::unique_ptr<std::uint8_t> header_buffer(
+  std::unique_ptr<std::uint8_t[]> header_buffer(
       new std::uint8_t[encoder::kFullHeader]);
   auto status = reader_->ReadAt(starting_offset,
                                 {header_buffer.get(), encoder::kFullHeader});
@@ -65,7 +73,7 @@ absl::StatusOr<std::string> SSTable::Find(const std::string &key) noexcept {
   std::uint16_t value_length =
       absl::little_endian::Load16(&header_buffer.get()[encoder::kKeyByteCount]);
 
-  std::unique_ptr<std::uint8_t> value_buffer(new std::uint8_t[value_length]);
+  std::unique_ptr<std::uint8_t[]> value_buffer(new std::uint8_t[value_length]);
   status = reader_->ReadAt(starting_offset + encoder::kFullHeader + key_length,
                            {
                                value_buffer.get(),
@@ -120,35 +128,49 @@ absl::Status SSTable::PopulateFromFile() noexcept {
     return absl::InternalError("reader is nullptr when reading.");
   }
 
-  std::uint64_t offset = 0;
-  while (true) {
-    // read the header of the entry.
-    std::unique_ptr<std::uint8_t[]> header(
-        new std::uint8_t[encoder::kFullHeader]);
+  // read file size so we know when to stop.
+  struct ::stat fileStat;
+  if (::stat(fname_.c_str(), &fileStat) == -1) {
+    return absl::InternalError("could not get filesize");
+  }
+  uint64_t file_size = static_cast<uint64_t>(fileStat.st_size);
 
-    auto status = reader_->ReadAt(offset, {header.get(), encoder::kFullHeader});
+  std::uint64_t starting_offset = 0;
+  while (starting_offset <= file_size) {
+    std::unique_ptr<std::uint8_t> header_buffer(
+        new std::uint8_t[encoder::kFullHeader]);
+    auto status = reader_->ReadAt(starting_offset,
+                                  {header_buffer.get(), encoder::kFullHeader});
     if (!status.ok()) {
       break;
     }
 
-    std::uint8_t key_length = header.get()[0];
-    std::uint16_t value_length =
-        absl::little_endian::Load16(&header.get()[encoder::kKeyByteCount]);
-
-    std::unique_ptr<std::uint8_t> key_buffer(new std::uint8_t[key_length]);
-    status = reader_->ReadAt(
-        offset + encoder::kFullHeader,
-        {key_buffer.get(),
-         encoder::kFullHeader + static_cast<std::uint32_t>(key_length)});
-
-    if (!status.ok()) {
-      return status.status();
+    if (*status != encoder::kFullHeader) {
+      break;
     }
 
-    std::string key_str = reinterpret_cast<char *>(key_buffer.get());
+    // get value and key lenghts
+    std::uint8_t key_length = header_buffer.get()[0];
+    std::uint16_t value_length = absl::little_endian::Load16(
+        &header_buffer.get()[encoder::kKeyByteCount]);
 
-    offset_map_[key_str] = offset;
-    offset += encoder::kFullHeader + key_length + value_length;
+    std::unique_ptr<std::uint8_t[]> key_buffer(new std::uint8_t[key_length]);
+    status = reader_->ReadAt(starting_offset + encoder::kFullHeader,
+                             {
+                                 key_buffer.get(),
+                                 key_length,
+                             });
+
+    if (!status.ok()) {
+      break;
+    }
+
+    std::string result = reinterpret_cast<char *>(key_buffer.get());
+    offset_map_[result] = starting_offset;
+
+    std::cerr << result << ':' << starting_offset << '\n';
+
+    starting_offset += encoder::kFullHeader + key_length + value_length;
   }
 
   return absl::OkStatus();

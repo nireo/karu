@@ -1,10 +1,10 @@
-Start testing: Feb 07 13:14 EET
+Start testing: Feb 07 15:16 EET
 ----------------------------------------------------------
-1/4 Testing: EncoderTest.RawHeader
-1/4 Test: EncoderTest.RawHeader
+1/5 Testing: EncoderTest.RawHeader
+1/5 Test: EncoderTest.RawHeader
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=EncoderTest.RawHeader" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"EncoderTest.RawHeader" start time: Feb 07 13:14 EET
+"EncoderTest.RawHeader" start time: Feb 07 15:16 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -23,15 +23,15 @@ Note: Google Test filter = EncoderTest.RawHeader
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"EncoderTest.RawHeader" end time: Feb 07 13:14 EET
+"EncoderTest.RawHeader" end time: Feb 07 15:16 EET
 "EncoderTest.RawHeader" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-2/4 Testing: MemtableTest.LogFileCreated
-2/4 Test: MemtableTest.LogFileCreated
+2/5 Testing: MemtableTest.LogFileCreated
+2/5 Test: MemtableTest.LogFileCreated
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=MemtableTest.LogFileCreated" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"MemtableTest.LogFileCreated" start time: Feb 07 13:14 EET
+"MemtableTest.LogFileCreated" start time: Feb 07 15:16 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -50,15 +50,15 @@ Note: Google Test filter = MemtableTest.LogFileCreated
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"MemtableTest.LogFileCreated" end time: Feb 07 13:14 EET
+"MemtableTest.LogFileCreated" end time: Feb 07 15:16 EET
 "MemtableTest.LogFileCreated" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-3/4 Testing: MemtableTest.BasicOperations
-3/4 Test: MemtableTest.BasicOperations
+3/5 Testing: MemtableTest.BasicOperations
+3/5 Test: MemtableTest.BasicOperations
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=MemtableTest.BasicOperations" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"MemtableTest.BasicOperations" start time: Feb 07 13:14 EET
+"MemtableTest.BasicOperations" start time: Feb 07 15:16 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -77,15 +77,15 @@ Note: Google Test filter = MemtableTest.BasicOperations
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"MemtableTest.BasicOperations" end time: Feb 07 13:14 EET
+"MemtableTest.BasicOperations" end time: Feb 07 15:16 EET
 "MemtableTest.BasicOperations" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-4/4 Testing: SSTableTest.TestBuildFromBTree
-4/4 Test: SSTableTest.TestBuildFromBTree
+4/5 Testing: SSTableTest.TestBuildFromBTree
+4/5 Test: SSTableTest.TestBuildFromBTree
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=SSTableTest.TestBuildFromBTree" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"SSTableTest.TestBuildFromBTree" start time: Feb 07 13:14 EET
+"SSTableTest.TestBuildFromBTree" start time: Feb 07 15:16 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -94,18 +94,54 @@ Note: Google Test filter = SSTableTest.TestBuildFromBTree
 [----------] Global test environment set-up.
 [----------] 1 test from SSTableTest
 [ RUN      ] SSTableTest.TestBuildFromBTree
-[       OK ] SSTableTest.TestBuildFromBTree (1 ms)
-[----------] 1 test from SSTableTest (1 ms total)
+[       OK ] SSTableTest.TestBuildFromBTree (0 ms)
+[----------] 1 test from SSTableTest (0 ms total)
 
 [----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (1 ms total)
+[==========] 1 test from 1 test suite ran. (0 ms total)
 [  PASSED  ] 1 test.
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"SSTableTest.TestBuildFromBTree" end time: Feb 07 13:14 EET
+"SSTableTest.TestBuildFromBTree" end time: Feb 07 15:16 EET
 "SSTableTest.TestBuildFromBTree" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Feb 07 13:14 EET
+5/5 Testing: SSTableTest.TestPopulateFromFile
+5/5 Test: SSTableTest.TestPopulateFromFile
+Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=SSTableTest.TestPopulateFromFile" "--gtest_also_run_disabled_tests"
+Directory: /home/eemil/dev/karu/build
+"SSTableTest.TestPopulateFromFile" start time: Feb 07 15:16 EET
+Output:
+----------------------------------------------------------
+Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
+Note: Google Test filter = SSTableTest.TestPopulateFromFile
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from SSTableTest
+[ RUN      ] SSTableTest.TestPopulateFromFile
+hello:0
+sami:11
+/home/eemil/dev/karu/src/tests.cc:107: Failure
+Expected equality of these values:
+  *f_status
+    Which is: "joob\x5"
+  value
+    Which is: "joo"
+sami 0
+sami 11
+/home/eemil/dev/karu/src/tests.cc:106: Failure
+Value of: f_status.ok()
+  Actual: false
+Expected: true
+[/build/abseil-cpp/src/abseil-cpp-20211102.0/absl/status/statusor.cc : 83] RAW: Attempting to fetch value instead of handling error NOT_FOUND: could not find offset for key
+<end of output>
+Test time =   0.07 sec
+----------------------------------------------------------
+Test Failed.
+"SSTableTest.TestPopulateFromFile" end time: Feb 07 15:16 EET
+"SSTableTest.TestPopulateFromFile" time elapsed: 00:00:00
+----------------------------------------------------------
+
+End testing: Feb 07 15:16 EET

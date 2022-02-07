@@ -9,6 +9,8 @@
 #include "memory_table.h"
 #include "sstable.h"
 
+#define OK EXPECT_TRUE(status.ok())
+
 void createTestDirectory(const std::string &path) {
   std::filesystem::create_directory(path);
 }
@@ -59,16 +61,51 @@ TEST(SSTableTest, TestBuildFromBTree) {
   createTestFile("./test/table.data");
   karu::sstable::SSTable sstable("./test/table.data");
   auto status = sstable.InitWriterAndReader();
-  EXPECT_TRUE(status.ok());
 
   status = sstable.BuildFromBTree(values);
-  EXPECT_TRUE(status.ok());
 
   for (const auto &[key, value] : values) {
     auto f_status = sstable.Find(key);
 
     EXPECT_TRUE(f_status.ok());
     EXPECT_EQ(*f_status, value);
+  }
+
+  std::filesystem::remove_all(test_dir);
+}
+
+TEST(SSTableTest, TestPopulateFromFile) {
+  const std::string test_dir = "./test";
+  createTestDirectory(test_dir);
+  absl::btree_map<std::string, std::string> values = {
+      {"sami", "world"},
+      {"hello", "joo"},
+  };
+
+  createTestFile("./test/table.data");
+  {
+    auto sstable =
+        std::make_unique<karu::sstable::SSTable>("./test/table.data");
+    auto status = sstable->InitWriterAndReader();
+    OK;
+    status = sstable->BuildFromBTree(values);
+    OK;
+  }
+
+  {
+    auto sstable =
+        std::make_unique<karu::sstable::SSTable>("./test/table.data");
+    auto status = sstable->InitOnlyReader();
+    OK;
+    status = sstable->PopulateFromFile();
+    OK;
+
+    for (const auto &[key, value] : values) {
+      auto f_status = sstable->Find(key);
+
+      EXPECT_TRUE(f_status.ok());
+      EXPECT_EQ(*f_status, value);
+    }
   }
 
   std::filesystem::remove_all(test_dir);
