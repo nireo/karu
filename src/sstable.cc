@@ -42,11 +42,12 @@ absl::Status SSTable::InitOnlyReader() noexcept {
 }
 
 absl::StatusOr<std::string> SSTable::Find(const std::string &key) noexcept {
-  if (!offset_map_.contains(key)) {
-    return absl::NotFoundError("could not find key");
+  auto offset_it = offset_map_.find(key);
+  if (offset_it == offset_map_.end()) {
+    return absl::NotFoundError("could not find offset for key");
   }
 
-  std::uint64_t starting_offset = offset_map_[key];
+  std::uint64_t starting_offset = offset_it->second;
   std::unique_ptr<std::uint8_t> header_buffer(
       new std::uint8_t[encoder::kFullHeader]);
   auto status = reader_->ReadAt(starting_offset,
@@ -65,10 +66,11 @@ absl::StatusOr<std::string> SSTable::Find(const std::string &key) noexcept {
       absl::little_endian::Load16(&header_buffer.get()[encoder::kKeyByteCount]);
 
   std::unique_ptr<std::uint8_t> value_buffer(new std::uint8_t[value_length]);
-  status = reader_->ReadAt(
-      starting_offset,
-      {value_buffer.get(),
-       encoder::kFullHeader + static_cast<std::uint32_t>(key_length)});
+  status = reader_->ReadAt(starting_offset + encoder::kFullHeader + key_length,
+                           {
+                               value_buffer.get(),
+                               value_length,
+                           });
 
   if (!status.ok()) {
     return status.status();
@@ -88,8 +90,8 @@ absl::Status SSTable::BuildFromBTree(
     auto key_span = STRING_TO_SPAN(key);
     auto value_span = STRING_TO_SPAN(value);
 
-    auto klen = static_cast<std::uint8_t>(key.size());
-    auto vlen = static_cast<std::uint16_t>(value.size());
+    auto klen = static_cast<std::uint8_t>(key_span.size());
+    auto vlen = static_cast<std::uint16_t>(value_span.size());
     std::uint32_t buffer_size = encoder::kFullHeader + klen + vlen;
 
     std::unique_ptr<std::uint8_t[]> buffer(new std::uint8_t[buffer_size]);
@@ -142,6 +144,7 @@ absl::Status SSTable::PopulateFromFile() noexcept {
     if (!status.ok()) {
       return status.status();
     }
+
     std::string key_str = reinterpret_cast<char *>(key_buffer.get());
 
     offset_map_[key_str] = offset;

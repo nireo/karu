@@ -1,6 +1,6 @@
-karu_NOT_BUILT 0 0
-EncoderTest.RawHeader 14 0.000258844
-MemtableTest.LogFileCreated 11 0.000323979
-MemtableTest.BasicOperations 0 0
+EncoderTest.RawHeader 5 0.000728149
+MemtableTest.LogFileCreated 5 0.000876837
+MemtableTest.BasicOperations 4 0.000980143
+SSTableTest.TestBuildFromBTree 0 0
 ---
-MemtableTest.BasicOperations
+SSTableTest.TestBuildFromBTree
