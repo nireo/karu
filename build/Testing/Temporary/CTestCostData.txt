@@ -1,6 +1,5 @@
-EncoderTest.RawHeader 5 0.000728149
-MemtableTest.LogFileCreated 5 0.000876837
-MemtableTest.BasicOperations 4 0.000980143
-SSTableTest.TestBuildFromBTree 0 0
+EncoderTest.RawHeader 7 0.00061067
+MemtableTest.LogFileCreated 7 0.000588021
+MemtableTest.BasicOperations 6 0.000691395
+SSTableTest.TestBuildFromBTree 1 0.00495843
 ---
-SSTableTest.TestBuildFromBTree

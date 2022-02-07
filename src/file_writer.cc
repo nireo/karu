@@ -17,7 +17,7 @@ absl::StatusOr<std::uint64_t> FileWriter::Append(
   }
 
   std::uint64_t offset = offset_;  // where it starts.
-  offset += src.size();
+  offset_ += src.size();
 
   return offset;
 }

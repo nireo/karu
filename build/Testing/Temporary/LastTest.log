@@ -1,10 +1,10 @@
-Start testing: Feb 07 02:55 EET
+Start testing: Feb 07 13:14 EET
 ----------------------------------------------------------
 1/4 Testing: EncoderTest.RawHeader
 1/4 Test: EncoderTest.RawHeader
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=EncoderTest.RawHeader" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"EncoderTest.RawHeader" start time: Feb 07 02:55 EET
+"EncoderTest.RawHeader" start time: Feb 07 13:14 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -23,7 +23,7 @@ Note: Google Test filter = EncoderTest.RawHeader
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"EncoderTest.RawHeader" end time: Feb 07 02:55 EET
+"EncoderTest.RawHeader" end time: Feb 07 13:14 EET
 "EncoderTest.RawHeader" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -31,7 +31,7 @@ Test Passed.
 2/4 Test: MemtableTest.LogFileCreated
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=MemtableTest.LogFileCreated" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"MemtableTest.LogFileCreated" start time: Feb 07 02:55 EET
+"MemtableTest.LogFileCreated" start time: Feb 07 13:14 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -50,7 +50,7 @@ Note: Google Test filter = MemtableTest.LogFileCreated
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"MemtableTest.LogFileCreated" end time: Feb 07 02:55 EET
+"MemtableTest.LogFileCreated" end time: Feb 07 13:14 EET
 "MemtableTest.LogFileCreated" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -58,7 +58,7 @@ Test Passed.
 3/4 Test: MemtableTest.BasicOperations
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=MemtableTest.BasicOperations" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"MemtableTest.BasicOperations" start time: Feb 07 02:55 EET
+"MemtableTest.BasicOperations" start time: Feb 07 13:14 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -77,7 +77,7 @@ Note: Google Test filter = MemtableTest.BasicOperations
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"MemtableTest.BasicOperations" end time: Feb 07 02:55 EET
+"MemtableTest.BasicOperations" end time: Feb 07 13:14 EET
 "MemtableTest.BasicOperations" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -85,7 +85,7 @@ Test Passed.
 4/4 Test: SSTableTest.TestBuildFromBTree
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=SSTableTest.TestBuildFromBTree" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"SSTableTest.TestBuildFromBTree" start time: Feb 07 02:55 EET
+"SSTableTest.TestBuildFromBTree" start time: Feb 07 13:14 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -94,40 +94,18 @@ Note: Google Test filter = SSTableTest.TestBuildFromBTree
 [----------] Global test environment set-up.
 [----------] 1 test from SSTableTest
 [ RUN      ] SSTableTest.TestBuildFromBTree
-/home/eemil/dev/karu/src/tests.cc:71: Failure
-Expected equality of these values:
-  *f_status
-    Which is: "world"
-  value
-    Which is: "2"
-/home/eemil/dev/karu/src/tests.cc:71: Failure
-Expected equality of these values:
-  *f_status
-    Which is: ""
-  value
-    Which is: "world"
-/home/eemil/dev/karu/src/tests.cc:71: Failure
-Expected equality of these values:
-  *f_status
-    Which is: ""
-  value
-    Which is: "world"
-[  FAILED  ] SSTableTest.TestBuildFromBTree (1 ms)
+[       OK ] SSTableTest.TestBuildFromBTree (1 ms)
 [----------] 1 test from SSTableTest (1 ms total)
 
 [----------] Global test environment tear-down
 [==========] 1 test from 1 test suite ran. (1 ms total)
-[  PASSED  ] 0 tests.
-[  FAILED  ] 1 test, listed below:
-[  FAILED  ] SSTableTest.TestBuildFromBTree
-
- 1 FAILED TEST
+[  PASSED  ] 1 test.
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
-Test Failed.
-"SSTableTest.TestBuildFromBTree" end time: Feb 07 02:55 EET
+Test Passed.
+"SSTableTest.TestBuildFromBTree" end time: Feb 07 13:14 EET
 "SSTableTest.TestBuildFromBTree" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Feb 07 02:55 EET
+End testing: Feb 07 13:14 EET

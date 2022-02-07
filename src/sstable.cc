@@ -100,7 +100,7 @@ absl::Status SSTable::BuildFromBTree(
     header.SetValueLength(vlen);
 
     std::memcpy(&buffer[encoder::kFullHeader], key.data(), klen);
-    std::memcpy(&buffer[encoder::kFullHeader + klen], value.data(), klen);
+    std::memcpy(&buffer[encoder::kFullHeader + klen], value.data(), vlen);
 
     auto status = write_->Append({buffer.get(), buffer_size});
     if (!status.ok()) {
