@@ -21,7 +21,6 @@ namespace memtable {
 Memtable::Memtable(const std::string &directory) {
   // other functions already ensure that the directory in fact does exist.
   // get the unix timestamp
-  std::time_t res = std::time(nullptr);
   int64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
                           std::chrono::system_clock::now().time_since_epoch())
                           .count();

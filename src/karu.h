@@ -11,7 +11,7 @@
 #include "sstable.h"
 
 namespace karu {
-using file_id_t = std::uint64_t;
+using file_id_t = std::int64_t;
 class DB {
   DB(absl::string_view directory);
 
@@ -22,10 +22,12 @@ class DB {
                       const std::string &value) noexcept;  // string_view?
   absl::StatusOr<std::string> Get(
       const std::string &key) noexcept;  // string_view?
+  absl::StatusOr<std::string> Get(
+      absl::string_view key) noexcept;  // string_view?
   absl::Status Delete(const std::string &key) noexcept;
 
  private:
-  std::unique_ptr<memtable::Memtable> current_memtable_;
+  std::unique_ptr<memtable::Memtable> current_memtable_ = nullptr;
   absl::btree_map<file_id_t, std::unique_ptr<sstable::SSTable>> sstable_map_;
   std::string database_directory_;
 

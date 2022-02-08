@@ -32,10 +32,10 @@ class SSTable {
   std::map<std::string, std::uint64_t> offset_map_;
   absl::Mutex mutex_;
 
-  std::unique_ptr<io::FileReader> reader_;
+  std::unique_ptr<io::FileReader> reader_ = nullptr;
   // this is only used when creating the sstable. When loading files after
   // reopening database we just initialize the reader_ field.
-  std::unique_ptr<io::FileWriter> write_;
+  std::unique_ptr<io::FileWriter> write_ = nullptr;
 };
 
 absl::StatusOr<std::unique_ptr<SSTable>> ParseSSTableFromFile(
