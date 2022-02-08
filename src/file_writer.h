@@ -22,8 +22,10 @@ class FileWriter {
   FileWriter() = default;
   FileWriter(const FileWriter &) = delete;
   FileWriter &operator=(const FileWriter &) = delete;
+  std::uint64_t LastWritten() const noexcept { return last_written_; };
 
  private:
+  std::uint64_t last_written_ = 0;  // so we can easily append sizes
   std::ofstream file_;
   uint64_t offset_;
   std::string filename_;

@@ -158,7 +158,11 @@ CMakeFiles/karu.dir/src/sstable.cc.o: /home/eemil/dev/karu/src/sstable.cc \
  /usr/include/c++/11.1.0/ciso646 /usr/include/absl/base/policy_checks.h \
  /usr/include/absl/base/internal/throw_delegate.h \
  /usr/include/absl/base/macros.h /usr/include/absl/base/optimization.h \
- /usr/include/absl/base/port.h /usr/include/absl/container/btree_map.h \
+ /usr/include/absl/base/port.h /usr/include/c++/11.1.0/map \
+ /usr/include/c++/11.1.0/bits/stl_tree.h \
+ /usr/include/c++/11.1.0/bits/stl_map.h \
+ /usr/include/c++/11.1.0/bits/stl_multimap.h \
+ /usr/include/absl/container/btree_map.h \
  /usr/include/absl/container/internal/btree.h \
  /usr/include/absl/container/internal/common.h \
  /usr/include/absl/meta/type_traits.h /usr/include/absl/types/optional.h \

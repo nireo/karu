@@ -1136,7 +1136,11 @@ CMakeFiles/karu.dir/src/karu.cc.o: ../src/karu.cc \
   /usr/include/absl/types/variant.h \
   /usr/include/c++/11.1.0/variant \
   ../src/file_writer.h \
-  ../src/sstable.h
+  ../src/sstable.h \
+  /usr/include/c++/11.1.0/map \
+  /usr/include/c++/11.1.0/bits/stl_tree.h \
+  /usr/include/c++/11.1.0/bits/stl_map.h \
+  /usr/include/c++/11.1.0/bits/stl_multimap.h
 
 CMakeFiles/karu.dir/src/memory_table.cc.o: ../src/memory_table.cc \
   /usr/include/stdc-predef.h \
@@ -1740,6 +1744,10 @@ CMakeFiles/karu.dir/src/sstable.cc.o: ../src/sstable.cc \
   /usr/include/absl/base/macros.h \
   /usr/include/absl/base/optimization.h \
   /usr/include/absl/base/port.h \
+  /usr/include/c++/11.1.0/map \
+  /usr/include/c++/11.1.0/bits/stl_tree.h \
+  /usr/include/c++/11.1.0/bits/stl_map.h \
+  /usr/include/c++/11.1.0/bits/stl_multimap.h \
   /usr/include/absl/container/btree_map.h \
   /usr/include/absl/container/internal/btree.h \
   /usr/include/absl/container/internal/common.h \
@@ -2411,12 +2419,6 @@ _deps/googletest-src/googletest/include/gtest/internal/gtest-filepath.h:
 
 /usr/include/c++/11.1.0/bits/stl_set.h:
 
-/usr/include/c++/11.1.0/bits/stl_multimap.h:
-
-/usr/include/c++/11.1.0/bits/stl_tree.h:
-
-/usr/include/c++/11.1.0/map:
-
 /usr/include/bits/sigthread.h:
 
 /usr/include/bits/ss_flags.h:
@@ -2460,6 +2462,12 @@ _deps/googletest-src/googletest/include/gtest/gtest.h:
 /usr/include/c++/11.1.0/filesystem:
 
 ../src/sstable.cc:
+
+/usr/include/c++/11.1.0/bits/stl_multimap.h:
+
+/usr/include/c++/11.1.0/bits/stl_tree.h:
+
+/usr/include/c++/11.1.0/map:
 
 ../src/memory_table.h:
 

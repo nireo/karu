@@ -287,8 +287,6 @@ CMakeFiles/karu.dir/src/karu.cc.o: /home/eemil/dev/karu/src/karu.cc \
  /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/basic_file.h \
  /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/c++io.h \
  /usr/include/c++/11.1.0/bits/fstream.tcc \
- /usr/include/c++/11.1.0/shared_mutex \
- /usr/include/c++/11.1.0/bits/std_mutex.h \
  /usr/include/absl/status/status.h \
  /usr/include/absl/status/internal/status_internal.h \
  /usr/include/absl/status/statusor.h /usr/include/absl/base/call_once.h \
@@ -296,4 +294,7 @@ CMakeFiles/karu.dir/src/karu.cc.o: /home/eemil/dev/karu/src/karu.cc \
  /usr/include/absl/status/internal/statusor_internal.h \
  /usr/include/absl/types/variant.h /usr/include/c++/11.1.0/variant \
  /home/eemil/dev/karu/src/file_writer.h \
- /home/eemil/dev/karu/src/sstable.h
+ /home/eemil/dev/karu/src/sstable.h /usr/include/c++/11.1.0/map \
+ /usr/include/c++/11.1.0/bits/stl_tree.h \
+ /usr/include/c++/11.1.0/bits/stl_map.h \
+ /usr/include/c++/11.1.0/bits/stl_multimap.h

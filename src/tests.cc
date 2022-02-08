@@ -107,6 +107,4 @@ TEST(SSTableTest, TestPopulateFromFile) {
       EXPECT_EQ(*f_status, value);
     }
   }
-
-  std::filesystem::remove_all(test_dir);
 }

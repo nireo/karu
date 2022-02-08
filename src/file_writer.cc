@@ -18,11 +18,15 @@ absl::StatusOr<std::uint64_t> FileWriter::Append(
 
   std::uint64_t offset = offset_;  // where it starts.
   offset_ += src.size();
+  last_written_ = src.size();
 
   return offset;
 }
 
-void FileWriter::Sync() noexcept { file_.flush(); }
+void FileWriter::Sync() noexcept {
+  // flush the writed buffer onto the disk
+  file_.flush();
+}
 
 absl::StatusOr<std::unique_ptr<FileWriter>> OpenFileWriter(
     const std::string &fname) noexcept {

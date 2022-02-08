@@ -4,12 +4,12 @@
 #include <cstdint>
 #include <fstream>
 #include <memory>
-#include <shared_mutex>
 #include <string>
 
 #include "absl/container/btree_map.h"
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
+#include "absl/synchronization/mutex.h"
 #include "file_writer.h"
 
 namespace karu {
@@ -27,16 +27,19 @@ class Memtable {
                                     const std::string &value) noexcept;
 
   [[nodiscard]] absl::StatusOr<std::string> Get(
-      const std::string &key) const noexcept;
+      const std::string &key) noexcept;
 
   [[nodiscard]] absl::Status AppendToLog(const std::string &key_str,
                                          const std::string &value_str) noexcept;
+  std::uint64_t Size() const noexcept { return file_size_; };
   std::string log_path_;
   std::unique_ptr<io::FileWriter> fw_;
 
  private:
   absl::btree_map<std::string, std::string> map_;
+  absl::Mutex index_mutex_;
   absl::Mutex file_lock_;
+  std::uint64_t file_size_ = 0;
 };
 
 absl::StatusOr<std::unique_ptr<Memtable>> CreateMemtableWithDir(

@@ -4,6 +4,7 @@
 #include <absl/strings/string_view.h>
 
 #include <cstddef>
+#include <map>
 #include <string>
 
 #include "absl/container/btree_map.h"
@@ -28,7 +29,7 @@ class SSTable {
 
  private:
   std::string fname_;
-  absl::btree_map<std::string, std::uint64_t> offset_map_;
+  std::map<std::string, std::uint64_t> offset_map_;
   absl::Mutex mutex_;
 
   std::unique_ptr<io::FileReader> reader_;

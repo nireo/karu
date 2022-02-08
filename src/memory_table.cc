@@ -7,6 +7,7 @@
 #include <cstring>
 #include <string>
 
+#include "absl/synchronization/mutex.h"
 #include "encoder.h"
 #include "file_writer.h"
 
@@ -37,12 +38,15 @@ Memtable::Memtable(const std::string &directory) {
   if (!writer.ok()) {
     exit(1);  // TODO: Make a function which can fail this
   }
+
   fw_ = std::move(*writer);
 }
 
 absl::Status Memtable::Insert(const std::string &key,
                               const std::string &value) noexcept {
+  index_mutex_.WriterLock();
   map_[key] = value;
+  index_mutex_.WriterUnlock();
   auto status = AppendToLog(key, value);
   if (!status.ok()) {
     return status;
@@ -51,8 +55,8 @@ absl::Status Memtable::Insert(const std::string &key,
   return absl::OkStatus();
 }
 
-absl::StatusOr<std::string> Memtable::Get(
-    const std::string &key) const noexcept {
+absl::StatusOr<std::string> Memtable::Get(const std::string &key) noexcept {
+  absl::ReaderMutexLock guard(&index_mutex_);
   auto it = map_.find(key);
   if (it == map_.end()) {
     return absl::NotFoundError("couldn't find entry in memtable.");
@@ -63,6 +67,8 @@ absl::StatusOr<std::string> Memtable::Get(
 
 absl::Status Memtable::AppendToLog(const std::string &key_str,
                                    const std::string &value_str) noexcept {
+  absl::WriterMutexLock guard(
+      &file_lock_);  // when this goes out of scope it releases the mutex
   auto key = STRING_TO_SPAN(key_str);
   auto value = STRING_TO_SPAN(value_str);
 
@@ -87,6 +93,8 @@ absl::Status Memtable::AppendToLog(const std::string &key_str,
   if (!status.ok()) {
     return status.status();
   }
+
+  file_size_ += buffer_size;
   fw_->Sync();  // make sure that files are written to disk.
 
   return absl::OkStatus();

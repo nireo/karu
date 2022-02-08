@@ -345,8 +345,6 @@ CMakeFiles/karu.dir/src/tests.cc.o: /home/eemil/dev/karu/src/tests.cc \
  /home/eemil/dev/karu/build/_deps/googletest-src/googletest/include/gtest/gtest-typed-test.h \
  /home/eemil/dev/karu/build/_deps/googletest-src/googletest/include/gtest/gtest_pred_impl.h \
  /home/eemil/dev/karu/src/memory_table.h \
- /usr/include/c++/11.1.0/shared_mutex \
- /usr/include/c++/11.1.0/bits/std_mutex.h \
  /usr/include/absl/status/status.h \
  /usr/include/absl/status/internal/status_internal.h \
  /usr/include/absl/status/statusor.h /usr/include/absl/base/call_once.h \
