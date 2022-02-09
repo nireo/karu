@@ -51,12 +51,20 @@ absl::Status DB::InitializeSSTables() noexcept {
 
 absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
   // check the memtable
-  auto status = current_memtable_->Get(key);
-  if (!status.ok()) {
+  if (auto status = current_memtable_->Get(key); !status.ok()) {
     return status.status();
   } else {
     return *status;
   }
+
+  // check the old memtable list
+  memtable_list_mutex_.ReaderLock();
+  for (const auto &mtable : memtable_list_) {
+    if (auto status = mtable->Get(key); status.ok()) {
+      return *status;  // we don't care about non valid values
+    }
+  }
+  memtable_list_mutex_.ReaderUnlock();
 
   // look for value in sstables.
 }
@@ -71,24 +79,38 @@ absl::Status DB::FlushMemoryTable() noexcept {
 
   memtable_mutex_.WriterUnlock();
 
+  memtable_list_mutex_.WriterLock();
+  memtable_list_.push_back(std::move(old_memtable));
+  size_t memtable_index = memtable_list_.size() - 1;
+  memtable_list_mutex_.WriterUnlock();
+
   int64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
                           std::chrono::system_clock::now().time_since_epoch())
                           .count();
 
-  std::thread t([&old_memtable, this, timestamp]() {
+  std::thread t([this, timestamp, memtable_index]() {
     std::string sstable_path =
         database_directory_ + '/' + std::to_string(timestamp) + ".data";
     std::unique_ptr<sstable::SSTable> ss =
         std::make_unique<sstable::SSTable>(sstable_path);
 
     // fill the sstable with data.
-    auto status = ss->BuildFromBTree(old_memtable_->map_);
+    auto status = ss->BuildFromBTree(memtable_list_[memtable_index]->map_);
     if (!status.ok()) {
       std::cerr << "failed to build sstable from btree_map.\n";
       return;
     }
 
     sstable_map_[timestamp] = std::move(ss);  // store the sstable.
+
+    memtable_list_mutex_.WriterLock();
+    std::unique_ptr<memtable::Memtable> useless_ =
+        std::move(memtable_list_[memtable_index]);
+    memtable_list_[memtable_index] = nullptr;
+    // remove the log file since it is not needed anymore
+    std::filesystem::remove(useless_->log_path_);
+    memtable_list_.erase(memtable_list_.begin() + memtable_index);
+    memtable_list_mutex_.WriterUnlock();
   });
 
   return absl::OkStatus();
