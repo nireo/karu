@@ -22,12 +22,11 @@ class DB {
                       const std::string &value) noexcept;  // string_view?
   absl::StatusOr<std::string> Get(
       const std::string &key) noexcept;  // string_view?
-  absl::StatusOr<std::string> Get(
-      absl::string_view key) noexcept;  // string_view?
   absl::Status Delete(const std::string &key) noexcept;
 
  private:
   std::unique_ptr<memtable::Memtable> current_memtable_ = nullptr;
+  std::unique_ptr<memtable::Memtable> old_memtable_ = nullptr;
   absl::btree_map<file_id_t, std::unique_ptr<sstable::SSTable>> sstable_map_;
   std::string database_directory_;
 

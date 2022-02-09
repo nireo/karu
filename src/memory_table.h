@@ -34,9 +34,9 @@ class Memtable {
   std::uint64_t Size() const noexcept { return file_size_; };
   std::string log_path_;
   std::unique_ptr<io::FileWriter> fw_;
+  absl::btree_map<std::string, std::string> map_;
 
  private:
-  absl::btree_map<std::string, std::string> map_;
   absl::Mutex index_mutex_;
   absl::Mutex file_lock_;
   std::uint64_t file_size_ = 0;

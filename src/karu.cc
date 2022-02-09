@@ -4,6 +4,7 @@
 
 #include <cstdio>
 #include <filesystem>
+#include <thread>
 
 #include "memory_table.h"
 #include "sstable.h"
@@ -56,6 +57,41 @@ absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
   } else {
     return *status;
   }
+
+  // look for value in sstables.
+}
+
+absl::Status DB::FlushMemoryTable() noexcept {
+  memtable_mutex_.WriterLock();
+
+  // copy the memory table such that operations can continue on the database.
+  std::unique_ptr<memtable::Memtable> old_memtable =
+      std::move(current_memtable_);
+  current_memtable_ = std::make_unique<memtable::Memtable>(database_directory_);
+
+  memtable_mutex_.WriterUnlock();
+
+  int64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
+                          std::chrono::system_clock::now().time_since_epoch())
+                          .count();
+
+  std::thread t([&old_memtable, this, timestamp]() {
+    std::string sstable_path =
+        database_directory_ + '/' + std::to_string(timestamp) + ".data";
+    std::unique_ptr<sstable::SSTable> ss =
+        std::make_unique<sstable::SSTable>(sstable_path);
+
+    // fill the sstable with data.
+    auto status = ss->BuildFromBTree(old_memtable_->map_);
+    if (!status.ok()) {
+      std::cerr << "failed to build sstable from btree_map.\n";
+      return;
+    }
+
+    sstable_map_[timestamp] = std::move(ss);  // store the sstable.
+  });
+
+  return absl::OkStatus();
 }
 
 }  // namespace karu
