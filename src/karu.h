@@ -13,6 +13,7 @@
 namespace karu {
 using file_id_t = std::int64_t;
 class DB {
+ public:
   DB(absl::string_view directory);
 
   // TODO: Implement these functions
@@ -26,7 +27,8 @@ class DB {
   absl::Status Shutdown() noexcept;
 
  private:
-  // we hold memtables which we have not yet written to disk in the memtable_list
+  // we hold memtables which we have not yet written to disk in the
+  // memtable_list
   std::vector<std::unique_ptr<memtable::Memtable>> memtable_list_;
   std::unique_ptr<memtable::Memtable> current_memtable_ = nullptr;
   absl::btree_map<file_id_t, std::unique_ptr<sstable::SSTable>> sstable_map_;
