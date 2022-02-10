@@ -12,4 +12,6 @@ add_test( KaruTest.BasicOperations /home/eemil/dev/karu/build/karu [==[--gtest_f
 set_tests_properties( KaruTest.BasicOperations PROPERTIES WORKING_DIRECTORY /home/eemil/dev/karu/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
 add_test( KaruTest.LotsOfPairs /home/eemil/dev/karu/build/karu [==[--gtest_filter=KaruTest.LotsOfPairs]==] --gtest_also_run_disabled_tests)
 set_tests_properties( KaruTest.LotsOfPairs PROPERTIES WORKING_DIRECTORY /home/eemil/dev/karu/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
-set( karu_TESTS EncoderTest.RawHeader MemtableTest.LogFileCreated MemtableTest.BasicOperations SSTableTest.TestBuildFromBTree SSTableTest.TestPopulateFromFile KaruTest.BasicOperations KaruTest.LotsOfPairs)
+add_test( KaruTest.MemtableFlush /home/eemil/dev/karu/build/karu [==[--gtest_filter=KaruTest.MemtableFlush]==] --gtest_also_run_disabled_tests)
+set_tests_properties( KaruTest.MemtableFlush PROPERTIES WORKING_DIRECTORY /home/eemil/dev/karu/build SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set( karu_TESTS EncoderTest.RawHeader MemtableTest.LogFileCreated MemtableTest.BasicOperations SSTableTest.TestBuildFromBTree SSTableTest.TestPopulateFromFile KaruTest.BasicOperations KaruTest.LotsOfPairs KaruTest.MemtableFlush)

@@ -1,10 +1,12 @@
 #include <absl/container/btree_map.h>
 
+#include <chrono>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <random>
 #include <string>
+#include <thread>
 
 #include "gtest/gtest.h"
 #include "karu.h"
@@ -34,6 +36,28 @@ std::string gen_random_str(size_t size) {
     random_string += chars[distribution(generator)];
   }
   return random_string;
+}
+
+std::vector<std::string> generate_random_keys(size_t key_count = 10000,
+                                              size_t key_size = 10) {
+  std::vector<std::string> keys;
+  keys.resize(key_count);
+
+  for (std::string &v : keys) {
+    v = gen_random_str(key_size);
+  }
+  return keys;
+}
+
+std::vector<std::pair<std::string, std::string>> generate_random_pairs(
+    size_t pair_count = 10000, size_t str_size = 10) {
+  std::vector<std::pair<std::string, std::string>> keys(pair_count);
+  for (auto &[key, value] : keys) {
+    key = gen_random_str(str_size);
+    value = gen_random_str(str_size);
+  }
+
+  return keys;
 }
 
 TEST(EncoderTest, RawHeader) { EXPECT_EQ(1, 1); }
@@ -146,24 +170,46 @@ TEST(KaruTest, BasicOperations) {
 TEST(KaruTest, LotsOfPairs) {
   const std::string test_dir = "./test";
   createTestDirectory(test_dir);
-  constexpr size_t pair_count = 10000;
-  constexpr size_t string_size = 15;
-  std::vector<std::string> pairs;
-  pairs.resize(pair_count);
 
+  auto keys = generate_random_keys();
   karu::DB db(test_dir);
 
-  for (std::string &v : pairs) {
-    v = gen_random_str(string_size);
-    auto status = db.Insert(v, v);
+  for (const auto &k : keys) {
+    auto status = db.Insert(k, k);
     OK;
   }
 
-  for (const auto &key : pairs) {
+  for (const auto &key : keys) {
     auto status = db.Get(key);
     OK;
 
     EXPECT_EQ(key, *status);
+  }
+
+  std::filesystem::remove_all(test_dir);
+}
+
+TEST(KaruTest, MemtableFlush) {
+  const std::string test_dir = "./test";
+  createTestDirectory(test_dir);
+
+  auto keys = generate_random_keys(500);
+  karu::DB db(test_dir);
+
+  for (const auto &k : keys) {
+    auto status = db.Insert(k, k);
+    OK;
+  }
+  auto status = db.FlushMemoryTable();
+  OK;
+
+  // let is sleep for a little while
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+  EXPECT_EQ(1, db.sstable_map_.size());
+  for (const auto &k : keys) {
+    auto f_status = (*db.sstable_map_.begin()).second->Find(k);
+    EXPECT_TRUE(f_status.ok());
   }
 
   std::filesystem::remove_all(test_dir);

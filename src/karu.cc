@@ -94,17 +94,17 @@ absl::Status DB::Insert(const std::string &key,
 absl::Status DB::FlushMemoryTable() noexcept {
   memtable_mutex_.WriterLock();
 
-  // copy the memory table such that operations can continue on the database.
   std::unique_ptr<memtable::Memtable> old_memtable =
       std::move(current_memtable_);
   current_memtable_ = std::make_unique<memtable::Memtable>(database_directory_);
-
   memtable_mutex_.WriterUnlock();
+  std::cerr << "created a new memtable.\n";
 
   memtable_list_mutex_.WriterLock();
   memtable_list_.push_back(std::move(old_memtable));
   size_t memtable_index = memtable_list_.size() - 1;
   memtable_list_mutex_.WriterUnlock();
+  std::cerr << "added old memtable to queue.\n";
 
   int64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(
                           std::chrono::system_clock::now().time_since_epoch())
@@ -115,10 +115,16 @@ absl::Status DB::FlushMemoryTable() noexcept {
         database_directory_ + '/' + std::to_string(timestamp) + ".data";
     std::unique_ptr<sstable::SSTable> ss =
         std::make_unique<sstable::SSTable>(sstable_path);
+    if (auto status = ss->InitWriterAndReader(); !status.ok()) {
+      std::cerr << "failed to initialize writer and reader.\n";
+      return;
+    }
+    std::cerr << "created sstable\n";
 
     // fill the sstable with data.
     auto status = ss->BuildFromBTree(memtable_list_[memtable_index]->map_);
-    if (!status.ok()) {
+    if (auto status = ss->BuildFromBTree(memtable_list_[memtable_index]->map_);
+        !status.ok()) {
       std::cerr << "failed to build sstable from btree_map.\n";
       return;
     }
@@ -128,12 +134,19 @@ absl::Status DB::FlushMemoryTable() noexcept {
     memtable_list_mutex_.WriterLock();
     std::unique_ptr<memtable::Memtable> useless_ =
         std::move(memtable_list_[memtable_index]);
+
     memtable_list_[memtable_index] = nullptr;
+
     // remove the log file since it is not needed anymore
     std::filesystem::remove(useless_->log_path_);
     memtable_list_.erase(memtable_list_.begin() + memtable_index);
+    std::cerr << "removed memtable";
     memtable_list_mutex_.WriterUnlock();
   });
+
+  // NOTE: this is just for testing, when running for real comment
+  // this.
+  // t.join();
 
   return absl::OkStatus();
 }
