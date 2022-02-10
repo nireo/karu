@@ -23,6 +23,7 @@ class DB {
   absl::StatusOr<std::string> Get(
       const std::string &key) noexcept;  // string_view?
   absl::Status Delete(const std::string &key) noexcept;
+  absl::Status Shutdown() noexcept;
 
  private:
   // we hold memtables which we have not yet written to disk in the memtable_list

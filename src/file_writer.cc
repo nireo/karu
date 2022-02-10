@@ -68,6 +68,5 @@ absl::StatusOr<std::uint64_t> FileReader::ReadAt(
 
   return size;
 }
-
 }  // namespace io
 }  // namespace karu

@@ -31,6 +31,7 @@ class Memtable {
 
   [[nodiscard]] absl::Status AppendToLog(const std::string &key_str,
                                          const std::string &value_str) noexcept;
+  std::int64_t ID() const noexcept { return id_; }
   std::uint64_t Size() const noexcept { return file_size_; };
   std::string log_path_;
   std::unique_ptr<io::FileWriter> fw_;
@@ -40,6 +41,7 @@ class Memtable {
   absl::Mutex index_mutex_;
   absl::Mutex file_lock_;
   std::uint64_t file_size_ = 0;
+  std::int64_t id_;
 };
 
 absl::StatusOr<std::unique_ptr<Memtable>> CreateMemtableWithDir(

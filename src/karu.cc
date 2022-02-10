@@ -1,6 +1,7 @@
 #include "karu.h"
 
 #include <absl/status/status.h>
+#include <absl/synchronization/mutex.h>
 
 #include <cstdio>
 #include <filesystem>
@@ -69,6 +70,27 @@ absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
   // look for value in sstables.
 }
 
+absl::Status DB::Insert(const std::string &key,
+                        const std::string &value) noexcept {
+  memtable_mutex_.WriterLock();
+  if (auto status = current_memtable_->Insert(key, value); !status.ok()) {
+    memtable_mutex_.WriterUnlock();
+    return status;
+  }
+  memtable_mutex_.WriterUnlock();
+
+  memtable_mutex_.ReaderLock();
+  std::uint64_t size = current_memtable_->Size();
+  memtable_mutex_.ReaderUnlock();
+  if (size > memtable::kMaxMemSize) {
+    if (auto status = FlushMemoryTable(); !status.ok()) {
+      return status;
+    }
+  }
+
+  return absl::OkStatus();
+}
+
 absl::Status DB::FlushMemoryTable() noexcept {
   memtable_mutex_.WriterLock();
 
@@ -112,6 +134,33 @@ absl::Status DB::FlushMemoryTable() noexcept {
     memtable_list_.erase(memtable_list_.begin() + memtable_index);
     memtable_list_mutex_.WriterUnlock();
   });
+
+  return absl::OkStatus();
+}
+
+// shutdown makes sure that all memtables are written to the disk. Log files do
+// ensure that no data is lost, but the Shutdown() function can be considered a
+// more graceful shutdown as it converts the data into its intended format.
+absl::Status DB::Shutdown() noexcept {
+  memtable_list_mutex_.WriterLock();
+
+  for (size_t i = 0; i < memtable_list_.size(); ++i) {
+    auto mtable = std::move(memtable_list_[i]);
+    memtable_list_[i] = nullptr;
+    std::string sstable_path =
+        database_directory_ + '/' + std::to_string(mtable->ID()) + ".data";
+    sstable::SSTable sstable(sstable_path);
+
+    if (auto status = sstable.BuildFromBTree(mtable->map_); !status.ok()) {
+      std::cerr << "error writing memtable(" << mtable->ID() << ") to disk.\n";
+      continue;
+    }
+
+    // remove the log file as it's useless once data has been transferred into
+    // the sstable.
+    std::filesystem::remove(mtable->log_path_);
+  }
+  memtable_list_mutex_.WriterUnlock();
 
   return absl::OkStatus();
 }

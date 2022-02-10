@@ -25,6 +25,7 @@ Memtable::Memtable(const std::string &directory) {
                           std::chrono::system_clock::now().time_since_epoch())
                           .count();
 
+  id_ = timestamp;
   // make file path
   log_path_ = directory;
   log_path_ += "/" + std::to_string(timestamp) + ".log";
