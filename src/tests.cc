@@ -9,6 +9,7 @@
 #include <string>
 #include <thread>
 
+#include "bloom.h"
 #include "encoder.h"
 #include "gtest/gtest.h"
 #include "karu.h"
@@ -128,8 +129,7 @@ TEST(SSTableTest, TestPopulateFromFile) {
 
     createTestFile("./test/table.data");
     {
-      auto sstable =
-          std::make_unique<sstable::SSTable>("./test/table.data");
+      auto sstable = std::make_unique<sstable::SSTable>("./test/table.data");
       auto status = sstable->InitWriterAndReader();
       OK;
       status = sstable->BuildFromBTree(values);
@@ -137,8 +137,7 @@ TEST(SSTableTest, TestPopulateFromFile) {
     }
 
     {
-      auto sstable =
-          std::make_unique<sstable::SSTable>("./test/table.data");
+      auto sstable = std::make_unique<sstable::SSTable>("./test/table.data");
       auto status = sstable->InitOnlyReader();
       OK;
       status = sstable->PopulateFromFile();
@@ -200,9 +199,9 @@ TEST(KaruTest, MemtableFlush) {
     OK;
 
     // let is sleep for a little while
-    EXPECT_EQ(1, db.sstable_map_.size());
+    EXPECT_EQ(1, db.sstable_list_.size());
     for (const auto &k : keys) {
-      auto f_status = (*db.sstable_map_.begin()).second->Find(k);
+      auto f_status = db.sstable_list_[0]->Find(k);
       EXPECT_TRUE(f_status.ok());
     }
   });
@@ -211,4 +210,43 @@ TEST(KaruTest, MemtableFlush) {
 TEST(EncoderTest, HintHeader) {
   std::unique_ptr<std::uint8_t[]> buffer(new std::uint8_t[8]);
   encoder::HintHeader hintheader(buffer.get());
+  constexpr std::uint8_t key_size = 16;
+  constexpr std::uint16_t value_size = 1024;
+
+  hintheader.SetKeyLength(key_size);
+  hintheader.SetValueLength(value_size);
+
+  EXPECT_EQ(hintheader.KeyLength(), key_size);
+  EXPECT_EQ(hintheader.ValueLength(), value_size);
+
+  hintheader.MakeTombstone();
+  EXPECT_TRUE(hintheader.IsTombstoneValue());
+}
+
+TEST(EncoderTest, EntryHeader) {
+  std::unique_ptr<std::uint8_t[]> buffer(new std::uint8_t[8]);
+  encoder::HintHeader entryheader(buffer.get());
+  constexpr std::uint8_t key_size = 16;
+  constexpr std::uint16_t value_size = 1024;
+
+  entryheader.SetKeyLength(key_size);
+  entryheader.SetValueLength(value_size);
+
+  EXPECT_EQ(entryheader.KeyLength(), key_size);
+  EXPECT_EQ(entryheader.ValueLength(), value_size);
+
+  entryheader.MakeTombstone();
+  EXPECT_TRUE(entryheader.IsTombstoneValue());
+}
+
+TEST(BloomFilterTest, Main) {
+  BloomFilter bloomfilter(60000, 13);
+  auto keys = generate_random_keys(2500);
+  for (const auto &k : keys) {
+    bloomfilter.add(k.c_str(), k.size());
+  }
+
+  for (const auto &k : keys) {
+    EXPECT_TRUE(bloomfilter.contains(k.c_str(), k.size()));
+  }
 }

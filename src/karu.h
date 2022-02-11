@@ -25,15 +25,13 @@ class DB {
       const std::string &key) noexcept;  // string_view?
   absl::Status Delete(const std::string &key) noexcept;
   absl::Status Shutdown() noexcept;
-
-  absl::btree_map<file_id_t, std::unique_ptr<sstable::SSTable>> sstable_map_;
+  std::vector<std::unique_ptr<sstable::SSTable>> sstable_list_;
 
  private:
   // we hold memtables which we have not yet written to disk in the
   // memtable_list
   std::vector<std::unique_ptr<memtable::Memtable>> memtable_list_;
   std::unique_ptr<memtable::Memtable> current_memtable_ = nullptr;
-
   std::string database_directory_;
 
   absl::Mutex sstable_mutex_;

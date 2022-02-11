@@ -5,6 +5,7 @@
 
 #include <cstdio>
 #include <filesystem>
+#include <memory>
 #include <thread>
 
 #include "memory_table.h"
@@ -36,17 +37,16 @@ absl::Status DB::InitializeSSTables() noexcept {
       return absl::InternalError("couldn't read file id properly");
     }
 
-    std::unique_ptr<sstable::SSTable> sstable =
-        std::make_unique<sstable::SSTable>(entry.path());
+    auto sstable = std::make_unique<sstable::SSTable>(entry.path());
 
     auto status = sstable->InitOnlyReader();
     if (!status.ok()) {
       return status;
     }
-
     status = sstable->PopulateFromFile();
-    sstable_map_[id] = std::move(sstable);
+    sstable_list_.push_back(std::move(sstable));
   }
+
   return absl::OkStatus();
 }
 
@@ -127,8 +127,7 @@ absl::Status DB::FlushMemoryTable() noexcept {
     std::cerr << "failed to build sstable from btree_map.\n";
     return absl::InternalError("failed to build sstable from btree.\n");
   }
-
-  sstable_map_[timestamp] = std::move(ss);  // store the sstable.
+  sstable_list_.push_back(std::move(ss));  // store the sstable.
 
   memtable_list_mutex_.WriterLock();
   std::unique_ptr<memtable::Memtable> useless_ =

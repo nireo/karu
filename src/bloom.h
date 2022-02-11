@@ -7,9 +7,9 @@
 
 namespace karu {
 struct BloomFilter {
-  explicit BloomFilter(std::uint64_t size, uint8_t hash_count);
-  void add(const std::uint8_t *data, std::size_t len) noexcept;
-  bool contains(const std::uint8_t *data, std::size_t len) const noexcept;
+  BloomFilter(std::uint64_t size, uint8_t hash_count);
+  void add(const char *data, std::size_t len) noexcept;
+  bool contains(const char *data, std::size_t len) const noexcept;
 
  private:
   std::uint8_t hash_count_;

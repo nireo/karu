@@ -12,22 +12,20 @@ inline std::uint64_t nth_hash(uint8_t n, uint64_t hash_a, uint64_t hash_b,
   return (hash_a + n * hash_b) % filter_size;
 }
 
-std::array<std::uint64_t, 2> hash(const uint8_t *data,
-                                  std::size_t len) noexcept {
+std::array<std::uint64_t, 2> hash(const char *data, std::size_t len) noexcept {
   std::array<std::uint64_t, 2> hash_value;
   MurmurHash3_x64_128(data, len, 0, hash_value.data());
   return hash_value;
 }
 
-void BloomFilter::add(const uint8_t *data, std::size_t len) noexcept {
+void BloomFilter::add(const char *data, std::size_t len) noexcept {
   auto hashValues = hash(data, len);
   for (int n = 0; n < hash_count_; n++) {
     bits_[nth_hash(n, hashValues[0], hashValues[1], bits_.size())] = true;
   }
 }
 
-bool BloomFilter::contains(const uint8_t *data,
-                           std::size_t len) const noexcept {
+bool BloomFilter::contains(const char *data, std::size_t len) const noexcept {
   auto hashValues = hash(data, len);
   for (int n = 0; n < hash_count_; n++) {
     if (!bits_[nth_hash(n, hashValues[0], hashValues[1], bits_.size())]) {
