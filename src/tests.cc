@@ -4,14 +4,18 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <random>
 #include <string>
 #include <thread>
 
+#include "encoder.h"
 #include "gtest/gtest.h"
 #include "karu.h"
 #include "memory_table.h"
 #include "sstable.h"
+
+using namespace karu;
 
 #define OK EXPECT_TRUE(status.ok())
 
@@ -60,157 +64,151 @@ std::vector<std::pair<std::string, std::string>> generate_random_pairs(
   return keys;
 }
 
+void test_wrapper(std::function<void(std::string)> test_func) {
+  const std::string test_dir = "./test";
+  createTestDirectory(test_dir);
+
+  test_func(test_dir);
+
+  std::filesystem::remove_all(test_dir);
+}
+
 TEST(EncoderTest, RawHeader) { EXPECT_EQ(1, 1); }
 
 TEST(MemtableTest, LogFileCreated) {
-  const std::string test_dir = "./test";
-  createTestDirectory(test_dir);
-
-  karu::memtable::Memtable memtable(test_dir);
-  EXPECT_TRUE(std::filesystem::exists(memtable.log_path_));
-
-  std::filesystem::remove_all(test_dir);
+  test_wrapper([](std::string test_dir) {
+    memtable::Memtable memtable(test_dir);
+    EXPECT_TRUE(std::filesystem::exists(memtable.log_path_));
+  });
 }
 
 TEST(MemtableTest, BasicOperations) {
-  const std::string test_dir = "./test";
-  createTestDirectory(test_dir);
+  test_wrapper([](std::string test_dir) {
+    memtable::Memtable memtable(test_dir);
 
-  karu::memtable::Memtable memtable(test_dir);
+    auto status = memtable.Insert("key", "value");
+    EXPECT_TRUE(status.ok());
 
-  auto status = memtable.Insert("key", "value");
-  EXPECT_TRUE(status.ok());
+    auto value = memtable.Get("key");
+    EXPECT_TRUE(value.ok());
 
-  auto value = memtable.Get("key");
-  EXPECT_TRUE(value.ok());
-
-  EXPECT_EQ(*value, "value");
-
-  std::filesystem::remove_all(test_dir);
+    EXPECT_EQ(*value, "value");
+  });
 }
 
 TEST(SSTableTest, TestBuildFromBTree) {
-  const std::string test_dir = "./test";
-  createTestDirectory(test_dir);
-  absl::btree_map<std::string, std::string> values = {
-      {"hello", "world"},
-      {"key", "world"},
-      {"1", "2"},
-  };
+  test_wrapper([](std::string test_dir) {
+    absl::btree_map<std::string, std::string> values = {
+        {"hello", "world"},
+        {"key", "world"},
+        {"1", "2"},
+    };
 
-  createTestFile("./test/table.data");
-  karu::sstable::SSTable sstable("./test/table.data");
-  auto status = sstable.InitWriterAndReader();
+    createTestFile("./test/table.data");
+    sstable::SSTable sstable("./test/table.data");
+    auto status = sstable.InitWriterAndReader();
 
-  status = sstable.BuildFromBTree(values);
-
-  for (const auto &[key, value] : values) {
-    auto f_status = sstable.Find(key);
-
-    EXPECT_TRUE(f_status.ok());
-    EXPECT_EQ(*f_status, value);
-  }
-
-  std::filesystem::remove_all(test_dir);
-}
-
-TEST(SSTableTest, TestPopulateFromFile) {
-  const std::string test_dir = "./test";
-  createTestDirectory(test_dir);
-  absl::btree_map<std::string, std::string> values = {
-      {"sami", "world"},
-      {"hello", "joo"},
-  };
-
-  createTestFile("./test/table.data");
-  {
-    auto sstable =
-        std::make_unique<karu::sstable::SSTable>("./test/table.data");
-    auto status = sstable->InitWriterAndReader();
-    OK;
-    status = sstable->BuildFromBTree(values);
-    OK;
-  }
-
-  {
-    auto sstable =
-        std::make_unique<karu::sstable::SSTable>("./test/table.data");
-    auto status = sstable->InitOnlyReader();
-    OK;
-    status = sstable->PopulateFromFile();
-    OK;
+    status = sstable.BuildFromBTree(values);
 
     for (const auto &[key, value] : values) {
-      auto f_status = sstable->Find(key);
+      auto f_status = sstable.Find(key);
 
       EXPECT_TRUE(f_status.ok());
       EXPECT_EQ(*f_status, value);
     }
-  }
-  std::filesystem::remove_all(test_dir);
+  });
+}
+
+TEST(SSTableTest, TestPopulateFromFile) {
+  test_wrapper([](std::string test_dir) {
+    absl::btree_map<std::string, std::string> values = {
+        {"sami", "world"},
+        {"hello", "joo"},
+    };
+
+    createTestFile("./test/table.data");
+    {
+      auto sstable =
+          std::make_unique<sstable::SSTable>("./test/table.data");
+      auto status = sstable->InitWriterAndReader();
+      OK;
+      status = sstable->BuildFromBTree(values);
+      OK;
+    }
+
+    {
+      auto sstable =
+          std::make_unique<sstable::SSTable>("./test/table.data");
+      auto status = sstable->InitOnlyReader();
+      OK;
+      status = sstable->PopulateFromFile();
+      OK;
+
+      for (const auto &[key, value] : values) {
+        auto f_status = sstable->Find(key);
+
+        EXPECT_TRUE(f_status.ok());
+        EXPECT_EQ(*f_status, value);
+      }
+    }
+  });
 }
 
 TEST(KaruTest, BasicOperations) {
-  const std::string test_dir = "./test";
-  createTestDirectory(test_dir);
+  test_wrapper([](std::string test_dir) {
+    DB db(test_dir);
 
-  karu::DB db(test_dir);
+    // these go into the memtable.
+    auto status = db.Insert("hello", "world");
+    OK;
 
-  // these go into the memtable.
-  auto status = db.Insert("hello", "world");
-  OK;
-
-  auto get_status = db.Get("hello");
-  EXPECT_TRUE(get_status.ok());
-  EXPECT_EQ("world", *get_status);
-
-  std::filesystem::remove_all(test_dir);
+    auto get_status = db.Get("hello");
+    EXPECT_TRUE(get_status.ok());
+    EXPECT_EQ("world", *get_status);
+  });
 }
 
 TEST(KaruTest, LotsOfPairs) {
-  const std::string test_dir = "./test";
-  createTestDirectory(test_dir);
+  test_wrapper([](std::string test_dir) {
+    auto keys = generate_random_keys();
+    DB db(test_dir);
 
-  auto keys = generate_random_keys();
-  karu::DB db(test_dir);
+    for (const auto &k : keys) {
+      auto status = db.Insert(k, k);
+      OK;
+    }
 
-  for (const auto &k : keys) {
-    auto status = db.Insert(k, k);
-    OK;
-  }
+    for (const auto &key : keys) {
+      auto status = db.Get(key);
+      OK;
 
-  for (const auto &key : keys) {
-    auto status = db.Get(key);
-    OK;
-
-    EXPECT_EQ(key, *status);
-  }
-
-  std::filesystem::remove_all(test_dir);
+      EXPECT_EQ(key, *status);
+    }
+  });
 }
 
 TEST(KaruTest, MemtableFlush) {
-  const std::string test_dir = "./test";
-  createTestDirectory(test_dir);
+  test_wrapper([](std::string test_dir) {
+    auto keys = generate_random_keys(500);
+    karu::DB db(test_dir);
 
-  auto keys = generate_random_keys(500);
-  karu::DB db(test_dir);
-
-  for (const auto &k : keys) {
-    auto status = db.Insert(k, k);
+    for (const auto &k : keys) {
+      auto status = db.Insert(k, k);
+      OK;
+    }
+    auto status = db.FlushMemoryTable();
     OK;
-  }
-  auto status = db.FlushMemoryTable();
-  OK;
 
-  // let is sleep for a little while
-  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    // let is sleep for a little while
+    EXPECT_EQ(1, db.sstable_map_.size());
+    for (const auto &k : keys) {
+      auto f_status = (*db.sstable_map_.begin()).second->Find(k);
+      EXPECT_TRUE(f_status.ok());
+    }
+  });
+}
 
-  EXPECT_EQ(1, db.sstable_map_.size());
-  for (const auto &k : keys) {
-    auto f_status = (*db.sstable_map_.begin()).second->Find(k);
-    EXPECT_TRUE(f_status.ok());
-  }
-
-  std::filesystem::remove_all(test_dir);
+TEST(EncoderTest, HintHeader) {
+  std::unique_ptr<std::uint8_t[]> buffer(new std::uint8_t[8]);
+  encoder::HintHeader hintheader(buffer.get());
 }

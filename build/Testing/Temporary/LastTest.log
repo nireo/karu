@@ -1,10 +1,10 @@
-Start testing: Feb 10 23:33 EET
+Start testing: Feb 11 21:21 EET
 ----------------------------------------------------------
 1/8 Testing: EncoderTest.RawHeader
 1/8 Test: EncoderTest.RawHeader
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=EncoderTest.RawHeader" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"EncoderTest.RawHeader" start time: Feb 10 23:33 EET
+"EncoderTest.RawHeader" start time: Feb 11 21:21 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -23,7 +23,7 @@ Note: Google Test filter = EncoderTest.RawHeader
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"EncoderTest.RawHeader" end time: Feb 10 23:33 EET
+"EncoderTest.RawHeader" end time: Feb 11 21:21 EET
 "EncoderTest.RawHeader" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -31,7 +31,7 @@ Test Passed.
 2/8 Test: MemtableTest.LogFileCreated
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=MemtableTest.LogFileCreated" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"MemtableTest.LogFileCreated" start time: Feb 10 23:33 EET
+"MemtableTest.LogFileCreated" start time: Feb 11 21:21 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -40,17 +40,17 @@ Note: Google Test filter = MemtableTest.LogFileCreated
 [----------] Global test environment set-up.
 [----------] 1 test from MemtableTest
 [ RUN      ] MemtableTest.LogFileCreated
-[       OK ] MemtableTest.LogFileCreated (0 ms)
-[----------] 1 test from MemtableTest (0 ms total)
+[       OK ] MemtableTest.LogFileCreated (1 ms)
+[----------] 1 test from MemtableTest (1 ms total)
 
 [----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
+[==========] 1 test from 1 test suite ran. (1 ms total)
 [  PASSED  ] 1 test.
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"MemtableTest.LogFileCreated" end time: Feb 10 23:33 EET
+"MemtableTest.LogFileCreated" end time: Feb 11 21:21 EET
 "MemtableTest.LogFileCreated" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -58,7 +58,7 @@ Test Passed.
 3/8 Test: MemtableTest.BasicOperations
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=MemtableTest.BasicOperations" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"MemtableTest.BasicOperations" start time: Feb 10 23:33 EET
+"MemtableTest.BasicOperations" start time: Feb 11 21:21 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -77,7 +77,7 @@ Note: Google Test filter = MemtableTest.BasicOperations
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"MemtableTest.BasicOperations" end time: Feb 10 23:33 EET
+"MemtableTest.BasicOperations" end time: Feb 11 21:21 EET
 "MemtableTest.BasicOperations" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -85,7 +85,7 @@ Test Passed.
 4/8 Test: SSTableTest.TestBuildFromBTree
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=SSTableTest.TestBuildFromBTree" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"SSTableTest.TestBuildFromBTree" start time: Feb 10 23:33 EET
+"SSTableTest.TestBuildFromBTree" start time: Feb 11 21:21 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -104,7 +104,7 @@ Note: Google Test filter = SSTableTest.TestBuildFromBTree
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"SSTableTest.TestBuildFromBTree" end time: Feb 10 23:33 EET
+"SSTableTest.TestBuildFromBTree" end time: Feb 11 21:21 EET
 "SSTableTest.TestBuildFromBTree" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -112,7 +112,7 @@ Test Passed.
 5/8 Test: SSTableTest.TestPopulateFromFile
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=SSTableTest.TestPopulateFromFile" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"SSTableTest.TestPopulateFromFile" start time: Feb 10 23:33 EET
+"SSTableTest.TestPopulateFromFile" start time: Feb 11 21:21 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -126,7 +126,7 @@ sami:11
 /home/eemil/dev/karu/src/tests.cc:147: Failure
 Expected equality of these values:
   *f_status
-    Which is: "jooX\x5"
+    Which is: "joob\x5"
   value
     Which is: "joo"
 sami 0
@@ -140,7 +140,7 @@ Expected: true
 Test time =   0.06 sec
 ----------------------------------------------------------
 Test Failed.
-"SSTableTest.TestPopulateFromFile" end time: Feb 10 23:33 EET
+"SSTableTest.TestPopulateFromFile" end time: Feb 11 21:21 EET
 "SSTableTest.TestPopulateFromFile" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -148,7 +148,7 @@ Test Failed.
 6/8 Test: KaruTest.BasicOperations
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=KaruTest.BasicOperations" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"KaruTest.BasicOperations" start time: Feb 10 23:33 EET
+"KaruTest.BasicOperations" start time: Feb 11 21:21 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -158,16 +158,16 @@ Note: Google Test filter = KaruTest.BasicOperations
 [----------] 1 test from KaruTest
 [ RUN      ] KaruTest.BasicOperations
 [       OK ] KaruTest.BasicOperations (0 ms)
-[----------] 1 test from KaruTest (0 ms total)
+[----------] 1 test from KaruTest (1 ms total)
 
 [----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (0 ms total)
+[==========] 1 test from 1 test suite ran. (1 ms total)
 [  PASSED  ] 1 test.
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
 Test Passed.
-"KaruTest.BasicOperations" end time: Feb 10 23:33 EET
+"KaruTest.BasicOperations" end time: Feb 11 21:21 EET
 "KaruTest.BasicOperations" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -175,7 +175,7 @@ Test Passed.
 7/8 Test: KaruTest.LotsOfPairs
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=KaruTest.LotsOfPairs" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"KaruTest.LotsOfPairs" start time: Feb 10 23:33 EET
+"KaruTest.LotsOfPairs" start time: Feb 11 21:21 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -184,17 +184,17 @@ Note: Google Test filter = KaruTest.LotsOfPairs
 [----------] Global test environment set-up.
 [----------] 1 test from KaruTest
 [ RUN      ] KaruTest.LotsOfPairs
-[       OK ] KaruTest.LotsOfPairs (242 ms)
-[----------] 1 test from KaruTest (242 ms total)
+[       OK ] KaruTest.LotsOfPairs (262 ms)
+[----------] 1 test from KaruTest (262 ms total)
 
 [----------] Global test environment tear-down
-[==========] 1 test from 1 test suite ran. (242 ms total)
+[==========] 1 test from 1 test suite ran. (262 ms total)
 [  PASSED  ] 1 test.
 <end of output>
-Test time =   0.25 sec
+Test time =   0.27 sec
 ----------------------------------------------------------
 Test Passed.
-"KaruTest.LotsOfPairs" end time: Feb 10 23:33 EET
+"KaruTest.LotsOfPairs" end time: Feb 11 21:21 EET
 "KaruTest.LotsOfPairs" time elapsed: 00:00:00
 ----------------------------------------------------------
 
@@ -202,7 +202,7 @@ Test Passed.
 8/8 Test: KaruTest.MemtableFlush
 Command: "/home/eemil/dev/karu/build/karu" "--gtest_filter=KaruTest.MemtableFlush" "--gtest_also_run_disabled_tests"
 Directory: /home/eemil/dev/karu/build
-"KaruTest.MemtableFlush" start time: Feb 10 23:33 EET
+"KaruTest.MemtableFlush" start time: Feb 11 21:21 EET
 Output:
 ----------------------------------------------------------
 Running main() from /home/eemil/dev/karu/build/_deps/googletest-src/googletest/src/gtest_main.cc
@@ -213,13 +213,19 @@ Note: Google Test filter = KaruTest.MemtableFlush
 [ RUN      ] KaruTest.MemtableFlush
 created a new memtable.
 added old memtable to queue.
-terminate called without an active exception
+created sstable
+removed memtable[       OK ] KaruTest.MemtableFlush (14 ms)
+[----------] 1 test from KaruTest (14 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (14 ms total)
+[  PASSED  ] 1 test.
 <end of output>
-Test time =   0.09 sec
+Test time =   0.02 sec
 ----------------------------------------------------------
-Test Failed.
-"KaruTest.MemtableFlush" end time: Feb 10 23:33 EET
+Test Passed.
+"KaruTest.MemtableFlush" end time: Feb 11 21:21 EET
 "KaruTest.MemtableFlush" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Feb 10 23:33 EET
+End testing: Feb 11 21:21 EET

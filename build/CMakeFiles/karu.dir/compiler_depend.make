@@ -2337,6 +2337,9 @@ CMakeFiles/karu.dir/src/tests.cc.o: ../src/tests.cc \
   /usr/include/c++/11.1.0/numeric \
   /usr/include/c++/11.1.0/bits/stl_numeric.h \
   /usr/include/c++/11.1.0/pstl/glue_numeric_defs.h \
+  /usr/include/c++/11.1.0/thread \
+  /usr/include/c++/11.1.0/bits/std_thread.h \
+  /usr/include/c++/11.1.0/bits/this_thread_sleep.h \
   _deps/googletest-src/googletest/include/gtest/gtest.h \
   _deps/googletest-src/googletest/include/gtest/internal/gtest-internal.h \
   _deps/googletest-src/googletest/include/gtest/internal/gtest-port.h \
