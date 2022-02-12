@@ -236,6 +236,30 @@ gtest_main/fast:
 	$(MAKE) $(MAKESILENT) -f _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build.make _deps/googletest-build/googletest/CMakeFiles/gtest_main.dir/build
 .PHONY : gtest_main/fast
 
+src/bloom.o: src/bloom.cc.o
+.PHONY : src/bloom.o
+
+# target to build an object file
+src/bloom.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/bloom.cc.o
+.PHONY : src/bloom.cc.o
+
+src/bloom.i: src/bloom.cc.i
+.PHONY : src/bloom.i
+
+# target to preprocess a source file
+src/bloom.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/bloom.cc.i
+.PHONY : src/bloom.cc.i
+
+src/bloom.s: src/bloom.cc.s
+.PHONY : src/bloom.s
+
+# target to generate assembly for a file
+src/bloom.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/bloom.cc.s
+.PHONY : src/bloom.cc.s
+
 src/encoder.o: src/encoder.cc.o
 .PHONY : src/encoder.o
 
@@ -284,6 +308,30 @@ src/file_writer.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/file_writer.cc.s
 .PHONY : src/file_writer.cc.s
 
+src/hint.o: src/hint.cc.o
+.PHONY : src/hint.o
+
+# target to build an object file
+src/hint.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/hint.cc.o
+.PHONY : src/hint.cc.o
+
+src/hint.i: src/hint.cc.i
+.PHONY : src/hint.i
+
+# target to preprocess a source file
+src/hint.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/hint.cc.i
+.PHONY : src/hint.cc.i
+
+src/hint.s: src/hint.cc.s
+.PHONY : src/hint.s
+
+# target to generate assembly for a file
+src/hint.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/hint.cc.s
+.PHONY : src/hint.cc.s
+
 src/karu.o: src/karu.cc.o
 .PHONY : src/karu.o
 
@@ -331,6 +379,30 @@ src/memory_table.s: src/memory_table.cc.s
 src/memory_table.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/memory_table.cc.s
 .PHONY : src/memory_table.cc.s
+
+src/murmurhash3.o: src/murmurhash3.cc.o
+.PHONY : src/murmurhash3.o
+
+# target to build an object file
+src/murmurhash3.cc.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/murmurhash3.cc.o
+.PHONY : src/murmurhash3.cc.o
+
+src/murmurhash3.i: src/murmurhash3.cc.i
+.PHONY : src/murmurhash3.i
+
+# target to preprocess a source file
+src/murmurhash3.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/murmurhash3.cc.i
+.PHONY : src/murmurhash3.cc.i
+
+src/murmurhash3.s: src/murmurhash3.cc.s
+.PHONY : src/murmurhash3.s
+
+# target to generate assembly for a file
+src/murmurhash3.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/karu.dir/build.make CMakeFiles/karu.dir/src/murmurhash3.cc.s
+.PHONY : src/murmurhash3.cc.s
 
 src/sstable.o: src/sstable.cc.o
 .PHONY : src/sstable.o
@@ -398,18 +470,27 @@ help:
 	@echo "... gtest"
 	@echo "... gtest_main"
 	@echo "... karu"
+	@echo "... src/bloom.o"
+	@echo "... src/bloom.i"
+	@echo "... src/bloom.s"
 	@echo "... src/encoder.o"
 	@echo "... src/encoder.i"
 	@echo "... src/encoder.s"
 	@echo "... src/file_writer.o"
 	@echo "... src/file_writer.i"
 	@echo "... src/file_writer.s"
+	@echo "... src/hint.o"
+	@echo "... src/hint.i"
+	@echo "... src/hint.s"
 	@echo "... src/karu.o"
 	@echo "... src/karu.i"
 	@echo "... src/karu.s"
 	@echo "... src/memory_table.o"
 	@echo "... src/memory_table.i"
 	@echo "... src/memory_table.s"
+	@echo "... src/murmurhash3.o"
+	@echo "... src/murmurhash3.i"
+	@echo "... src/murmurhash3.s"
 	@echo "... src/sstable.o"
 	@echo "... src/sstable.i"
 	@echo "... src/sstable.s"

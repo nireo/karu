@@ -1,8 +1,1 @@
-1:EncoderTest.RawHeader
-2:MemtableTest.LogFileCreated
-3:MemtableTest.BasicOperations
-4:SSTableTest.TestBuildFromBTree
-5:SSTableTest.TestPopulateFromFile
-6:KaruTest.BasicOperations
-7:KaruTest.LotsOfPairs
-8:KaruTest.MemtableFlush
+7:SSTableTest.TestPopulateFromFile

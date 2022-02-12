@@ -26,10 +26,10 @@ class SSTable {
   absl::Status BuildFromBTree(
       const absl::btree_map<std::string, std::string>& btree) noexcept;
   absl::StatusOr<std::string> Find(const std::string& key) noexcept;
+  std::map<std::string, std::uint64_t> offset_map_;
 
  private:
   std::string fname_;
-  std::map<std::string, std::uint64_t> offset_map_;
   absl::Mutex mutex_;
 
   std::unique_ptr<io::FileReader> reader_ = nullptr;

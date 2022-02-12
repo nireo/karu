@@ -14,6 +14,9 @@ add_executable(
   src/memory_table.cc
   src/sstable.cc
   src/encoder.cc
+  src/hint.cc
+  src/bloom.cc
+  src/murmurhash3.cc
 )
 
 include(FetchContent)

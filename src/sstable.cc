@@ -46,12 +46,6 @@ absl::Status SSTable::InitOnlyReader() noexcept {
 absl::StatusOr<std::string> SSTable::Find(const std::string &key) noexcept {
   auto offset_it = offset_map_.find(key);
   if (offset_it == offset_map_.end()) {
-    for (const auto &[k, value] : offset_map_) {
-      if (k == key) {
-        std::cerr << "XD";
-      }
-      std::cerr << key << ' ' << value << '\n';
-    }
     return absl::NotFoundError("could not find offset for key");
   }
 
@@ -167,9 +161,7 @@ absl::Status SSTable::PopulateFromFile() noexcept {
 
     std::string result = reinterpret_cast<char *>(key_buffer.get());
     offset_map_[result] = starting_offset;
-
     std::cerr << result << ':' << starting_offset << '\n';
-
     starting_offset += encoder::kFullHeader + key_length + value_length;
   }
 

@@ -240,8 +240,8 @@ TEST(EncoderTest, EntryHeader) {
 }
 
 TEST(BloomFilterTest, Main) {
-  BloomFilter bloomfilter(60000, 13);
-  auto keys = generate_random_keys(2500);
+  bloom::BloomFilter bloomfilter(60000, 13);
+  auto keys = generate_random_keys();
   for (const auto &k : keys) {
     bloomfilter.add(k.c_str(), k.size());
   }

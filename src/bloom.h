@@ -6,6 +6,7 @@
 #include <vector>
 
 namespace karu {
+namespace bloom {
 struct BloomFilter {
   BloomFilter(std::uint64_t size, uint8_t hash_count);
   void add(const char *data, std::size_t len) noexcept;
@@ -15,6 +16,7 @@ struct BloomFilter {
   std::uint8_t hash_count_;
   std::vector<bool> bits_;
 };
+}  // namespace bloom
 }  // namespace karu
 
 #endif

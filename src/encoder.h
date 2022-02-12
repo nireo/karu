@@ -22,11 +22,13 @@ class HintHeader {
   HintHeader(std::uint8_t* const data) : data_(data){};
   std::uint8_t KeyLength() const noexcept;
   std::uint16_t ValueLength() const noexcept;
+  std::uint32_t ValuePos() const noexcept;
+
   bool IsTombstoneValue() const noexcept;
   void MakeTombstone() noexcept;
   void SetKeyLength(std::uint8_t klen) noexcept;
   void SetValueLength(std::uint16_t vlen) noexcept;
-  void SetPos(std::uint64_t pos) noexcept;
+  void SetPos(std::uint32_t pos) noexcept;
 
  private:
   std::uint8_t* const data_;

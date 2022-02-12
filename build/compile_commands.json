@@ -30,6 +30,21 @@
   "file": "/home/eemil/dev/karu/src/encoder.cc"
 },
 {
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++  -isystem /home/eemil/dev/karu/build/_deps/googletest-src/googletest/include -isystem /home/eemil/dev/karu/build/_deps/googletest-src/googletest -std=gnu++17 -o CMakeFiles/karu.dir/src/hint.cc.o -c /home/eemil/dev/karu/src/hint.cc",
+  "file": "/home/eemil/dev/karu/src/hint.cc"
+},
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++  -isystem /home/eemil/dev/karu/build/_deps/googletest-src/googletest/include -isystem /home/eemil/dev/karu/build/_deps/googletest-src/googletest -std=gnu++17 -o CMakeFiles/karu.dir/src/bloom.cc.o -c /home/eemil/dev/karu/src/bloom.cc",
+  "file": "/home/eemil/dev/karu/src/bloom.cc"
+},
+{
+  "directory": "/home/eemil/dev/karu/build",
+  "command": "/usr/bin/c++  -isystem /home/eemil/dev/karu/build/_deps/googletest-src/googletest/include -isystem /home/eemil/dev/karu/build/_deps/googletest-src/googletest -std=gnu++17 -o CMakeFiles/karu.dir/src/murmurhash3.cc.o -c /home/eemil/dev/karu/src/murmurhash3.cc",
+  "file": "/home/eemil/dev/karu/src/murmurhash3.cc"
+},
+{
   "directory": "/home/eemil/dev/karu/build/_deps/googletest-build/googlemock",
   "command": "/usr/bin/c++  -I/home/eemil/dev/karu/build/_deps/googletest-src/googlemock/include -I/home/eemil/dev/karu/build/_deps/googletest-src/googlemock -isystem /home/eemil/dev/karu/build/_deps/googletest-src/googletest/include -isystem /home/eemil/dev/karu/build/_deps/googletest-src/googletest -Wall -Wshadow -Werror -Wno-error=dangling-else -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=c++17 -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /home/eemil/dev/karu/build/_deps/googletest-src/googlemock/src/gmock-all.cc",
   "file": "/home/eemil/dev/karu/build/_deps/googletest-src/googlemock/src/gmock-all.cc"

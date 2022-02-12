@@ -153,6 +153,48 @@ CMakeFiles/karu.dir/src/encoder.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/karu.dir/src/encoder.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/eemil/dev/karu/src/encoder.cc -o CMakeFiles/karu.dir/src/encoder.cc.s
 
+CMakeFiles/karu.dir/src/hint.cc.o: CMakeFiles/karu.dir/flags.make
+CMakeFiles/karu.dir/src/hint.cc.o: ../src/hint.cc
+CMakeFiles/karu.dir/src/hint.cc.o: CMakeFiles/karu.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/karu.dir/src/hint.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/karu.dir/src/hint.cc.o -MF CMakeFiles/karu.dir/src/hint.cc.o.d -o CMakeFiles/karu.dir/src/hint.cc.o -c /home/eemil/dev/karu/src/hint.cc
+
+CMakeFiles/karu.dir/src/hint.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/karu.dir/src/hint.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/eemil/dev/karu/src/hint.cc > CMakeFiles/karu.dir/src/hint.cc.i
+
+CMakeFiles/karu.dir/src/hint.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/karu.dir/src/hint.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/eemil/dev/karu/src/hint.cc -o CMakeFiles/karu.dir/src/hint.cc.s
+
+CMakeFiles/karu.dir/src/bloom.cc.o: CMakeFiles/karu.dir/flags.make
+CMakeFiles/karu.dir/src/bloom.cc.o: ../src/bloom.cc
+CMakeFiles/karu.dir/src/bloom.cc.o: CMakeFiles/karu.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/karu.dir/src/bloom.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/karu.dir/src/bloom.cc.o -MF CMakeFiles/karu.dir/src/bloom.cc.o.d -o CMakeFiles/karu.dir/src/bloom.cc.o -c /home/eemil/dev/karu/src/bloom.cc
+
+CMakeFiles/karu.dir/src/bloom.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/karu.dir/src/bloom.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/eemil/dev/karu/src/bloom.cc > CMakeFiles/karu.dir/src/bloom.cc.i
+
+CMakeFiles/karu.dir/src/bloom.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/karu.dir/src/bloom.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/eemil/dev/karu/src/bloom.cc -o CMakeFiles/karu.dir/src/bloom.cc.s
+
+CMakeFiles/karu.dir/src/murmurhash3.cc.o: CMakeFiles/karu.dir/flags.make
+CMakeFiles/karu.dir/src/murmurhash3.cc.o: ../src/murmurhash3.cc
+CMakeFiles/karu.dir/src/murmurhash3.cc.o: CMakeFiles/karu.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/karu.dir/src/murmurhash3.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/karu.dir/src/murmurhash3.cc.o -MF CMakeFiles/karu.dir/src/murmurhash3.cc.o.d -o CMakeFiles/karu.dir/src/murmurhash3.cc.o -c /home/eemil/dev/karu/src/murmurhash3.cc
+
+CMakeFiles/karu.dir/src/murmurhash3.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/karu.dir/src/murmurhash3.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/eemil/dev/karu/src/murmurhash3.cc > CMakeFiles/karu.dir/src/murmurhash3.cc.i
+
+CMakeFiles/karu.dir/src/murmurhash3.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/karu.dir/src/murmurhash3.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/eemil/dev/karu/src/murmurhash3.cc -o CMakeFiles/karu.dir/src/murmurhash3.cc.s
+
 # Object files for target karu
 karu_OBJECTS = \
 "CMakeFiles/karu.dir/src/tests.cc.o" \
@@ -160,7 +202,10 @@ karu_OBJECTS = \
 "CMakeFiles/karu.dir/src/karu.cc.o" \
 "CMakeFiles/karu.dir/src/memory_table.cc.o" \
 "CMakeFiles/karu.dir/src/sstable.cc.o" \
-"CMakeFiles/karu.dir/src/encoder.cc.o"
+"CMakeFiles/karu.dir/src/encoder.cc.o" \
+"CMakeFiles/karu.dir/src/hint.cc.o" \
+"CMakeFiles/karu.dir/src/bloom.cc.o" \
+"CMakeFiles/karu.dir/src/murmurhash3.cc.o"
 
 # External object files for target karu
 karu_EXTERNAL_OBJECTS =
@@ -171,6 +216,9 @@ karu: CMakeFiles/karu.dir/src/karu.cc.o
 karu: CMakeFiles/karu.dir/src/memory_table.cc.o
 karu: CMakeFiles/karu.dir/src/sstable.cc.o
 karu: CMakeFiles/karu.dir/src/encoder.cc.o
+karu: CMakeFiles/karu.dir/src/hint.cc.o
+karu: CMakeFiles/karu.dir/src/bloom.cc.o
+karu: CMakeFiles/karu.dir/src/murmurhash3.cc.o
 karu: CMakeFiles/karu.dir/build.make
 karu: /usr/lib/libabsl_statusor.so.2111.0.0
 karu: lib/libgtest_main.a
@@ -204,7 +252,7 @@ karu: /usr/lib/libabsl_log_severity.so.2111.0.0
 karu: /usr/lib/libabsl_int128.so.2111.0.0
 karu: lib/libgtest.a
 karu: CMakeFiles/karu.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable karu"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/eemil/dev/karu/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Linking CXX executable karu"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/karu.dir/link.txt --verbose=$(VERBOSE)
 	/usr/bin/cmake -D TEST_TARGET=karu -D TEST_EXECUTABLE=/home/eemil/dev/karu/build/karu -D TEST_EXECUTOR= -D TEST_WORKING_DIR=/home/eemil/dev/karu/build -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=karu_TESTS -D CTEST_FILE=/home/eemil/dev/karu/build/karu[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_XML_OUTPUT_DIR= -P /usr/share/cmake/Modules/GoogleTestAddTests.cmake
 
