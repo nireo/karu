@@ -74,8 +74,6 @@ void test_wrapper(std::function<void(std::string)> test_func) {
   std::filesystem::remove_all(test_dir);
 }
 
-TEST(EncoderTest, RawHeader) { EXPECT_EQ(1, 1); }
-
 TEST(MemtableTest, LogFileCreated) {
   test_wrapper([](std::string test_dir) {
     memtable::Memtable memtable(test_dir);

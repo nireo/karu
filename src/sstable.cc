@@ -43,7 +43,29 @@ absl::Status SSTable::InitOnlyReader() noexcept {
   return absl::OkStatus();
 }
 
+absl::StatusOr<std::string> SSTable::FindValueFromPos(
+    const EntryPosition &pos) noexcept {
+  std::unique_ptr<std::uint8_t[]> value_buffer(
+      new std::uint8_t[pos.value_size]);
+
+  auto status = reader_->ReadAt(pos.pos, {value_buffer.get(), pos.value_size});
+  if (!status.ok()) {
+    return status.status();
+  }
+
+  if (*status != pos.value_size) {
+    return absl::InternalError("read wrong amount of bytes from file.");
+  }
+  std::string result = reinterpret_cast<char *>(value_buffer.get());
+
+  return result;
+}
+
 absl::StatusOr<std::string> SSTable::Find(const std::string &key) noexcept {
+  if (!bloom_.contains(key.c_str(), key.size())) {
+    return absl::NotFoundError("could not find key in bloom map.");
+  }
+
   auto offset_it = offset_map_.find(key);
   if (offset_it == offset_map_.end()) {
     return absl::NotFoundError("could not find offset for key");
@@ -109,6 +131,7 @@ absl::Status SSTable::BuildFromBTree(
       return status.status();
     }
 
+    bloom_.add(key.c_str(), key.size());
     std::uint64_t offset = *status;
     offset_map_[key] = offset;
   }
@@ -160,6 +183,7 @@ absl::Status SSTable::PopulateFromFile() noexcept {
     }
 
     std::string result = reinterpret_cast<char *>(key_buffer.get());
+    bloom_.add(result.c_str(), result.size());
     offset_map_[result] = starting_offset;
     std::cerr << result << ':' << starting_offset << '\n';
     starting_offset += encoder::kFullHeader + key_length + value_length;

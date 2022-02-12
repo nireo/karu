@@ -8,14 +8,25 @@
 #include <string>
 
 #include "absl/container/btree_map.h"
+#include "bloom.h"
 #include "file_writer.h"
 
 namespace karu {
 namespace sstable {
+
+struct EntryPosition {
+  std::uint32_t pos;
+  std::uint16_t value_size;
+};
+
 class SSTable {
  public:
   SSTable(const std::string& fname)
-      : fname_(fname), reader_(nullptr), write_(nullptr){};
+      : fname_(fname),
+        reader_(nullptr),
+        write_(nullptr),
+        bloom_(bloom::BloomFilter(30000, 13)){};
+
   SSTable& operator=(const SSTable&) = delete;
   SSTable(const SSTable&) = delete;
 
@@ -26,11 +37,14 @@ class SSTable {
   absl::Status BuildFromBTree(
       const absl::btree_map<std::string, std::string>& btree) noexcept;
   absl::StatusOr<std::string> Find(const std::string& key) noexcept;
+  absl::StatusOr<std::string> FindValueFromPos(
+      const EntryPosition& pos) noexcept;
   std::map<std::string, std::uint64_t> offset_map_;
 
  private:
   std::string fname_;
   absl::Mutex mutex_;
+  bloom::BloomFilter bloom_;
 
   std::unique_ptr<io::FileReader> reader_ = nullptr;
   // this is only used when creating the sstable. When loading files after
