@@ -14,6 +14,8 @@ constexpr std::uint8_t kValueByteCount = 2;
 constexpr std::uint8_t kPosByteCount = 4;
 
 constexpr std::uint8_t kFullHeader = 3;  // 1 = key length + 2 = value length
+constexpr std::uint32_t kHintHeader =
+    kKeyByteCount + kValueByteCount + kPosByteCount;
 
 class HintHeader {
  public:
@@ -24,6 +26,7 @@ class HintHeader {
   void MakeTombstone() noexcept;
   void SetKeyLength(std::uint8_t klen) noexcept;
   void SetValueLength(std::uint16_t vlen) noexcept;
+  void SetPos(std::uint64_t pos) noexcept;
 
  private:
   std::uint8_t* const data_;

@@ -16,7 +16,6 @@ class DB {
  public:
   DB(absl::string_view directory);
 
-  // TODO: Implement these functions
   absl::Status InitializeSSTables() noexcept;
   absl::Status FlushMemoryTable() noexcept;
   absl::Status Insert(const std::string &key,
