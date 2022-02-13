@@ -100,7 +100,7 @@ TEST(SSTableTest, TestBuildFromBTree) {
     absl::btree_map<std::string, std::string> values = {
         {"hello", "world"},
         {"key", "world"},
-        {"1", "2"},
+        {"keykey", "worldworld"},
     };
 
     createTestFile("./test/table.data");
@@ -121,8 +121,9 @@ TEST(SSTableTest, TestBuildFromBTree) {
 TEST(SSTableTest, TestPopulateFromFile) {
   test_wrapper([](std::string test_dir) {
     absl::btree_map<std::string, std::string> values = {
-        {"sami", "world"},
-        {"hello", "joo"},
+        {"hello", "world"},
+        {"key", "world"},
+        {"keykey", "worldworld"},
     };
 
     createTestFile("./test/table.data");

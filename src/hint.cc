@@ -92,6 +92,11 @@ HintFile::BuildSSTableHintFile() noexcept {
     if (*status != encoder::kHintHeader) {
       return absl::InternalError("read wrong amount of bytes");
     }
+
+    encoder::HintHeader hint_header(header_buffer.get());
+    std::uint8_t ksize = hint_header.KeyLength();
+    std::uint16_t vsize = hint_header.ValueLength();
+    std::uint32_t pos = hint_header.ValuePos();
   }
 
   return absl::OkStatus();

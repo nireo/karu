@@ -15,8 +15,8 @@ namespace karu {
 namespace sstable {
 
 struct EntryPosition {
-  std::uint32_t pos;
-  std::uint16_t value_size;
+  std::uint64_t pos_;
+  std::uint16_t value_size_;
 };
 
 class SSTable {
@@ -39,7 +39,7 @@ class SSTable {
   absl::StatusOr<std::string> Find(const std::string& key) noexcept;
   absl::StatusOr<std::string> FindValueFromPos(
       const EntryPosition& pos) noexcept;
-  std::map<std::string, std::uint64_t> offset_map_;
+  std::map<std::string, EntryPosition> offset_map_;
 
  private:
   std::string fname_;

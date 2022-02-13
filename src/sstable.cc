@@ -46,14 +46,15 @@ absl::Status SSTable::InitOnlyReader() noexcept {
 absl::StatusOr<std::string> SSTable::FindValueFromPos(
     const EntryPosition &pos) noexcept {
   std::unique_ptr<std::uint8_t[]> value_buffer(
-      new std::uint8_t[pos.value_size]);
+      new std::uint8_t[pos.value_size_]);
 
-  auto status = reader_->ReadAt(pos.pos, {value_buffer.get(), pos.value_size});
+  auto status =
+      reader_->ReadAt(pos.pos_, {value_buffer.get(), pos.value_size_});
   if (!status.ok()) {
     return status.status();
   }
 
-  if (*status != pos.value_size) {
+  if (*status != pos.value_size_) {
     return absl::InternalError("read wrong amount of bytes from file.");
   }
   std::string result = reinterpret_cast<char *>(value_buffer.get());
@@ -71,37 +72,7 @@ absl::StatusOr<std::string> SSTable::Find(const std::string &key) noexcept {
     return absl::NotFoundError("could not find offset for key");
   }
 
-  std::uint64_t starting_offset = offset_it->second;
-  std::unique_ptr<std::uint8_t[]> header_buffer(
-      new std::uint8_t[encoder::kFullHeader]);
-  auto status = reader_->ReadAt(starting_offset,
-                                {header_buffer.get(), encoder::kFullHeader});
-  if (!status.ok()) {
-    return status.status();
-  }
-
-  if (*status != encoder::kFullHeader) {
-    return absl::InternalError("read wrong amount of bytes");
-  }
-
-  // get value and key lenghts
-  std::uint8_t key_length = header_buffer.get()[0];
-  std::uint16_t value_length =
-      absl::little_endian::Load16(&header_buffer.get()[encoder::kKeyByteCount]);
-
-  std::unique_ptr<std::uint8_t[]> value_buffer(new std::uint8_t[value_length]);
-  status = reader_->ReadAt(starting_offset + encoder::kFullHeader + key_length,
-                           {
-                               value_buffer.get(),
-                               value_length,
-                           });
-
-  if (!status.ok()) {
-    return status.status();
-  }
-  std::string result = reinterpret_cast<char *>(value_buffer.get());
-
-  return result;
+  return FindValueFromPos(offset_it->second);
 }
 
 absl::Status SSTable::BuildFromBTree(
@@ -133,7 +104,8 @@ absl::Status SSTable::BuildFromBTree(
 
     bloom_.add(key.c_str(), key.size());
     std::uint64_t offset = *status;
-    offset_map_[key] = offset;
+    offset_map_[key] = EntryPosition{
+        .pos_ = offset + encoder::kFullHeader + klen, .value_size_ = vlen};
   }
 
   write_->Sync();  // we don't need to sync after every turn
@@ -153,7 +125,7 @@ absl::Status SSTable::PopulateFromFile() noexcept {
   uint64_t file_size = static_cast<uint64_t>(fileStat.st_size);
 
   std::uint64_t starting_offset = 0;
-  while (starting_offset <= file_size) {
+  while (starting_offset < file_size) {
     std::unique_ptr<std::uint8_t> header_buffer(
         new std::uint8_t[encoder::kFullHeader]);
     auto status = reader_->ReadAt(starting_offset,
@@ -177,15 +149,18 @@ absl::Status SSTable::PopulateFromFile() noexcept {
                                  key_buffer.get(),
                                  key_length,
                              });
-
     if (!status.ok()) {
       break;
     }
 
     std::string result = reinterpret_cast<char *>(key_buffer.get());
     bloom_.add(result.c_str(), result.size());
-    offset_map_[result] = starting_offset;
-    std::cerr << result << ':' << starting_offset << '\n';
+    offset_map_[result] = EntryPosition{
+        .pos_ = starting_offset + encoder::kFullHeader + key_length,
+        .value_size_ = value_length};
+
+    std::cerr << result << ':'
+              << starting_offset + encoder::kFullHeader + key_length << '\n';
     starting_offset += encoder::kFullHeader + key_length + value_length;
   }
 
