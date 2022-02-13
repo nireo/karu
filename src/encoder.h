@@ -9,24 +9,25 @@
 namespace karu {
 namespace encoder {
 constexpr std::uint16_t kTombstone = 0xFFFF;
-constexpr std::uint32_t kKeyByteCount = 1;
+constexpr std::uint32_t kKeyByteCount = 2;
 constexpr std::uint32_t kValueByteCount = 2;
 constexpr std::uint32_t kPosByteCount = 4;
 
-constexpr std::uint32_t kFullHeader = 3;  // 1 = key length + 2 = value length
+constexpr std::uint32_t kFullHeader =
+    kKeyByteCount + kValueByteCount;  // 2 = key length + 2 = value length
 constexpr std::uint32_t kHintHeader =
     kKeyByteCount + kValueByteCount + kPosByteCount;
 
 class HintHeader {
  public:
   HintHeader(std::uint8_t* const data) : data_(data){};
-  std::uint8_t KeyLength() const noexcept;
+  std::uint16_t KeyLength() const noexcept;
   std::uint16_t ValueLength() const noexcept;
   std::uint32_t ValuePos() const noexcept;
 
   bool IsTombstoneValue() const noexcept;
   void MakeTombstone() noexcept;
-  void SetKeyLength(std::uint8_t klen) noexcept;
+  void SetKeyLength(std::uint16_t klen) noexcept;
   void SetValueLength(std::uint16_t vlen) noexcept;
   void SetPos(std::uint32_t pos) noexcept;
 
@@ -38,11 +39,11 @@ class HintHeader {
 class EntryHeader {
  public:
   EntryHeader(std::uint8_t* const data) : data_(data){};
-  std::uint8_t KeyLength() const noexcept;
+  std::uint16_t KeyLength() const noexcept;
   std::uint16_t ValueLength() const noexcept;
   bool IsTombstoneValue() const noexcept;
   void MakeTombstone() noexcept;
-  void SetKeyLength(std::uint8_t klen) noexcept;
+  void SetKeyLength(std::uint16_t klen) noexcept;
   void SetValueLength(std::uint16_t vlen) noexcept;
 
  private:

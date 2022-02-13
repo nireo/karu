@@ -3,6 +3,7 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#include <cerrno>
 #include <cstdint>
 
 #include "absl/status/status.h"
@@ -18,7 +19,6 @@ absl::StatusOr<std::uint32_t> FileWriter::Append(
 
   std::uint64_t offset = offset_;  // where it starts.
   offset_ += src.size();
-  last_written_ = src.size();
 
   return offset;
 }

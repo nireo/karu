@@ -4,7 +4,9 @@
 
 namespace karu {
 namespace encoder {
-std::uint8_t HintHeader::KeyLength() const noexcept { return data_[0]; }
+std::uint16_t HintHeader::KeyLength() const noexcept {
+  return absl::little_endian::Load16(&data_[0]);
+}
 
 std::uint16_t HintHeader::ValueLength() const noexcept {
   if (IsTombstoneValue()) {
@@ -29,7 +31,9 @@ void HintHeader::SetPos(std::uint32_t pos) noexcept {
   absl::little_endian::Store32(&data_[kKeyByteCount + kValueByteCount], pos);
 }
 
-void HintHeader::SetKeyLength(std::uint8_t klen) noexcept { data_[0] = klen; }
+void HintHeader::SetKeyLength(std::uint16_t klen) noexcept {
+  absl::little_endian::Store16(&data_[0], klen);
+}
 
 void HintHeader::SetValueLength(std::uint16_t vlen) noexcept {
   absl::little_endian::Store16(&data_[kKeyByteCount], vlen);
@@ -37,7 +41,9 @@ void HintHeader::SetValueLength(std::uint16_t vlen) noexcept {
 
 void HintHeader::MakeTombstone() noexcept { SetValueLength(kTombstone); }
 
-std::uint8_t EntryHeader::KeyLength() const noexcept { return data_[0]; }
+std::uint16_t EntryHeader::KeyLength() const noexcept {
+  return absl::little_endian::Load16(&data_[0]);
+}
 
 std::uint16_t EntryHeader::ValueLength() const noexcept {
   if (IsTombstoneValue()) {
@@ -54,7 +60,9 @@ bool EntryHeader::IsTombstoneValue() const noexcept {
   return RawValueLength() == kTombstone;
 }
 
-void EntryHeader::SetKeyLength(std::uint8_t klen) noexcept { data_[0] = klen; }
+void EntryHeader::SetKeyLength(std::uint16_t klen) noexcept {
+  absl::little_endian::Store16(&data_[kKeyByteCount], klen);
+}
 
 void EntryHeader::SetValueLength(std::uint16_t vlen) noexcept {
   absl::little_endian::Store16(&data_[kKeyByteCount], vlen);

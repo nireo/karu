@@ -101,7 +101,9 @@ TEST(SSTableTest, TestBuildFromBTree) {
         {"hello", "world"},
         {"key", "world"},
         {"keykey", "worldworld"},
-    };
+        {"xdxd", "1231254125125"},
+        {"llonglonglonglonglonglonglonglonglonglonglongong", "verylong"},
+        {"verylong", "llonglonglonglonglonglonglonglonglonglonglongong"}};
 
     createTestFile("./test/table.data");
     sstable::SSTable sstable("./test/table.data");
@@ -124,7 +126,9 @@ TEST(SSTableTest, TestPopulateFromFile) {
         {"hello", "world"},
         {"key", "world"},
         {"keykey", "worldworld"},
-    };
+        {"xdxd", "1231254125125"},
+        {"llonglonglonglonglonglonglonglonglonglonglongong", "verylong"},
+        {"verylong", "llonglonglonglonglonglonglonglonglonglonglongong"}};
 
     createTestFile("./test/table.data");
     {
@@ -140,6 +144,7 @@ TEST(SSTableTest, TestPopulateFromFile) {
       auto status = sstable->InitOnlyReader();
       OK;
       status = sstable->PopulateFromFile();
+      std::cerr << status.message() << '\n';
       OK;
 
       for (const auto &[key, value] : values) {
