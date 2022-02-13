@@ -15,7 +15,7 @@ namespace karu {
 namespace sstable {
 
 struct EntryPosition {
-  std::uint64_t pos_;
+  std::uint32_t pos_;
   std::uint16_t value_size_;
 };
 

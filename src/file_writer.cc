@@ -9,7 +9,7 @@
 
 namespace karu {
 namespace io {
-absl::StatusOr<std::uint64_t> FileWriter::Append(
+absl::StatusOr<std::uint32_t> FileWriter::Append(
     absl::Span<const std::uint8_t> src) noexcept {
   file_.write(reinterpret_cast<const char *>(src.data()), src.size());
   if (file_.fail()) {

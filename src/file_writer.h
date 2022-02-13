@@ -12,12 +12,12 @@ class FileWriter {
  public:
   ~FileWriter() { file_.close(); }
   FileWriter(const std::string &fname, std::ofstream &&file,
-             std::uint64_t offset)
+             std::uint32_t offset)
       : file_(std::move(file)), filename_(fname), offset_(offset) {}
-  [[nodiscard]] absl::StatusOr<std::uint64_t> Append(
+  [[nodiscard]] absl::StatusOr<std::uint32_t> Append(
       absl::Span<const std::uint8_t> src) noexcept;
   void Sync() noexcept;
-  std::uint64_t Size() const noexcept { return offset_; }
+  std::uint32_t Size() const noexcept { return offset_; }
 
   FileWriter() = default;
   FileWriter(const FileWriter &) = delete;
@@ -27,7 +27,7 @@ class FileWriter {
  private:
   std::uint64_t last_written_ = 0;  // so we can easily append sizes
   std::ofstream file_;
-  uint64_t offset_;
+  uint32_t offset_;
   std::string filename_;
 };
 

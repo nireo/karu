@@ -4,6 +4,8 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 
+#include <fstream>
+
 #include "encoder.h"
 #include "file_writer.h"
 
@@ -81,31 +83,41 @@ absl::Status SSTable::BuildFromBTree(
     return absl::InternalError("file writen has been initialized");
   }
 
-  for (const auto &[key, value] : btree) {
-    auto key_span = STRING_TO_SPAN(key);
-    auto value_span = STRING_TO_SPAN(value);
+  for (const auto &entry : btree) {
+    absl::Span<const std::uint8_t> key_span = STRING_TO_SPAN(entry.first);
+    absl::Span<const std::uint8_t> value_span = STRING_TO_SPAN(entry.second);
 
-    auto klen = static_cast<std::uint8_t>(key_span.size());
-    auto vlen = static_cast<std::uint16_t>(value_span.size());
-    std::uint32_t buffer_size = encoder::kFullHeader + klen + vlen;
+    if (key_span.size() == 0 || key_span.size() > 0xFF) {
+      return absl::InternalError("invalid key length");
+    }
 
+    if (value_span.size() >= encoder::kTombstone) {
+      return absl::InternalError("invalid value length");
+    }
+
+    auto key_len = static_cast<std::uint8_t>(key_span.size());
+    auto value_len = static_cast<std::uint16_t>(value_span.size());
+    std::uint32_t buffer_size = encoder::kFullHeader + key_len + value_len;
     std::unique_ptr<std::uint8_t[]> buffer(new std::uint8_t[buffer_size]);
-    encoder::EntryHeader header(buffer.get());
-    header.SetKeyLength(klen);
-    header.SetValueLength(vlen);
 
-    std::memcpy(&buffer[encoder::kFullHeader], key_span.data(), klen);
-    std::memcpy(&buffer[encoder::kFullHeader + klen], value.data(), vlen);
+    encoder::EntryHeader header(buffer.get());
+    header.SetKeyLength(key_len);
+    header.SetValueLength(value_len);
+
+    std::memcpy(&buffer[encoder::kFullHeader], key_span.data(), key_len);
+    std::memcpy(&buffer[encoder::kFullHeader + key_span.size()],
+                value_span.data(), value_len);
 
     auto status = write_->Append({buffer.get(), buffer_size});
     if (!status.ok()) {
       return status.status();
     }
 
-    bloom_.add(key.c_str(), key.size());
-    std::uint64_t offset = *status;
-    offset_map_[key] = EntryPosition{
-        .pos_ = offset + encoder::kFullHeader + klen, .value_size_ = vlen};
+    bloom_.add(entry.first.c_str(), entry.first.size());
+    auto offset = *status;
+    offset_map_[entry.first] =
+        EntryPosition{.pos_ = offset + encoder::kFullHeader + key_len,
+                      .value_size_ = value_len};
   }
 
   write_->Sync();  // we don't need to sync after every turn
@@ -117,51 +129,45 @@ absl::Status SSTable::PopulateFromFile() noexcept {
     return absl::InternalError("reader is nullptr when reading.");
   }
 
-  // read file size so we know when to stop.
-  struct ::stat fileStat;
-  if (::stat(fname_.c_str(), &fileStat) == -1) {
-    return absl::InternalError("could not get filesize");
+  std::ifstream datafile(fname_, std::ios::binary | std::ios::in);
+  if (!datafile) {
+    return absl::InternalError("could not initialize data stream.");
   }
-  uint64_t file_size = static_cast<uint64_t>(fileStat.st_size);
 
   std::uint64_t starting_offset = 0;
-  while (starting_offset < file_size) {
-    std::unique_ptr<std::uint8_t> header_buffer(
-        new std::uint8_t[encoder::kFullHeader]);
-    auto status = reader_->ReadAt(starting_offset,
-                                  {header_buffer.get(), encoder::kFullHeader});
-    if (!status.ok()) {
+  while (true) {
+    std::uint8_t header[encoder::kFullHeader]{};
+    datafile.read(reinterpret_cast<char *>(header), encoder::kFullHeader);
+    if (datafile.eof()) {
       break;
     }
 
-    if (*status != encoder::kFullHeader) {
+    if (datafile.fail()) {
+      return absl::InternalError("failed reading from file stream.");
+    }
+
+    encoder::EntryHeader entry_header(header);
+    auto klen = entry_header.KeyLength();
+    auto vlen = entry_header.ValueLength();
+
+    std::unique_ptr<std::uint8_t[]> key_buffer(new std::uint8_t[klen]);
+    datafile.read(reinterpret_cast<char *>(key_buffer.get()), klen);
+    if (datafile.eof()) {
       break;
     }
 
-    // get value and key lenghts
-    std::uint8_t key_length = header_buffer.get()[0];
-    std::uint16_t value_length = absl::little_endian::Load16(
-        &header_buffer.get()[encoder::kKeyByteCount]);
-
-    std::unique_ptr<std::uint8_t[]> key_buffer(new std::uint8_t[key_length]);
-    status = reader_->ReadAt(starting_offset + encoder::kFullHeader,
-                             {
-                                 key_buffer.get(),
-                                 key_length,
-                             });
-    if (!status.ok()) {
-      break;
+    if (datafile.fail()) {
+      return absl::InternalError("failed reading from file stream.");
     }
+    datafile.ignore(vlen);
 
     std::string result = reinterpret_cast<char *>(key_buffer.get());
     bloom_.add(result.c_str(), result.size());
-    offset_map_[result] = EntryPosition{
-        .pos_ = starting_offset + encoder::kFullHeader + key_length,
-        .value_size_ = value_length};
-
-    std::cerr << result << ':'
-              << starting_offset + encoder::kFullHeader + key_length << '\n';
-    starting_offset += encoder::kFullHeader + key_length + value_length;
+    offset_map_[result] =
+        EntryPosition{.pos_ = static_cast<uint32_t>(
+                          starting_offset + encoder::kFullHeader + klen),
+                      .value_size_ = vlen};
+    starting_offset += encoder::kFullHeader + klen + vlen;
   }
 
   return absl::OkStatus();

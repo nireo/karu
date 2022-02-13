@@ -9,11 +9,11 @@
 namespace karu {
 namespace encoder {
 constexpr std::uint16_t kTombstone = 0xFFFF;
-constexpr std::uint8_t kKeyByteCount = 1;
-constexpr std::uint8_t kValueByteCount = 2;
-constexpr std::uint8_t kPosByteCount = 4;
+constexpr std::uint32_t kKeyByteCount = 1;
+constexpr std::uint32_t kValueByteCount = 2;
+constexpr std::uint32_t kPosByteCount = 4;
 
-constexpr std::uint8_t kFullHeader = 3;  // 1 = key length + 2 = value length
+constexpr std::uint32_t kFullHeader = 3;  // 1 = key length + 2 = value length
 constexpr std::uint32_t kHintHeader =
     kKeyByteCount + kValueByteCount + kPosByteCount;
 
