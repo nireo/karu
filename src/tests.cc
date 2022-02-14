@@ -257,3 +257,32 @@ TEST(BloomFilterTest, Main) {
     EXPECT_TRUE(bloomfilter.contains(k.c_str(), k.size()));
   }
 }
+
+TEST(KaruTest, PersistanceTest) {
+  test_wrapper([](std::string test_dir) {
+    auto keys = generate_random_keys(500);
+    {
+      karu::DB db(test_dir);
+
+      for (const auto &k : keys) {
+        auto status = db.Insert(k, k);
+        OK;
+      }
+
+      auto status = db.FlushMemoryTable();
+      OK;
+    }
+
+    {
+      karu::DB db(test_dir);
+      auto status = db.InitializeSSTables();
+      OK;
+
+      for (const auto &k : keys) {
+        auto status = db.Get(k);
+        OK;
+        EXPECT_EQ(*status, k);
+      }
+    }
+  });
+}

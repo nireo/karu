@@ -1257,6 +1257,7 @@ CMakeFiles/karu.dir/src/hint.cc.o: ../src/hint.cc \
   /usr/include/absl/types/compare.h \
   /usr/include/absl/container/internal/btree_container.h \
   ../src/bloom.h \
+  ../src/memory_table.h \
   /usr/include/fcntl.h \
   /usr/include/bits/fcntl.h \
   /usr/include/bits/fcntl-linux.h \
@@ -2469,6 +2470,7 @@ CMakeFiles/karu.dir/src/sstable.cc.o: ../src/sstable.cc \
   /usr/include/absl/status/internal/status_internal.h \
   /usr/include/absl/types/variant.h \
   /usr/include/c++/11.1.0/variant \
+  ../src/memory_table.h \
   /usr/include/fcntl.h \
   /usr/include/bits/fcntl.h \
   /usr/include/bits/fcntl-linux.h \
@@ -2493,6 +2495,23 @@ CMakeFiles/karu.dir/src/sstable.cc.o: ../src/sstable.cc \
   /usr/include/bits/statx-generic.h \
   /usr/include/bits/types/struct_statx_timestamp.h \
   /usr/include/bits/types/struct_statx.h \
+  /usr/include/c++/11.1.0/filesystem \
+  /usr/include/c++/11.1.0/bits/fs_fwd.h \
+  /usr/include/c++/11.1.0/bits/fs_path.h \
+  /usr/include/c++/11.1.0/locale \
+  /usr/include/c++/11.1.0/bits/locale_facets_nonio.h \
+  /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/time_members.h \
+  /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/messages_members.h \
+  /usr/include/libintl.h \
+  /usr/include/c++/11.1.0/bits/locale_facets_nonio.tcc \
+  /usr/include/c++/11.1.0/bits/locale_conv.h \
+  /usr/include/c++/11.1.0/iomanip \
+  /usr/include/c++/11.1.0/bits/quoted_string.h \
+  /usr/include/c++/11.1.0/sstream \
+  /usr/include/c++/11.1.0/bits/sstream.tcc \
+  /usr/include/c++/11.1.0/codecvt \
+  /usr/include/c++/11.1.0/bits/fs_dir.h \
+  /usr/include/c++/11.1.0/bits/fs_ops.h \
   ../src/encoder.h
 
 CMakeFiles/karu.dir/src/tests.cc.o: ../src/tests.cc \
@@ -3053,9 +3072,9 @@ _deps/googletest-src/googletest/include/gtest/gtest.h:
 
 /usr/include/c++/11.1.0/filesystem:
 
-../src/memory_table.h:
-
 ../src/karu.h:
+
+../src/memory_table.h:
 
 /usr/include/absl/container/internal/btree_container.h:
 

@@ -10,6 +10,7 @@
 #include "absl/container/btree_map.h"
 #include "bloom.h"
 #include "file_writer.h"
+#include "memory_table.h"
 
 namespace karu {
 namespace sstable {
@@ -54,6 +55,10 @@ class SSTable {
 
 absl::StatusOr<std::unique_ptr<SSTable>> ParseSSTableFromFile(
     const std::string& key) noexcept;
+
+absl::StatusOr<std::unique_ptr<SSTable>> CreateSSTableFromMemtable(
+    const memtable::Memtable& memtable,
+    const std::string& database_directory) noexcept;
 }  // namespace sstable
 }  // namespace karu
 

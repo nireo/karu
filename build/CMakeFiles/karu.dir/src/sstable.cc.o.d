@@ -294,17 +294,30 @@ CMakeFiles/karu.dir/src/sstable.cc.o: /home/eemil/dev/karu/src/sstable.cc \
  /usr/include/absl/status/status.h \
  /usr/include/absl/status/internal/status_internal.h \
  /usr/include/absl/types/variant.h /usr/include/c++/11.1.0/variant \
- /usr/include/fcntl.h /usr/include/bits/fcntl.h \
- /usr/include/bits/fcntl-linux.h /usr/include/bits/types/struct_iovec.h \
- /usr/include/linux/falloc.h /usr/include/bits/stat.h \
- /usr/include/bits/struct_stat.h /usr/include/sys/stat.h \
- /usr/include/bits/statx.h /usr/include/linux/stat.h \
- /usr/include/linux/types.h /usr/include/asm/types.h \
- /usr/include/asm-generic/types.h /usr/include/asm-generic/int-ll64.h \
- /usr/include/asm/bitsperlong.h /usr/include/asm-generic/bitsperlong.h \
- /usr/include/linux/posix_types.h /usr/include/linux/stddef.h \
- /usr/include/asm/posix_types.h /usr/include/asm/posix_types_64.h \
- /usr/include/asm-generic/posix_types.h /usr/include/bits/statx-generic.h \
+ /home/eemil/dev/karu/src/memory_table.h /usr/include/fcntl.h \
+ /usr/include/bits/fcntl.h /usr/include/bits/fcntl-linux.h \
+ /usr/include/bits/types/struct_iovec.h /usr/include/linux/falloc.h \
+ /usr/include/bits/stat.h /usr/include/bits/struct_stat.h \
+ /usr/include/sys/stat.h /usr/include/bits/statx.h \
+ /usr/include/linux/stat.h /usr/include/linux/types.h \
+ /usr/include/asm/types.h /usr/include/asm-generic/types.h \
+ /usr/include/asm-generic/int-ll64.h /usr/include/asm/bitsperlong.h \
+ /usr/include/asm-generic/bitsperlong.h /usr/include/linux/posix_types.h \
+ /usr/include/linux/stddef.h /usr/include/asm/posix_types.h \
+ /usr/include/asm/posix_types_64.h /usr/include/asm-generic/posix_types.h \
+ /usr/include/bits/statx-generic.h \
  /usr/include/bits/types/struct_statx_timestamp.h \
  /usr/include/bits/types/struct_statx.h \
- /home/eemil/dev/karu/src/encoder.h
+ /usr/include/c++/11.1.0/filesystem /usr/include/c++/11.1.0/bits/fs_fwd.h \
+ /usr/include/c++/11.1.0/bits/fs_path.h /usr/include/c++/11.1.0/locale \
+ /usr/include/c++/11.1.0/bits/locale_facets_nonio.h \
+ /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/time_members.h \
+ /usr/include/c++/11.1.0/x86_64-pc-linux-gnu/bits/messages_members.h \
+ /usr/include/libintl.h \
+ /usr/include/c++/11.1.0/bits/locale_facets_nonio.tcc \
+ /usr/include/c++/11.1.0/bits/locale_conv.h \
+ /usr/include/c++/11.1.0/iomanip \
+ /usr/include/c++/11.1.0/bits/quoted_string.h \
+ /usr/include/c++/11.1.0/sstream /usr/include/c++/11.1.0/bits/sstream.tcc \
+ /usr/include/c++/11.1.0/codecvt /usr/include/c++/11.1.0/bits/fs_dir.h \
+ /usr/include/c++/11.1.0/bits/fs_ops.h /home/eemil/dev/karu/src/encoder.h

@@ -27,16 +27,12 @@ absl::Status DB::InitializeSSTables() noexcept {
        std::filesystem::directory_iterator(database_directory_)) {
     // parse sstable id from filename
     std::string filename = entry.path().filename();
+    if (entry.path().extension() != ".data") {
+      continue;
+    }
+
     file_id_t id = -1;
-    int amount = std::sscanf(filename.c_str(), "%ld.data", &id);
-    if (amount != 1 || amount == EOF) {
-      return absl::InternalError("cannot parse file id from string");
-    }
-
-    if (id == -1) {
-      return absl::InternalError("couldn't read file id properly");
-    }
-
+    std::sscanf(filename.c_str(), "%ld.data", &id);
     auto sstable = std::make_unique<sstable::SSTable>(entry.path());
 
     auto status = sstable->InitOnlyReader();
@@ -165,23 +161,35 @@ absl::Status DB::FlushMemoryTable() noexcept {
 // ensure that no data is lost, but the Shutdown() function can be considered a
 // more graceful shutdown as it converts the data into its intended format.
 absl::Status DB::Shutdown() noexcept {
-  memtable_list_mutex_.WriterLock();
+  // write the current memtable.
+  std::string sstable_path = database_directory_ + '/' +
+                             std::to_string(current_memtable_->ID()) + ".data";
+  sstable::SSTable sstable(sstable_path);
+  if (auto status = sstable.BuildFromBTree(current_memtable_->map_);
+      !status.ok()) {
+    std::cerr << "error writing memtable(" << current_memtable_->ID()
+              << ") to disk.\n";
+  }
 
+  // remove the log file as it's useless once data has been transferred into
+  // the sstable.
+  std::filesystem::remove(current_memtable_->log_path_);
+  if (auto status = sstable::CreateSSTableFromMemtable(*current_memtable_,
+                                                       database_directory_);
+      !status.ok()) {
+    return status.status();
+  }
+
+  memtable_list_mutex_.WriterLock();
+  // write memtables.
   for (size_t i = 0; i < memtable_list_.size(); ++i) {
     auto mtable = std::move(memtable_list_[i]);
     memtable_list_[i] = nullptr;
-    std::string sstable_path =
-        database_directory_ + '/' + std::to_string(mtable->ID()) + ".data";
-    sstable::SSTable sstable(sstable_path);
-
-    if (auto status = sstable.BuildFromBTree(mtable->map_); !status.ok()) {
-      std::cerr << "error writing memtable(" << mtable->ID() << ") to disk.\n";
-      continue;
+    if (auto status =
+            sstable::CreateSSTableFromMemtable(*mtable, database_directory_);
+        !status.ok()) {
+      return status.status();
     }
-
-    // remove the log file as it's useless once data has been transferred into
-    // the sstable.
-    std::filesystem::remove(mtable->log_path_);
   }
   memtable_list_mutex_.WriterUnlock();
 
