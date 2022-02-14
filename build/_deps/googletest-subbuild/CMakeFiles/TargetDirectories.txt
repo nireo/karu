@@ -1,3 +1,0 @@
-/home/eemil/dev/karu/build/_deps/googletest-subbuild/CMakeFiles/googletest-populate.dir
-/home/eemil/dev/karu/build/_deps/googletest-subbuild/CMakeFiles/edit_cache.dir
-/home/eemil/dev/karu/build/_deps/googletest-subbuild/CMakeFiles/rebuild_cache.dir
