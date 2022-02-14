@@ -205,8 +205,11 @@ TEST(KaruTest, MemtableFlush) {
     // let is sleep for a little while
     EXPECT_EQ(1, db.sstable_list_.size());
     for (const auto &k : keys) {
-      auto f_status = db.sstable_list_[0]->Find(k);
-      EXPECT_TRUE(f_status.ok());
+      // now we should still be able to find the key.
+      auto status = db.Get(k);
+      OK;
+
+      EXPECT_EQ(*status, k);
     }
   });
 }

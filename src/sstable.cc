@@ -116,7 +116,6 @@ absl::Status SSTable::BuildFromBTree(
 
     bloom_.add(entry.first.c_str(), entry.first.size());
     auto offset = *status;
-    std::cerr << "written to offset: " << offset << '\n';
     offset_map_[entry.first] =
         EntryPosition{.pos_ = offset + encoder::kFullHeader + key_len,
                       .value_size_ = value_len};

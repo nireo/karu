@@ -52,14 +52,14 @@ absl::Status DB::InitializeSSTables() noexcept {
 
 absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
   // check the memtable
-  if (auto status = current_memtable_->Get(key); !status.ok()) {
-    return status.status();
-  } else {
+  std::cerr << "searching current memtable.\n";
+  if (auto status = current_memtable_->Get(key); status.ok()) {
     return *status;
   }
 
   // check the old memtable list
   memtable_list_mutex_.ReaderLock();
+  std::cerr << "searching older memtables.\n";
   for (const auto &mtable : memtable_list_) {
     if (auto status = mtable->Get(key); status.ok()) {
       return *status;  // we don't care about non valid values
@@ -68,6 +68,20 @@ absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
   memtable_list_mutex_.ReaderUnlock();
 
   // look for value in sstables.
+  sstable_mutex_.ReaderLock();
+  std::cerr << "reading from sstables.\n";
+  // since the newest sstable is always  the last, we loop starting from the
+  // back, and the first one we find is the correct one.
+  // TODO: Make this somewhat concurrent.
+  for (auto it = sstable_list_.rbegin(); it != sstable_list_.rend(); ++it) {
+    auto status = (*it)->Find(key);
+    if (status.ok()) {
+      return *status;
+    }
+  }
+
+  sstable_mutex_.ReaderUnlock();
+  return absl::NotFoundError("coult not find key in memtable for sstables.");
 }
 
 absl::Status DB::Insert(const std::string &key,
@@ -127,7 +141,10 @@ absl::Status DB::FlushMemoryTable() noexcept {
     std::cerr << "failed to build sstable from btree_map.\n";
     return absl::InternalError("failed to build sstable from btree.\n");
   }
+
+  sstable_mutex_.WriterLock();
   sstable_list_.push_back(std::move(ss));  // store the sstable.
+  sstable_mutex_.WriterUnlock();
 
   memtable_list_mutex_.WriterLock();
   std::unique_ptr<memtable::Memtable> useless_ =
