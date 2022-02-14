@@ -286,3 +286,23 @@ TEST(KaruTest, PersistanceTest) {
     }
   });
 }
+
+TEST(KaruTest, FlushedMemtableLogFilesDeleted) {
+  test_wrapper([](std::string test_dir) {
+    auto keys = generate_random_keys(500);
+    karu::DB db(test_dir);
+    for (const auto &k : keys) {
+      auto status = db.Insert(k, k);
+      OK;
+    }
+
+    auto status = db.FlushMemoryTable();
+    OK;
+
+    int log_count = 0;
+    for (const auto &entry : std::filesystem::directory_iterator(test_dir)) {
+      log_count += entry.path().extension() == ".log";
+    }
+    EXPECT_EQ(log_count, 1);  // contains the current memory table.
+  });
+}

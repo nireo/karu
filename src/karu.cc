@@ -39,6 +39,7 @@ absl::Status DB::InitializeSSTables() noexcept {
     if (!status.ok()) {
       return status;
     }
+
     status = sstable->PopulateFromFile();
     sstable_list_.push_back(std::move(sstable));
   }
@@ -156,44 +157,4 @@ absl::Status DB::FlushMemoryTable() noexcept {
 
   return absl::OkStatus();
 }
-
-// shutdown makes sure that all memtables are written to the disk. Log files do
-// ensure that no data is lost, but the Shutdown() function can be considered a
-// more graceful shutdown as it converts the data into its intended format.
-absl::Status DB::Shutdown() noexcept {
-  // write the current memtable.
-  std::string sstable_path = database_directory_ + '/' +
-                             std::to_string(current_memtable_->ID()) + ".data";
-  sstable::SSTable sstable(sstable_path);
-  if (auto status = sstable.BuildFromBTree(current_memtable_->map_);
-      !status.ok()) {
-    std::cerr << "error writing memtable(" << current_memtable_->ID()
-              << ") to disk.\n";
-  }
-
-  // remove the log file as it's useless once data has been transferred into
-  // the sstable.
-  std::filesystem::remove(current_memtable_->log_path_);
-  if (auto status = sstable::CreateSSTableFromMemtable(*current_memtable_,
-                                                       database_directory_);
-      !status.ok()) {
-    return status.status();
-  }
-
-  memtable_list_mutex_.WriterLock();
-  // write memtables.
-  for (size_t i = 0; i < memtable_list_.size(); ++i) {
-    auto mtable = std::move(memtable_list_[i]);
-    memtable_list_[i] = nullptr;
-    if (auto status =
-            sstable::CreateSSTableFromMemtable(*mtable, database_directory_);
-        !status.ok()) {
-      return status.status();
-    }
-  }
-  memtable_list_mutex_.WriterUnlock();
-
-  return absl::OkStatus();
-}
-
 }  // namespace karu

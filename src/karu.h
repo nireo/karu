@@ -23,7 +23,6 @@ class DB {
   absl::StatusOr<std::string> Get(
       const std::string &key) noexcept;  // string_view?
   absl::Status Delete(const std::string &key) noexcept;
-  absl::Status Shutdown() noexcept;
   std::vector<std::unique_ptr<sstable::SSTable>> sstable_list_;
 
  private:

@@ -1,13 +1,14 @@
 EncoderTest.RawHeader 31 0.000134707
-MemtableTest.LogFileCreated 97 3.88028e-05
-MemtableTest.BasicOperations 97 4.25703e-05
-SSTableTest.TestBuildFromBTree 94 3.97233e-05
-SSTableTest.TestPopulateFromFile 13 0.000290365
-KaruTest.BasicOperations 93 4.02358e-05
-KaruTest.LotsOfPairs 92 0.00288255
-KaruTest.MemtableFlush 79 0.000263938
-EncoderTest.HintHeader 77 5.49767e-05
-EncoderTest.EntryHeader 77 5.46409e-05
-BloomFilterTest.Main 77 0.00235844
-KaruTest.PersistanceTest 1 0.0243303
+MemtableTest.LogFileCreated 99 4.10826e-05
+MemtableTest.BasicOperations 99 3.92703e-05
+SSTableTest.TestBuildFromBTree 96 4.13384e-05
+SSTableTest.TestPopulateFromFile 15 0.000265509
+KaruTest.BasicOperations 95 4.04092e-05
+KaruTest.LotsOfPairs 94 0.00279681
+KaruTest.MemtableFlush 81 0.000259145
+EncoderTest.HintHeader 79 4.71056e-05
+EncoderTest.EntryHeader 79 4.78607e-05
+BloomFilterTest.Main 79 0.00229883
+KaruTest.PersistanceTest 3 0.00768566
+KaruTest.FlushedMemtableLogFilesDeleted 1 0.0195866
 ---
