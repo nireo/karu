@@ -10,7 +10,7 @@
 #include "absl/status/status.h"
 #include "absl/status/statusor.h"
 #include "absl/synchronization/mutex.h"
-#include "file_writer.h"
+#include "file_io.h"
 
 namespace karu {
 namespace memtable {

@@ -9,7 +9,7 @@
 
 #include "absl/synchronization/mutex.h"
 #include "encoder.h"
-#include "file_writer.h"
+#include "file_io.h"
 
 namespace karu {
 namespace memtable {

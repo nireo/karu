@@ -3,7 +3,7 @@
 
 #include <absl/status/status.h>
 
-#include "file_writer.h"
+#include "file_io.h"
 #include "karu.h"
 #include "sstable.h"
 

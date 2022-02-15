@@ -9,7 +9,7 @@ find_package(absl REQUIRED)
 add_executable(
   ${PROJECT_NAME}
   src/tests.cc
-  src/file_writer.cc
+  src/file_io.cc
   src/karu.cc
   src/memory_table.cc
   src/sstable.cc

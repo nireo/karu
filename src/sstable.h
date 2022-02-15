@@ -9,7 +9,7 @@
 
 #include "absl/container/btree_map.h"
 #include "bloom.h"
-#include "file_writer.h"
+#include "file_io.h"
 #include "memory_table.h"
 
 namespace karu {

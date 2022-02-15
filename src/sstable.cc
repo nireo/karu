@@ -8,7 +8,7 @@
 #include <fstream>
 
 #include "encoder.h"
-#include "file_writer.h"
+#include "file_io.h"
 #include "memory_table.h"
 
 namespace karu {

@@ -9,7 +9,7 @@
 #include <memory>
 
 #include "encoder.h"
-#include "file_writer.h"
+#include "file_io.h"
 #include "karu.h"
 #include "sstable.h"
 
