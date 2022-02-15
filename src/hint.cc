@@ -5,10 +5,12 @@
 #include <sys/stat.h>
 
 #include <cstring>
+#include <ftream>
 #include <memory>
 
 #include "encoder.h"
 #include "file_writer.h"
+#include "karu.h"
 #include "sstable.h"
 
 namespace karu {
@@ -37,7 +39,7 @@ absl::Status HintFile::WriteHint(const std::string &key,
   auto key_span = STRING_TO_SPAN(key);
 
   // we have already made sure that they key is not too long.
-  auto klen = static_cast<std::uint8_t>(key_span.size());
+  auto klen = static_cast<std::uint16_t>(key_span.size());
   std::uint32_t buffer_size = encoder::kHintHeader + klen;
   std::unique_ptr<std::uint8_t[]> buffer(new std::uint8_t[buffer_size]);
 
@@ -48,7 +50,7 @@ absl::Status HintFile::WriteHint(const std::string &key,
   header.SetValueLength(value_size);
 
   // copy the key data into the buffer
-  std::memcpy(&buffer[encoder::kFullHeader], key_span.data(), klen);
+  std::memcpy(&buffer[encoder::kFullHeader], key_span.data(), key_span.size());
 
   // write to the hint file
   if (auto status = file_writer_->Append({buffer.get(), buffer_size});
@@ -100,6 +102,23 @@ HintFile::BuildSSTableHintFile() noexcept {
   }
 
   return absl::OkStatus();
+}
+
+absl::StatusOr<std::unique_ptr<sstable::SSTable>> ParseHintFile(
+    const std::string &hint_path) noexcept {
+  std::ifstream file(hint_path, std::ios::binary | std::ios::in);
+  if (!file) {
+    return absl::InternalError(
+        "could not open file stream to hint file: " + hint_path + ".\n");
+  }
+
+  std::map<std::string, sstable::EntryPosition> result_;
+  std::uint32_t offset = 0;
+
+  while (true) {
+  }
+
+  return std::make_unique<sstable::SSTable>(std::move(result_));
 }
 }  // namespace hint
 }  // namespace karu

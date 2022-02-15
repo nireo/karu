@@ -22,11 +22,13 @@ struct EntryPosition {
 
 class SSTable {
  public:
-  SSTable(const std::string& fname)
+  explicit SSTable(const std::string& fname)
       : fname_(fname),
         reader_(nullptr),
         write_(nullptr),
         bloom_(bloom::BloomFilter(30000, 13)){};
+  explicit SSTable(std::map<std::string, EntryPosition>&& map,
+                   const std::string& path);
 
   SSTable& operator=(const SSTable&) = delete;
   SSTable(const SSTable&) = delete;

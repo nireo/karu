@@ -12,6 +12,9 @@ struct BloomFilter {
   void add(const char *data, std::size_t len) noexcept;
   bool contains(const char *data, std::size_t len) const noexcept;
 
+  BloomFilter &operator=(const BloomFilter &) = delete;
+  BloomFilter(const BloomFilter &) = delete;
+
  private:
   std::uint8_t hash_count_;
   std::vector<bool> bits_;

@@ -24,6 +24,7 @@ class DB {
       const std::string &key) noexcept;  // string_view?
   absl::Status Delete(const std::string &key) noexcept;
   std::vector<std::unique_ptr<sstable::SSTable>> sstable_list_;
+  absl::Status ParseHintFiles() noexcept;
 
  private:
   // we hold memtables which we have not yet written to disk in the

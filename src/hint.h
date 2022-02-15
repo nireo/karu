@@ -4,6 +4,7 @@
 #include <absl/status/status.h>
 
 #include "file_writer.h"
+#include "karu.h"
 #include "sstable.h"
 
 namespace karu {
@@ -21,6 +22,9 @@ class HintFile {
   std::unique_ptr<io::FileWriter> file_writer_ = nullptr;
   std::unique_ptr<io::FileReader> file_reader_ = nullptr;
 };
+
+absl::StatusOr<std::unique_ptr<sstable::SSTable>> ParseHintFile(
+    karu::file_id_t sstable_id, const std::string &database_directory) noexcept;
 }  // namespace hint
 }  // namespace karu
 

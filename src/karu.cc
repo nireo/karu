@@ -102,6 +102,17 @@ absl::Status DB::Insert(const std::string &key,
   return absl::OkStatus();
 }
 
+absl::Status DB::ParseHintFiles() noexcept {
+  for (const auto &entry :
+       std::filesystem::directory_iterator(database_directory_)) {
+    if (entry.path().extension() != ".hnt") {
+      // skip non-hint files
+      continue;
+    }
+  }
+  return absl::OkStatus();
+}
+
 absl::Status DB::FlushMemoryTable() noexcept {
   memtable_mutex_.WriterLock();
 

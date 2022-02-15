@@ -18,6 +18,22 @@ namespace sstable {
   absl::Span<const std::uint8_t>{ \
       reinterpret_cast<const std::uint8_t *>(str.data()), str.size()};
 
+SSTable::SSTable(std::map<std::string, EntryPosition> &&map,
+                 const std::string &path)
+    : bloom_(bloom::BloomFilter(30000, 13)),
+      write_(nullptr),
+      reader_(nullptr),
+      fname_(path),
+      offset_map_(std::move(map)) {
+
+  // only initialize the reader since we are not going to be writing to this
+  // file.
+  if (auto status = InitOnlyReader(); !status.ok()) {
+    std::cerr << "error initializing sstable reader.\n";
+    reader_ = nullptr;
+  }
+}
+
 absl::Status SSTable::InitWriterAndReader() noexcept {
   // this is only called when we are creating a new sstable, such that we don't
   // need the file size. After creating an sstable, we still need to take care
