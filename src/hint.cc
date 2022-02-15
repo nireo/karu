@@ -5,7 +5,7 @@
 #include <sys/stat.h>
 
 #include <cstring>
-#include <ftream>
+#include <fstream>
 #include <memory>
 
 #include "encoder.h"
@@ -112,13 +112,55 @@ absl::StatusOr<std::unique_ptr<sstable::SSTable>> ParseHintFile(
         "could not open file stream to hint file: " + hint_path + ".\n");
   }
 
-  std::map<std::string, sstable::EntryPosition> result_;
-  std::uint32_t offset = 0;
-
+  std::map<std::string, sstable::EntryPosition> offset_map;
   while (true) {
+    // read header and parse hint entry data
+    std::uint8_t hint_header[encoder::kHintHeader]{};
+    file.read(reinterpret_cast<char *>(hint_header), encoder::kHintHeader);
+    if (file.eof()) {
+      break;
+    }
+
+    if (file.fail()) {
+      return absl::InternalError("error reading hint file stream.");
+    }
+
+    encoder::HintHeader encoded_header(hint_header);
+    sstable::EntryPosition pos{
+        .pos_ = encoded_header.ValuePos(),
+        .value_size_ = encoded_header.ValueLength(),
+    };
+    auto key_len = encoded_header.KeyLength();
+
+    // parse key
+    std::unique_ptr<std::uint8_t[]> key_buffer(new std::uint8_t[key_len]);
+    file.read(reinterpret_cast<char *>(key_buffer.get()), key_len);
+    if (file.eof()) {
+      break;
+    }
+
+    if (file.fail()) {
+      return absl::InternalError("error reading hint file stream.");
+    }
+
+    std::string hint_key = reinterpret_cast<char *>(key_buffer.get());
+
+    // sometimes this contains some extra keys. This ensures that
+    // the key is the same length as described.
+    hint_key.resize(key_len);
+
+    offset_map[hint_key] = pos;
   }
 
-  return std::make_unique<sstable::SSTable>(std::move(result_));
+  // formulate proper sstable path
+  std::string sstable_path = hint_path;
+
+  // same filemane with .data suffix.
+  for (int i = 0; i < 4; ++i) sstable_path.pop_back();
+  sstable_path += ".data";
+
+  return std::make_unique<sstable::SSTable>(std::move(offset_map),
+                                            sstable_path);
 }
 }  // namespace hint
 }  // namespace karu

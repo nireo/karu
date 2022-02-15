@@ -17,6 +17,9 @@ class HintFile {
   absl::StatusOr<std::unique_ptr<sstable::SSTable>>
   BuildSSTableHintFile() noexcept;
 
+  HintFile &operator=(const HintFile &) = delete;
+  HintFile(const HintFile &) = delete;
+
  private:
   std::string path_;
   std::unique_ptr<io::FileWriter> file_writer_ = nullptr;
