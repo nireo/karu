@@ -17,6 +17,7 @@ add_executable(
   src/hint.cc
   src/bloom.cc
   src/murmurhash3.cc
+  src/utils
 )
 
 include(FetchContent)

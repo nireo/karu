@@ -25,7 +25,6 @@ SSTable::SSTable(std::map<std::string, EntryPosition> &&map,
       reader_(nullptr),
       fname_(path),
       offset_map_(std::move(map)) {
-
   // only initialize the reader since we are not going to be writing to this
   // file.
   if (auto status = InitOnlyReader(); !status.ok()) {

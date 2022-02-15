@@ -1,5 +1,9 @@
 # karu: linux database written in c++
 
+## Design
+
+The design of the database is quite similar to the design of bitcask. This means that the database sacrifices memory for performance. Karu stores the keys in memory while storing values in tables which are on the disk.
+
 ## Usage
 ```cpp
 #include "karu.h"

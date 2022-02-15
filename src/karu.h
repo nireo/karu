@@ -12,11 +12,16 @@
 
 namespace karu {
 using file_id_t = std::int64_t;
+constexpr const char *sstable_file_suffix = ".data";
+constexpr const char *hint_file_suffix = ".hnt";
+constexpr const char *log_file_suffix = ".log";
+
 class DB {
  public:
   DB(absl::string_view directory);
 
   absl::Status InitializeSSTables() noexcept;
+  absl::Status InitializeHints() noexcept;
   absl::Status FlushMemoryTable() noexcept;
   absl::Status Insert(const std::string &key,
                       const std::string &value) noexcept;  // string_view?
