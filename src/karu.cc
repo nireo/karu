@@ -3,11 +3,13 @@
 #include <absl/status/status.h>
 #include <absl/synchronization/mutex.h>
 
+#include <algorithm>
 #include <cstdio>
 #include <filesystem>
 #include <memory>
 #include <thread>
 
+#include "hint.h"
 #include "memory_table.h"
 #include "sstable.h"
 #include "utils.h"
@@ -106,6 +108,20 @@ absl::Status DB::Insert(const std::string &key,
 absl::Status DB::ParseHintFiles() noexcept {
   // find all hint files
   auto hint_files = utils::files_with_extension(".hnt", database_directory_);
+
+  // we want to sort the file paths such that oldest tables first.
+  std::sort(hint_files.begin(), hint_files.end());
+  for (const auto &path : hint_files) {
+    auto status = utils::parse_file_id(path);
+    if (!status.ok()) {
+      continue;
+    }
+
+    status = hint::ParseHintFile(path, *status, index_);
+    if (!status.ok()) {
+      continue;
+    }
+  }
 
   return absl::OkStatus();
 }

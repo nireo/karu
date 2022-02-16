@@ -3,6 +3,8 @@
 
 #include <absl/status/status.h>
 
+#include <string>
+
 #include "file_io.h"
 #include "karu.h"
 #include "sstable.h"
@@ -26,8 +28,9 @@ class HintFile {
   std::unique_ptr<io::FileReader> file_reader_ = nullptr;
 };
 
-absl::StatusOr<std::unique_ptr<sstable::SSTable>> ParseHintFile(
-    karu::file_id_t sstable_id, const std::string &database_directory) noexcept;
+absl::Status ParseHintFile(
+    const std::string &path, karu::file_id_t sstable_id,
+    phmap::parallel_flat_hash_map<std::string, DatabaseEntry> &index) noexcept;
 }  // namespace hint
 }  // namespace karu
 

@@ -7,6 +7,7 @@
 #include <cstring>
 #include <fstream>
 #include <memory>
+#include <string>
 
 #include "encoder.h"
 #include "file_io.h"
@@ -104,15 +105,15 @@ HintFile::BuildSSTableHintFile() noexcept {
   return absl::OkStatus();
 }
 
-absl::StatusOr<std::unique_ptr<sstable::SSTable>> ParseHintFile(
-    const std::string &hint_path) noexcept {
-  std::ifstream file(hint_path, std::ios::binary | std::ios::in);
+absl::Status ParseHintFile(
+    const std::string &path, karu::file_id_t file_id,
+    phmap::parallel_flat_hash_map<std::string, DatabaseEntry> &index) noexcept {
+  std::ifstream file(path, std::ios::binary | std::ios::in);
   if (!file) {
     return absl::InternalError(
-        "could not open file stream to hint file: " + hint_path + ".\n");
+        "could not open file stream to hint file: " + path + ".\n");
   }
 
-  std::map<std::string, sstable::EntryPosition> offset_map;
   while (true) {
     // read header and parse hint entry data
     std::uint8_t hint_header[encoder::kHintHeader]{};
@@ -126,10 +127,6 @@ absl::StatusOr<std::unique_ptr<sstable::SSTable>> ParseHintFile(
     }
 
     encoder::HintHeader encoded_header(hint_header);
-    sstable::EntryPosition pos{
-        .pos_ = encoded_header.ValuePos(),
-        .value_size_ = encoded_header.ValueLength(),
-    };
     auto key_len = encoded_header.KeyLength();
 
     // parse key
@@ -149,18 +146,10 @@ absl::StatusOr<std::unique_ptr<sstable::SSTable>> ParseHintFile(
     // the key is the same length as described.
     hint_key.resize(key_len);
 
-    offset_map[hint_key] = pos;
+    index[hint_key] = DatabaseEntry(file_id, encoded_header.ValuePos(),
+                                    encoded_header.ValueLength());
   }
-
-  // formulate proper sstable path
-  std::string sstable_path = hint_path;
-
-  // same filemane with .data suffix.
-  for (int i = 0; i < 4; ++i) sstable_path.pop_back();
-  sstable_path += ".data";
-
-  return std::make_unique<sstable::SSTable>(std::move(offset_map),
-                                            sstable_path);
+  return absl::OkStatus();
 }
 }  // namespace hint
 }  // namespace karu
