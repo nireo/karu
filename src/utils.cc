@@ -40,5 +40,11 @@ absl::StatusOr<file_id_t> parse_file_id(std::string_view path) noexcept {
 
   return last;
 }
+
+file_id_t generate_file_id() noexcept {
+  return std::chrono::duration_cast<std::chrono::milliseconds>(
+             std::chrono::system_clock::now().time_since_epoch())
+      .count();
+}
 }  // namespace utils
 }  // namespace karu

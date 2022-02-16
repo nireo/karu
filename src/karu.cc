@@ -10,6 +10,7 @@
 
 #include "memory_table.h"
 #include "sstable.h"
+#include "utils.h"
 
 namespace karu {
 
@@ -103,13 +104,9 @@ absl::Status DB::Insert(const std::string &key,
 }
 
 absl::Status DB::ParseHintFiles() noexcept {
-  for (const auto &entry :
-       std::filesystem::directory_iterator(database_directory_)) {
-    if (entry.path().extension() != ".hnt") {
-      // skip non-hint files
-      continue;
-    }
-  }
+  // find all hint files
+  auto hint_files = utils::files_with_extension(".hnt", database_directory_);
+
   return absl::OkStatus();
 }
 

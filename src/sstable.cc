@@ -226,5 +226,6 @@ absl::StatusOr<std::unique_ptr<SSTable>> ParseSSTableFromFile(
 
   return sstable;
 }
+
 }  // namespace sstable
 }  // namespace karu
