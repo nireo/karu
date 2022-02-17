@@ -52,6 +52,27 @@ absl::Status SSTable::InitWriterAndReader() noexcept {
   return absl::OkStatus();
 }
 
+// This is exactly same as the Find function but with arguments such that we
+// don't need to construct a separate file struct.
+absl::StatusOr<std::string> SSTable::Find(std::uint16_t value_size,
+                                          std::uint32_t pos) noexcept {
+
+  std::unique_ptr<std::uint8_t[]> value_buffer(new std::uint8_t[value_size]);
+  auto status = reader_->ReadAt(pos, {value_buffer.get(), value_size});
+  if (!status.ok()) {
+    return status.status();
+  }
+
+  if (*status != value_size) {
+    return absl::InternalError("read wrong amount of bytes from file.");
+  }
+
+  std::string result = reinterpret_cast<char *>(value_buffer.get());
+  result.resize(value_size);
+
+  return result;
+}
+
 absl::Status SSTable::InitOnlyReader() noexcept {
   auto reader = io::OpenFileReader(fname_);
   if (!reader.ok()) {

@@ -93,6 +93,9 @@ absl::Status DB::Insert(const std::string &key,
   }
   memtable_mutex_.WriterUnlock();
 
+  index_mutex_.WriterLock();
+  index_mutex_.WriterUnlock();
+
   memtable_mutex_.ReaderLock();
   std::uint64_t size = current_memtable_->Size();
   memtable_mutex_.ReaderUnlock();

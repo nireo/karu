@@ -43,12 +43,16 @@ class SSTable {
   absl::StatusOr<std::string> FindValueFromPos(
       const EntryPosition& pos) noexcept;
   std::map<std::string, EntryPosition> offset_map_;
+  absl::StatusOr<std::string> Find(std::uint16_t value_size,
+                                   std::uint32_t pos) noexcept;
+  std::uint32_t Size() const noexcept { return size_; }
 
  private:
   std::string fname_;
   absl::Mutex mutex_;
   bloom::BloomFilter bloom_;
 
+  std::uint32_t size_ = 0;
   std::unique_ptr<io::FileReader> reader_ = nullptr;
   // this is only used when creating the sstable. When loading files after
   // reopening database we just initialize the reader_ field.
