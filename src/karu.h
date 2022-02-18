@@ -19,9 +19,6 @@ constexpr const char *hint_file_suffix = ".hnt";
 constexpr const char *log_file_suffix = ".log";
 
 struct DatabaseEntry {
-  explicit DatabaseEntry(file_id_t file_id, std::uint32_t pos,
-                         std::uint16_t value_size)
-      : file_id_(file_id), pos_(pos), value_size_(value_size) {}
   file_id_t file_id_;
   std::uint32_t pos_;
   std::uint16_t value_size_;
@@ -43,7 +40,6 @@ class DB {
   absl::Status Delete(const std::string &key) noexcept;
   std::vector<std::unique_ptr<sstable::SSTable>> sstable_list_;
   absl::Status ParseHintFiles() noexcept;
-
 
  private:
   // we hold memtables which we have not yet written to disk in the

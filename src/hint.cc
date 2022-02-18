@@ -146,8 +146,11 @@ absl::Status ParseHintFile(
     // the key is the same length as described.
     hint_key.resize(key_len);
 
-    index[hint_key] = DatabaseEntry(file_id, encoded_header.ValuePos(),
-                                    encoded_header.ValueLength());
+    index[hint_key] = DatabaseEntry{
+        .file_id_ = file_id,
+        .pos_ = encoded_header.ValuePos(),
+        .value_size_ = encoded_header.ValueLength(),
+    };
   }
   return absl::OkStatus();
 }
