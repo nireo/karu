@@ -16,22 +16,20 @@
 #include "utils.h"
 
 namespace karu {
-
-absl::StatusOr<std::string> Get(const std::string &key) noexcept {
-  return absl::OkStatus();
-}
-
 DB::DB(absl::string_view directory) {
   database_directory_ = directory;
-  current_memtable_ = std::make_unique<memtable::Memtable>(database_directory_);
+
+  auto status = InitializeSSTables();
+  if (!status.ok()) {
+    std::cerr << "error parsing sstables\n";
+  }
 
   auto id = utils::generate_file_id();
   std::string sstable_string =
       database_directory_ + "/" + std::to_string(id) + sstable_file_suffix;
   current_sstable_ = std::make_unique<sstable::SSTable>(sstable_string, id);
-  auto status = current_sstable_->InitWriterAndReader();
-  if (!status.ok()) {
-    std::cerr << "could not initialize writer and reader";
+  if (auto status = current_sstable_->InitWriterAndReader(); !status.ok()) {
+    std::cerr << "could not initialize writer and reader\n";
   }
 }
 
@@ -51,7 +49,7 @@ absl::Status DB::InitializeSSTables() noexcept {
     }
     std::cerr << "parsed file id: " << *id << '\n';
 
-    auto sstable = std::make_unique<sstable::SSTable>(entry.path());
+    auto sstable = std::make_unique<sstable::SSTable>(entry.path(), *id);
 
     auto status = sstable->InitOnlyReader();
     if (!status.ok()) {
@@ -115,6 +113,7 @@ absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
   sstable_mutex_.ReaderUnlock();
 
   if (!datafiles_.contains(value.file_id_)) {
+    std::cerr << "could not find datafile: " << value.file_id_ << '\n';
     for (const auto &entry : datafiles_) {
       std::cerr << "found datafile: " << entry.first << '\n';
     }
@@ -126,13 +125,6 @@ absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
 
 absl::Status DB::Insert(const std::string &key,
                         const std::string &value) noexcept {
-  memtable_mutex_.WriterLock();
-  if (auto status = current_memtable_->Insert(key, value); !status.ok()) {
-    memtable_mutex_.WriterUnlock();
-    return status;
-  }
-  memtable_mutex_.WriterUnlock();
-
   sstable_mutex_.WriterLock();
   auto status = current_sstable_->Insert(key, value);
   if (!status.ok()) {

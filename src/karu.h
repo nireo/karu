@@ -38,7 +38,6 @@ class DB {
  private:
   // we hold memtables which we have not yet written to disk in the
   // memtable_list
-  std::vector<std::unique_ptr<memtable::Memtable>> memtable_list_;
   std::unique_ptr<memtable::Memtable> current_memtable_ = nullptr;
   std::string database_directory_;
   std::unique_ptr<sstable::SSTable> current_sstable_ = nullptr;
@@ -48,8 +47,6 @@ class DB {
 
   absl::Mutex sstable_mutex_;
   absl::Mutex index_mutex_;
-  absl::Mutex memtable_mutex_;
-  absl::Mutex memtable_list_mutex_;
 };
 }  // namespace karu
 

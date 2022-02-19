@@ -274,8 +274,6 @@ TEST(KaruTest, PersistanceTest) {
 
     {
       karu::DB db(test_dir);
-      auto status = db.InitializeSSTables();
-      OK;
 
       for (const auto &k : keys) {
         auto status = db.Get(k);
