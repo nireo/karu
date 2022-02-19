@@ -11,6 +11,7 @@
 #include "encoder.h"
 #include "file_io.h"
 #include "memory_table.h"
+#include "types.h"
 
 namespace karu {
 namespace sstable {
@@ -192,6 +193,59 @@ absl::Status SSTable::BuildFromBTree(
   }
 
   write_->Sync();  // we don't need to sync after every turn
+  return absl::OkStatus();
+}
+
+absl::Status SSTable::AddEntriesToIndex(
+    phmap::parallel_flat_hash_map<std::string, karu::DatabaseEntry>
+        &index) noexcept {
+  if (reader_ == nullptr) {
+    return absl::InternalError("reader is nullptr when reading.");
+  }
+
+  struct ::stat fileStat;
+  if (::stat(fname_.c_str(), &fileStat) == -1) {
+    return absl::InternalError("could not get filesize");
+  }
+  uint32_t file_size = static_cast<uint32_t>(fileStat.st_size);
+
+  std::uint32_t starting_offset = 0;
+  while (starting_offset <= file_size) {
+    std::unique_ptr<std::uint8_t[]> header_buffer(
+        new std::uint8_t[encoder::kFullHeader]);
+    auto status = reader_->ReadAt(starting_offset,
+                                  {header_buffer.get(), encoder::kFullHeader});
+    if (!status.ok()) break;
+    if (*status == 0) {
+      break;
+    }
+
+    std::uint16_t key_length =
+        absl::little_endian::Load16(&header_buffer.get()[0]);
+    std::uint16_t value_length = absl::little_endian::Load16(
+        &header_buffer.get()[encoder::kKeyByteCount]);
+
+    std::unique_ptr<std::uint8_t[]> key_buffer(new std::uint8_t[key_length]);
+    status = reader_->ReadAt(starting_offset + encoder::kFullHeader,
+                             {
+                                 key_buffer.get(),
+                                 key_length,
+                             });
+    if (!status.ok()) {
+      break;
+    }
+
+    std::string result = reinterpret_cast<char *>(key_buffer.get());
+    result.resize(key_length);
+    starting_offset += encoder::kFullHeader + key_length;
+    index[result] = DatabaseEntry{
+        .file_id_ = id_,
+        .pos_ = starting_offset,
+        .value_size_ = value_length,
+    };
+    starting_offset += value_length;
+  }
+
   return absl::OkStatus();
 }
 

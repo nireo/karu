@@ -12,6 +12,7 @@
 #include "hint.h"
 #include "memory_table.h"
 #include "sstable.h"
+#include "types.h"
 #include "utils.h"
 
 namespace karu {
@@ -43,8 +44,13 @@ absl::Status DB::InitializeSSTables() noexcept {
       continue;
     }
 
-    file_id_t id = -1;
-    std::sscanf(filename.c_str(), "%ld.data", &id);
+    auto id = utils::parse_file_id(entry.path().string());
+    if (!id.ok()) {
+      std::cerr << "cannot parse id from filename\n";
+      continue;
+    }
+    std::cerr << "parsed file id: " << *id << '\n';
+
     auto sstable = std::make_unique<sstable::SSTable>(entry.path());
 
     auto status = sstable->InitOnlyReader();
@@ -52,8 +58,8 @@ absl::Status DB::InitializeSSTables() noexcept {
       return status;
     }
 
-    status = sstable->PopulateFromFile();
-    sstable_list_.push_back(std::move(sstable));
+    status = sstable->AddEntriesToIndex(index_);
+    datafiles_[*id] = std::move(sstable);
   }
 
   return absl::OkStatus();
@@ -109,6 +115,9 @@ absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
   sstable_mutex_.ReaderUnlock();
 
   if (!datafiles_.contains(value.file_id_)) {
+    for (const auto &entry : datafiles_) {
+      std::cerr << "found datafile: " << entry.first << '\n';
+    }
     return absl::InternalError("invalid file id.");
   }
 

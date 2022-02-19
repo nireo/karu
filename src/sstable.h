@@ -7,10 +7,12 @@
 #include <map>
 #include <string>
 
+#include "../third_party/parallel_hashmap/phmap.h"
 #include "absl/container/btree_map.h"
 #include "bloom.h"
 #include "file_io.h"
 #include "memory_table.h"
+#include "types.h"
 
 namespace karu {
 namespace sstable {
@@ -47,6 +49,10 @@ class SSTable {
   absl::Status InitWriterAndReader() noexcept;
   absl::Status InitOnlyReader() noexcept;
   absl::StatusOr<std::string> Get(absl::string_view key) noexcept;
+  absl::Status AddEntriesToIndex(
+      phmap::parallel_flat_hash_map<std::string, karu::DatabaseEntry>&
+          index) noexcept;
+
   absl::Status BuildFromBTree(
       const absl::btree_map<std::string, std::string>& btree) noexcept;
   absl::StatusOr<std::string> Find(const std::string& key) noexcept;

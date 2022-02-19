@@ -10,19 +10,13 @@
 #include "absl/strings/string_view.h"
 #include "memory_table.h"
 #include "sstable.h"
+#include "types.h"
 
 namespace karu {
 
-using file_id_t = std::int64_t;
 constexpr const char *sstable_file_suffix = ".data";
 constexpr const char *hint_file_suffix = ".hnt";
 constexpr const char *log_file_suffix = ".log";
-
-struct DatabaseEntry {
-  file_id_t file_id_;
-  std::uint32_t pos_;
-  std::uint16_t value_size_;
-};
 
 class DB {
  public:
