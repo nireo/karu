@@ -28,6 +28,10 @@ DB::DB(absl::string_view directory) {
   std::string sstable_string =
       database_directory_ + "/" + std::to_string(id) + sstable_file_suffix;
   current_sstable_ = std::make_unique<sstable::SSTable>(sstable_string, id);
+  auto status = current_sstable_->InitWriterAndReader();
+  if (!status.ok()) {
+    std::cerr << "could not initialize writer and reader";
+  }
 }
 
 absl::Status DB::InitializeSSTables() noexcept {
@@ -56,6 +60,7 @@ absl::Status DB::InitializeSSTables() noexcept {
 }
 
 absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
+#ifdef OLD
   // check the memtable
   std::cerr << "searching current memtable.\n";
   if (auto status = current_memtable_->Get(key); status.ok()) {
@@ -87,6 +92,27 @@ absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
 
   sstable_mutex_.ReaderUnlock();
   return absl::NotFoundError("coult not find key in memtable for sstables.");
+#endif
+  if (!index_.contains(key)) {
+    return absl::NotFoundError("coult not find key in index");
+  }
+
+  const auto &value = index_[key];
+  sstable_mutex_.ReaderLock();
+  if (value.file_id_ == current_sstable_->ID()) {
+    auto status = current_sstable_->Find(value.value_size_, value.pos_);
+    if (status.ok()) {
+      sstable_mutex_.ReaderUnlock();
+      return status;
+    }
+  }
+  sstable_mutex_.ReaderUnlock();
+
+  if (!datafiles_.contains(value.file_id_)) {
+    return absl::InternalError("invalid file id.");
+  }
+
+  return datafiles_[value.file_id_]->Find(value.value_size_, value.pos_);
 }
 
 absl::Status DB::Insert(const std::string &key,
@@ -101,6 +127,7 @@ absl::Status DB::Insert(const std::string &key,
   sstable_mutex_.WriterLock();
   auto status = current_sstable_->Insert(key, value);
   if (!status.ok()) {
+    sstable_mutex_.WriterUnlock();
     return status.status();
   }
 
@@ -141,6 +168,7 @@ absl::Status DB::ParseHintFiles() noexcept {
 }
 
 absl::Status DB::FlushMemoryTable() noexcept {
+#ifdef OLD
   memtable_mutex_.WriterLock();
 
   std::unique_ptr<memtable::Memtable> old_memtable =
@@ -192,6 +220,21 @@ absl::Status DB::FlushMemoryTable() noexcept {
   memtable_list_.erase(memtable_list_.begin() + memtable_index);
   std::cerr << "removed memtable";
   memtable_list_mutex_.WriterUnlock();
+
+  return absl::OkStatus();
+#endif
+  absl::WriterMutexLock guard(&sstable_mutex_);
+  file_id_t id = current_sstable_->ID();
+  datafiles_[id] = std::move(current_sstable_);
+
+  auto new_id = utils::generate_file_id();
+  std::string sstable_string =
+      database_directory_ + "/" + std::to_string(new_id) + sstable_file_suffix;
+  current_sstable_ = std::make_unique<sstable::SSTable>(sstable_string, new_id);
+  auto status = current_sstable_->InitWriterAndReader();
+  if (!status.ok()) {
+    return status;
+  }
 
   return absl::OkStatus();
 }

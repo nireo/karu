@@ -306,3 +306,24 @@ TEST(KaruTest, FlushedMemtableLogFilesDeleted) {
     EXPECT_EQ(log_count, 1);  // contains the current memory table.
   });
 }
+
+TEST(SStableTest, InsertTest) {
+  test_wrapper([](std::string test_dir) {
+    std::string value = "world";
+    std::string _useless = "hello";
+
+    karu::sstable::SSTable sstable(test_dir + "/test.data");
+    auto status = sstable.InitWriterAndReader();
+    OK;
+
+    auto insert_status = sstable.Insert(_useless, value);
+    EXPECT_TRUE(insert_status.ok());
+
+    auto read_status = sstable.FindValueFromPos(sstable::EntryPosition{
+        .pos_ = *insert_status,
+        .value_size_ = static_cast<std::uint16_t>(value.size()),
+    });
+    EXPECT_TRUE(read_status.ok());
+    EXPECT_EQ(value, *read_status);
+  });
+}

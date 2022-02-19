@@ -81,7 +81,8 @@ absl::StatusOr<std::uint32_t> SSTable::Insert(
 
   // write changes to disk
   write_->Sync();
-  return *status + encoder::kFullHeader + key_len; // where the value starts in the file.
+  return *status + encoder::kFullHeader +
+         key_len;  // where the value starts in the file.
 }
 
 // This is exactly same as the Find function but with arguments such that we

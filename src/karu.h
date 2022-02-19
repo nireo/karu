@@ -47,8 +47,10 @@ class DB {
   std::vector<std::unique_ptr<memtable::Memtable>> memtable_list_;
   std::unique_ptr<memtable::Memtable> current_memtable_ = nullptr;
   std::string database_directory_;
-  phmap::parallel_flat_hash_map<std::string, DatabaseEntry> index_;
   std::unique_ptr<sstable::SSTable> current_sstable_ = nullptr;
+
+  phmap::parallel_flat_hash_map<std::string, DatabaseEntry> index_;
+  phmap::node_hash_map<file_id_t, std::unique_ptr<sstable::SSTable>> datafiles_;
 
   absl::Mutex sstable_mutex_;
   absl::Mutex index_mutex_;
