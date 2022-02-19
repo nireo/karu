@@ -5,20 +5,17 @@
 
 #include <string>
 
+#include "../third_party/parallel_hashmap/phmap.h"
 #include "file_io.h"
-#include "karu.h"
-#include "sstable.h"
+#include "types.h"
 
 namespace karu {
 namespace hint {
 class HintFile {
  public:
-  explicit HintFile(const std::string &path);
+  explicit HintFile(std::string path);
   absl::Status WriteHint(const std::string &key, std::uint16_t value_size,
                          std::uint32_t pos) noexcept;
-  absl::StatusOr<std::unique_ptr<sstable::SSTable>>
-  BuildSSTableHintFile() noexcept;
-
   HintFile &operator=(const HintFile &) = delete;
   HintFile(const HintFile &) = delete;
 
@@ -29,7 +26,7 @@ class HintFile {
 };
 
 absl::Status ParseHintFile(
-    const std::string &path, karu::file_id_t sstable_id,
+    const std::string &path, file_id_t sstable_id,
     phmap::parallel_flat_hash_map<std::string, DatabaseEntry> &index) noexcept;
 }  // namespace hint
 }  // namespace karu

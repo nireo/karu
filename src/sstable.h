@@ -11,6 +11,7 @@
 #include "absl/container/btree_map.h"
 #include "bloom.h"
 #include "file_io.h"
+#include "hint.h"
 #include "memory_table.h"
 #include "types.h"
 
@@ -30,14 +31,7 @@ class SSTable {
         reader_(nullptr),
         write_(nullptr),
         bloom_(bloom::BloomFilter(30000, 13)){};
-  explicit SSTable(const std::string& fname, std::int64_t id)
-      : fname_(fname),
-        id_(id),
-        reader_(nullptr),
-        write_(nullptr),
-        bloom_(bloom::BloomFilter(30000, 13)){};
-  explicit SSTable(std::map<std::string, EntryPosition>&& map,
-                   const std::string& path);
+  SSTable(std::string fname, std::int64_t id);
 
   SSTable& operator=(const SSTable&) = delete;
   SSTable(const SSTable&) = delete;
@@ -71,6 +65,7 @@ class SSTable {
   std::int64_t id_;
 
   std::uint32_t size_ = 0;
+  std::unique_ptr<hint::HintFile> hint_ = nullptr;
   std::unique_ptr<io::FileReader> reader_ = nullptr;
   // this is only used when creating the sstable. When loading files after
   // reopening database we just initialize the reader_ field.

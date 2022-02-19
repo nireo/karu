@@ -10,6 +10,7 @@
 
 #include "encoder.h"
 #include "file_io.h"
+#include "hint.h"
 #include "memory_table.h"
 #include "types.h"
 
@@ -20,19 +21,19 @@ namespace sstable {
   absl::Span<const std::uint8_t>{ \
       reinterpret_cast<const std::uint8_t *>(str.data()), str.size()};
 
-SSTable::SSTable(std::map<std::string, EntryPosition> &&map,
-                 const std::string &path)
-    : bloom_(bloom::BloomFilter(30000, 13)),
-      write_(nullptr),
+SSTable::SSTable(std::string fname, std::int64_t id)
+    : id_(id),
       reader_(nullptr),
-      fname_(path),
-      offset_map_(std::move(map)) {
-  // only initialize the reader since we are not going to be writing to this
-  // file.
-  if (auto status = InitOnlyReader(); !status.ok()) {
-    std::cerr << "error initializing sstable reader.\n";
-    reader_ = nullptr;
+      write_(nullptr),
+      bloom_(bloom::BloomFilter(30000, 13)) {
+  std::string hint_path = fname;
+  fname_ = fname;
+  for (size_t i = 0; i < 4; ++i) {
+    hint_path.pop_back();
   }
+
+  hint_path += "hnt";
+  hint_ = std::make_unique<hint::HintFile>(hint_path);
 }
 
 absl::Status SSTable::InitWriterAndReader() noexcept {
@@ -82,8 +83,16 @@ absl::StatusOr<std::uint32_t> SSTable::Insert(
 
   // write changes to disk
   write_->Sync();
-  return *status + encoder::kFullHeader +
-         key_len;  // where the value starts in the file.
+
+  // after we have successfully written the value into the table, we can create
+  // the hint entry.
+  std::uint32_t pos = *status + encoder::kFullHeader + key_len;
+  if (auto status = hint_->WriteHint(key, value_len, pos); !status.ok()) {
+    std::cerr << status.message() << '\n';
+    return status;
+  }
+
+  return pos;  // where the value starts in the file.
 }
 
 // This is exactly same as the Find function but with arguments such that we

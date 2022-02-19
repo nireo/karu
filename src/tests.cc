@@ -289,7 +289,7 @@ TEST(SStableTest, InsertTest) {
     std::string value = "world";
     std::string _useless = "hello";
 
-    karu::sstable::SSTable sstable(test_dir + "/test.data");
+    karu::sstable::SSTable sstable(test_dir + "/test.data", 5129512);
     auto status = sstable.InitWriterAndReader();
     OK;
 

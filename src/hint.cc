@@ -21,12 +21,15 @@ namespace hint {
   absl::Span<const std::uint8_t>{ \
       reinterpret_cast<const std::uint8_t *>(str.data()), str.size()};
 
-HintFile::HintFile(const std::string &path) {
-  auto status = io::OpenFileWriter(path_);
-  if (status.ok()) {
-    file_writer_ = std::move(*status);
-  }
+HintFile::HintFile(std::string path) {
+  std::ofstream file{path};
+  file.close();
 
+  auto status = io::OpenFileWriter(path);
+  if (!status.ok()) {
+    file_writer_ = nullptr;
+  }
+  file_writer_ = std::move(*status);
   path_ = path;
 }
 
@@ -63,6 +66,7 @@ absl::Status HintFile::WriteHint(const std::string &key,
   return absl::OkStatus();
 }
 
+#ifdef OLD
 absl::StatusOr<std::unique_ptr<sstable::SSTable>>
 HintFile::BuildSSTableHintFile() noexcept {
   if (file_reader_ == nullptr) {
@@ -104,6 +108,7 @@ HintFile::BuildSSTableHintFile() noexcept {
 
   return absl::OkStatus();
 }
+#endif
 
 absl::Status ParseHintFile(
     const std::string &path, karu::file_id_t file_id,
