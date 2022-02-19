@@ -24,6 +24,13 @@ class SSTable {
  public:
   explicit SSTable(const std::string& fname)
       : fname_(fname),
+        id_(0),
+        reader_(nullptr),
+        write_(nullptr),
+        bloom_(bloom::BloomFilter(30000, 13)){};
+  explicit SSTable(const std::string& fname, std::int64_t id)
+      : fname_(fname),
+        id_(id),
         reader_(nullptr),
         write_(nullptr),
         bloom_(bloom::BloomFilter(30000, 13)){};
@@ -32,6 +39,9 @@ class SSTable {
 
   SSTable& operator=(const SSTable&) = delete;
   SSTable(const SSTable&) = delete;
+
+  absl::StatusOr<std::uint32_t> Insert(const std::string& key,
+                                       const std::string& value) noexcept;
 
   absl::Status PopulateFromFile() noexcept;
   absl::Status InitWriterAndReader() noexcept;
@@ -46,11 +56,13 @@ class SSTable {
   absl::StatusOr<std::string> Find(std::uint16_t value_size,
                                    std::uint32_t pos) noexcept;
   std::uint32_t Size() const noexcept { return size_; }
+  std::int64_t ID() const noexcept { return id_; }
 
  private:
   std::string fname_;
   absl::Mutex mutex_;
   bloom::BloomFilter bloom_;
+  std::int64_t id_;
 
   std::uint32_t size_ = 0;
   std::unique_ptr<io::FileReader> reader_ = nullptr;

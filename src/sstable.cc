@@ -6,6 +6,7 @@
 
 #include <filesystem>
 #include <fstream>
+#include <memory>
 
 #include "encoder.h"
 #include "file_io.h"
@@ -52,11 +53,41 @@ absl::Status SSTable::InitWriterAndReader() noexcept {
   return absl::OkStatus();
 }
 
+absl::StatusOr<std::uint32_t> SSTable::Insert(
+    const std::string &key, const std::string &value) noexcept {
+  if (write_ == nullptr) {
+    return absl::InternalError("table writer is nullptr when trying to write");
+  }
+
+  auto key_span = STRING_TO_SPAN(key);
+  auto value_span = STRING_TO_SPAN(value);
+
+  auto key_len = static_cast<std::uint16_t>(key_span.size());
+  auto value_len = static_cast<std::uint16_t>(value_span.size());
+  std::uint32_t buffer_size = encoder::kFullHeader + key_len + value_len;
+  std::unique_ptr<std::uint8_t[]> buffer(new std::uint8_t[buffer_size]);
+  absl::little_endian::Store16(&buffer.get()[0], key_len);
+  absl::little_endian::Store16(&buffer.get()[encoder::kKeyByteCount],
+                               value_len);
+
+  std::memcpy(&buffer[encoder::kFullHeader], key_span.data(), key_span.size());
+  std::memcpy(&buffer[encoder::kFullHeader + key_span.size()],
+              value_span.data(), value_len);
+
+  auto status = write_->Append({buffer.get(), buffer_size});
+  if (!status.ok()) {
+    return status.status();
+  }
+
+  // write changes to disk
+  write_->Sync();
+  return *status + encoder::kFullHeader + key_len; // where the value starts in the file.
+}
+
 // This is exactly same as the Find function but with arguments such that we
 // don't need to construct a separate file struct.
 absl::StatusOr<std::string> SSTable::Find(std::uint16_t value_size,
                                           std::uint32_t pos) noexcept {
-
   std::unique_ptr<std::uint8_t[]> value_buffer(new std::uint8_t[value_size]);
   auto status = reader_->ReadAt(pos, {value_buffer.get(), value_size});
   if (!status.ok()) {

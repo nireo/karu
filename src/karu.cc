@@ -23,6 +23,11 @@ absl::StatusOr<std::string> Get(const std::string &key) noexcept {
 DB::DB(absl::string_view directory) {
   database_directory_ = directory;
   current_memtable_ = std::make_unique<memtable::Memtable>(database_directory_);
+
+  auto id = utils::generate_file_id();
+  std::string sstable_string =
+      database_directory_ + "/" + std::to_string(id) + sstable_file_suffix;
+  current_sstable_ = std::make_unique<sstable::SSTable>(sstable_string, id);
 }
 
 absl::Status DB::InitializeSSTables() noexcept {
@@ -93,17 +98,23 @@ absl::Status DB::Insert(const std::string &key,
   }
   memtable_mutex_.WriterUnlock();
 
-  index_mutex_.WriterLock();
-  index_mutex_.WriterUnlock();
-
-  memtable_mutex_.ReaderLock();
-  std::uint64_t size = current_memtable_->Size();
-  memtable_mutex_.ReaderUnlock();
-  if (size > memtable::kMaxMemSize) {
-    if (auto status = FlushMemoryTable(); !status.ok()) {
-      return status;
-    }
+  sstable_mutex_.WriterLock();
+  auto status = current_sstable_->Insert(key, value);
+  if (!status.ok()) {
+    return status.status();
   }
+
+  std::uint32_t file_pos = *status;
+  file_id_t id = current_sstable_->ID();
+  sstable_mutex_.WriterUnlock();
+
+  index_mutex_.WriterLock();
+  index_[key] = {
+      .file_id_ = current_sstable_->ID(),
+      .pos_ = file_pos,
+      .value_size_ = static_cast<std::uint16_t>(value.size()),
+  };
+  index_mutex_.WriterUnlock();
 
   return absl::OkStatus();
 }
