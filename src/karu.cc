@@ -33,6 +33,28 @@ DB::DB(absl::string_view directory) {
   }
 }
 
+DB::DB(const DBConfig &conf) {
+  database_directory_ = conf.database_directory_;
+
+  if (conf.hint_files_) {
+    if (auto status = ParseHintFiles(); !status.ok()) {
+      std::cerr << "error parsing hint files: " << status.message() << '\n';
+    }
+  } else {
+    if (auto status = InitializeSSTables(); !status.ok()) {
+      std::cerr << "error parsing sstables: " << status.message() << '\n';
+    }
+  }
+
+  auto id = utils::generate_file_id();
+  std::string sstable_string =
+      database_directory_ + "/" + std::to_string(id) + sstable_file_suffix;
+  current_sstable_ = std::make_unique<sstable::SSTable>(sstable_string, id);
+  if (auto status = current_sstable_->InitWriterAndReader(); !status.ok()) {
+    std::cerr << "could not initialize writer and reader\n";
+  }
+}
+
 absl::Status DB::InitializeSSTables() noexcept {
   for (const auto &entry :
        std::filesystem::directory_iterator(database_directory_)) {

@@ -18,9 +18,20 @@ constexpr const char *sstable_file_suffix = ".data";
 constexpr const char *hint_file_suffix = ".hnt";
 constexpr const char *log_file_suffix = ".log";
 
+struct DBConfig {
+  bool hint_files_;  // the option to write into hint files. This basically
+                     // improves write performance a little bit, as we have to
+                     // do one less file write. The downside is that to startup
+                     // the application we need to parse the whole datafiles,
+                     // which will take a lot more time compared to just parsing
+                     // hint files.
+  std::string database_directory_;
+};
+
 class DB {
  public:
   explicit DB(absl::string_view directory);
+  explicit DB(const DBConfig &conf);
   DB &operator=(const DB &) = delete;
   DB(const DB &) = delete;
 
