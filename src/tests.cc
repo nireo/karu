@@ -305,6 +305,21 @@ TEST(SStableTest, InsertTest) {
   });
 }
 
+TEST(KaruTest, SSTableCreated) {
+  test_wrapper([](std::string test_dir) {
+    karu::DB db(test_dir);
+
+    int sstable_count = 0;
+    for (const auto &iter : std::filesystem::directory_iterator(test_dir)) {
+      if (iter.path().extension() == ".data") {
+        sstable_count++;
+      }
+    }
+
+    EXPECT_EQ(1, sstable_count);
+  });
+}
+
 TEST(KaruTest, HintFileStartup) {
   test_wrapper([](std::string test_dir) {
     // this is pretty much same as the persistance test, but we test parsing
