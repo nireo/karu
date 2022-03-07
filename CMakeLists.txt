@@ -11,7 +11,6 @@ add_executable(
   src/tests.cc
   src/file_io.cc
   src/karu.cc
-  src/memory_table.cc
   src/sstable.cc
   src/encoder.cc
   src/hint.cc
