@@ -10,7 +10,6 @@
 #include <thread>
 
 #include "hint.h"
-#include "memory_table.h"
 #include "sstable.h"
 #include "types.h"
 #include "utils.h"

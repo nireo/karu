@@ -8,7 +8,6 @@
 #include "../third_party/parallel_hashmap/phmap.h"
 #include "absl/container/btree_map.h"
 #include "absl/strings/string_view.h"
-#include "memory_table.h"
 #include "sstable.h"
 #include "types.h"
 

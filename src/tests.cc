@@ -13,7 +13,6 @@
 #include "encoder.h"
 #include "gtest/gtest.h"
 #include "karu.h"
-#include "memory_table.h"
 #include "sstable.h"
 
 using namespace karu;
@@ -72,27 +71,6 @@ void test_wrapper(std::function<void(std::string)> test_func) {
   test_func(test_dir);
 
   std::filesystem::remove_all(test_dir);
-}
-
-TEST(MemtableTest, LogFileCreated) {
-  test_wrapper([](std::string test_dir) {
-    memtable::Memtable memtable(test_dir);
-    EXPECT_TRUE(std::filesystem::exists(memtable.log_path_));
-  });
-}
-
-TEST(MemtableTest, BasicOperations) {
-  test_wrapper([](std::string test_dir) {
-    memtable::Memtable memtable(test_dir);
-
-    auto status = memtable.Insert("key", "value");
-    EXPECT_TRUE(status.ok());
-
-    auto value = memtable.Get("key");
-    EXPECT_TRUE(value.ok());
-
-    EXPECT_EQ(*value, "value");
-  });
 }
 
 TEST(SSTableTest, TestBuildFromBTree) {

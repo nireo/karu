@@ -11,7 +11,6 @@
 #include "encoder.h"
 #include "file_io.h"
 #include "hint.h"
-#include "memory_table.h"
 #include "types.h"
 
 namespace karu {
@@ -256,23 +255,6 @@ absl::Status SSTable::AddEntriesToIndex(
   }
 
   return absl::OkStatus();
-}
-
-absl::StatusOr<std::unique_ptr<SSTable>> CreateSSTableFromMemtable(
-    const memtable::Memtable &memtable,
-    const std::string &database_directory) noexcept {
-  std::string sstable_path =
-      database_directory + '/' + std::to_string(memtable.ID()) + ".data";
-  std::unique_ptr<sstable::SSTable> sstable =
-      std::make_unique<SSTable>(sstable_path);
-
-  if (auto status = sstable->BuildFromBTree(memtable.map_); !status.ok()) {
-    std::cerr << "error writing memtable(" << memtable.ID() << ") to disk.\n";
-    return absl::InternalError("error writing memtable to disk.");
-  }
-  std::filesystem::remove(memtable.log_path_);
-
-  return sstable;  // moves out the sstable
 }
 
 absl::Status SSTable::PopulateFromFile() noexcept {

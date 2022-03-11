@@ -12,7 +12,6 @@
 #include "bloom.h"
 #include "file_io.h"
 #include "hint.h"
-#include "memory_table.h"
 #include "types.h"
 
 namespace karu {
@@ -74,10 +73,6 @@ class SSTable {
 
 absl::StatusOr<std::unique_ptr<SSTable>> ParseSSTableFromFile(
     const std::string& key) noexcept;
-
-absl::StatusOr<std::unique_ptr<SSTable>> CreateSSTableFromMemtable(
-    const memtable::Memtable& memtable,
-    const std::string& database_directory) noexcept;
 }  // namespace sstable
 }  // namespace karu
 
