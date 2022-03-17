@@ -6,6 +6,7 @@
 
 #include <cstring>
 #include <fstream>
+#include <iostream>
 #include <memory>
 #include <string>
 
@@ -146,6 +147,8 @@ absl::Status ParseHintFile(
     }
 
     std::string hint_key = reinterpret_cast<char *>(key_buffer.get());
+    std::cerr << "hint key: " << hint_key << ' ' << encoded_header.ValuePos()
+              << ' ' << encoded_header.ValueLength() << '\n';
 
     // sometimes this contains some extra keys. This ensures that
     // the key is the same length as described.

@@ -61,7 +61,7 @@ bool EntryHeader::IsTombstoneValue() const noexcept {
 }
 
 void EntryHeader::SetKeyLength(std::uint16_t klen) noexcept {
-  absl::little_endian::Store16(&data_[kKeyByteCount], klen);
+  absl::little_endian::Store16(&data_[0], klen);
 }
 
 void EntryHeader::SetValueLength(std::uint16_t vlen) noexcept {
