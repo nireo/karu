@@ -5,7 +5,7 @@
 
 #include "karu.h"
 
-std::string gen_random_str(size_t size) {
+static std::string gen_random_str(size_t size) {
   const std::string chars =
       "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
   std::random_device random_device;
@@ -19,8 +19,8 @@ std::string gen_random_str(size_t size) {
   return random_string;
 }
 
-std::vector<std::string> generate_random_keys(size_t key_count = 10000,
-                                              size_t key_size = 10) {
+static std::vector<std::string> generate_random_keys(size_t key_count = 10000,
+                                                     size_t key_size = 10) {
   std::vector<std::string> keys;
   keys.resize(key_count);
 
@@ -30,7 +30,7 @@ std::vector<std::string> generate_random_keys(size_t key_count = 10000,
   return keys;
 }
 
-std::vector<std::pair<std::string, std::string>> generate_random_pairs(
+static std::vector<std::pair<std::string, std::string>> generate_random_pairs(
     size_t pair_count = 10000, size_t str_size = 10) {
   std::vector<std::pair<std::string, std::string>> keys(pair_count);
   for (auto &[key, value] : keys) {
@@ -63,7 +63,6 @@ int main(int argc, char **argv) {
   std::cout << "reads took: " << write_double.count() << '\n';
 
   auto read_time_start = std::chrono::high_resolution_clock::now();
-  karu::DB db("./test");
   for (const auto &k : keys) {
     db.Get(k.first);
   }
