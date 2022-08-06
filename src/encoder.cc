@@ -2,8 +2,7 @@
 
 #include "absl/base/internal/endian.h"
 
-namespace karu {
-namespace encoder {
+namespace karu::encoder {
 std::uint16_t HintHeader::KeyLength() const noexcept {
   return absl::little_endian::Load16(&data_[0]);
 }
@@ -69,5 +68,11 @@ void EntryHeader::SetValueLength(std::uint16_t vlen) noexcept {
 }
 
 void EntryHeader::MakeTombstone() noexcept { SetValueLength(kTombstone); }
-}  // namespace encoder
+absl::Span<const std::uint8_t> FullEncoding::Key() {
+  return {};
+}
+absl::Span<const std::uint8_t> FullEncoding::Value() {
+  return {};
+}
+std::uint16_t FullEncoding::RawValueLength() noexcept { return 0; }
 }  // namespace karu

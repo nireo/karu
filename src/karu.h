@@ -41,7 +41,6 @@ class DB {
                       const std::string &value) noexcept;  // string_view?
   absl::StatusOr<std::string> Get(
       const std::string &key) noexcept;  // string_view?
-  absl::Status Delete(const std::string &key) noexcept;
   absl::Status ParseHintFiles() noexcept;
 
  private:

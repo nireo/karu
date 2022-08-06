@@ -64,7 +64,7 @@ std::vector<std::pair<std::string, std::string>> generate_random_pairs(
   return keys;
 }
 
-void test_wrapper(std::function<void(std::string)> test_func) {
+void test_wrapper(const std::function<void(std::string)>& test_func) {
   const std::string test_dir = "./test";
   createTestDirectory(test_dir);
 
@@ -74,7 +74,7 @@ void test_wrapper(std::function<void(std::string)> test_func) {
 }
 
 TEST(SSTableTest, TestBuildFromBTree) {
-  test_wrapper([](std::string test_dir) {
+  test_wrapper([](const std::string& test_dir) {
     absl::btree_map<std::string, std::string> values = {
         {"hello", "world"},
         {"key", "world"},
@@ -99,7 +99,7 @@ TEST(SSTableTest, TestBuildFromBTree) {
 }
 
 TEST(SSTableTest, TestPopulateFromFile) {
-  test_wrapper([](std::string test_dir) {
+  test_wrapper([](const std::string& test_dir) {
     absl::btree_map<std::string, std::string> values = {
         {"hello", "world"},
         {"key", "world"},
@@ -136,7 +136,7 @@ TEST(SSTableTest, TestPopulateFromFile) {
 }
 
 TEST(KaruTest, BasicOperations) {
-  test_wrapper([](std::string test_dir) {
+  test_wrapper([](const std::string& test_dir) {
     DB db(test_dir);
 
     // these go into the memtable.
@@ -145,12 +145,13 @@ TEST(KaruTest, BasicOperations) {
 
     auto get_status = db.Get("hello");
     EXPECT_TRUE(get_status.ok());
+
     EXPECT_EQ("world", *get_status);
   });
 }
 
 TEST(KaruTest, LotsOfPairs) {
-  test_wrapper([](std::string test_dir) {
+  test_wrapper([](const std::string& test_dir) {
     auto keys = generate_random_keys();
     DB db(test_dir);
 
@@ -169,7 +170,7 @@ TEST(KaruTest, LotsOfPairs) {
 }
 
 TEST(KaruTest, MemtableFlush) {
-  test_wrapper([](std::string test_dir) {
+  test_wrapper([](const std::string& test_dir) {
     auto keys = generate_random_keys(500);
     karu::DB db(test_dir);
 
@@ -183,10 +184,10 @@ TEST(KaruTest, MemtableFlush) {
     // let is sleep for a little while
     for (const auto &k : keys) {
       // now we should still be able to find the key.
-      auto status = db.Get(k);
-      OK;
+      auto get_status = db.Get(k);
+      EXPECT_TRUE(get_status.ok());
 
-      EXPECT_EQ(*status, k);
+      EXPECT_EQ(*get_status, k);
     }
   });
 }
@@ -263,7 +264,7 @@ TEST(KaruTest, PersistanceTest) {
 }
 
 TEST(SStableTest, InsertTest) {
-  test_wrapper([](std::string test_dir) {
+  test_wrapper([](const std::string& test_dir) {
     std::string value = "world";
     std::string _useless = "hello";
 
@@ -272,8 +273,11 @@ TEST(SStableTest, InsertTest) {
     OK;
 
     auto insert_status = sstable.Insert(_useless, value);
-    EXPECT_TRUE(insert_status.ok());
+    if (!insert_status.ok()) {
+      std::cerr << insert_status.status().message() << '\n';
+    }
 
+    EXPECT_TRUE(insert_status.ok());
     auto read_status = sstable.FindValueFromPos(sstable::EntryPosition{
         .pos_ = *insert_status,
         .value_size_ = static_cast<std::uint16_t>(value.size()),
@@ -284,7 +288,7 @@ TEST(SStableTest, InsertTest) {
 }
 
 TEST(KaruTest, SSTableCreated) {
-  test_wrapper([](std::string test_dir) {
+  test_wrapper([](const std::string& test_dir) {
     karu::DB db(test_dir);
 
     int sstable_count = 0;
@@ -299,7 +303,7 @@ TEST(KaruTest, SSTableCreated) {
 }
 
 TEST(KaruTest, HintFileStartup) {
-  test_wrapper([](std::string test_dir) {
+  test_wrapper([](const std::string& test_dir) {
     // this is pretty much same as the persistance test, but we test parsing
     // hint files.
     auto keys = generate_random_keys(500);

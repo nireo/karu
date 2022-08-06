@@ -6,8 +6,7 @@
 #include <cstdint>
 #include <memory>
 
-namespace karu {
-namespace encoder {
+namespace karu::encoder {
 constexpr std::uint16_t kTombstone = 0xFFFF;
 constexpr std::uint32_t kKeyByteCount = 2;
 constexpr std::uint32_t kValueByteCount = 2;
@@ -20,12 +19,12 @@ constexpr std::uint32_t kHintHeader =
 
 class HintHeader {
  public:
-  HintHeader(std::uint8_t* const data) : data_(data){};
-  std::uint16_t KeyLength() const noexcept;
-  std::uint16_t ValueLength() const noexcept;
-  std::uint32_t ValuePos() const noexcept;
+  explicit HintHeader(std::uint8_t* const data) : data_(data){};
+  [[nodiscard]] std::uint16_t KeyLength() const noexcept;
+  [[nodiscard]] std::uint16_t ValueLength() const noexcept;
+  [[nodiscard]] std::uint32_t ValuePos() const noexcept;
 
-  bool IsTombstoneValue() const noexcept;
+  [[nodiscard]] bool IsTombstoneValue() const noexcept;
   void MakeTombstone() noexcept;
   void SetKeyLength(std::uint16_t klen) noexcept;
   void SetValueLength(std::uint16_t vlen) noexcept;
@@ -33,41 +32,40 @@ class HintHeader {
 
  private:
   std::uint8_t* const data_;
-  std::uint16_t RawValueLength() const noexcept;
+  [[nodiscard]] std::uint16_t RawValueLength() const noexcept;
 };
 
 class EntryHeader {
  public:
-  EntryHeader(std::uint8_t* const data) : data_(data){};
-  std::uint16_t KeyLength() const noexcept;
-  std::uint16_t ValueLength() const noexcept;
-  bool IsTombstoneValue() const noexcept;
+  explicit EntryHeader(std::uint8_t* const data) : data_(data){};
+  [[nodiscard]] std::uint16_t KeyLength() const noexcept;
+  [[nodiscard]] std::uint16_t ValueLength() const noexcept;
+  [[nodiscard]] bool IsTombstoneValue() const noexcept;
   void MakeTombstone() noexcept;
   void SetKeyLength(std::uint16_t klen) noexcept;
   void SetValueLength(std::uint16_t vlen) noexcept;
 
  private:
   std::uint8_t* const data_;
-  std::uint16_t RawValueLength() const noexcept;
+  [[nodiscard]] std::uint16_t RawValueLength() const noexcept;
 };
 
 // Full encoding contains encoding for full entries, meaning that it contains
 class FullEncoding {
-  FullEncoding(std::uint32_t len)
+  explicit FullEncoding(std::uint32_t len)
       : main_data_(new uint8_t[len]), key_size_(0), value_size_(0) {}
-  absl::Span<const std::uint8_t> Key() const;
-  absl::Span<const std::uint8_t> Value() const;
+  static absl::Span<const std::uint8_t> Key() ;
+  static absl::Span<const std::uint8_t> Value() ;
 
  private:
-  const std::uint8_t* raw_ptr() const { return main_data_.get(); }
+  [[nodiscard]] const std::uint8_t* raw_ptr() const { return main_data_.get(); }
   std::uint8_t* raw_ptr() { return main_data_.get(); }
 
   std::uint8_t key_size_;
   std::uint16_t value_size_;
   std::unique_ptr<std::uint8_t[]> main_data_;
-  std::uint16_t RawValueLength() const noexcept;
+  [[nodiscard]] static std::uint16_t RawValueLength() noexcept;
 };
-}  // namespace encoder
 }  // namespace karu
 
 #endif

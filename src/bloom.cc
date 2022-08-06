@@ -2,8 +2,7 @@
 
 #include "murmurhash3.h"
 
-namespace karu {
-namespace bloom {
+namespace karu::bloom {
 BloomFilter::BloomFilter(std::uint64_t size, std::uint8_t hash_count)
     : bits_(size), hash_count_(hash_count) {}
 
@@ -35,5 +34,4 @@ bool BloomFilter::contains(const char *data, std::size_t len) const noexcept {
 
   return true;
 }
-}  // namespace bloom
 }  // namespace karu

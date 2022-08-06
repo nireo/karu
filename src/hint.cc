@@ -15,14 +15,13 @@
 #include "karu.h"
 #include "sstable.h"
 
-namespace karu {
-namespace hint {
+namespace karu::hint {
 
 #define STRING_TO_SPAN(str)       \
   absl::Span<const std::uint8_t>{ \
-      reinterpret_cast<const std::uint8_t *>(str.data()), str.size()};
+      reinterpret_cast<const std::uint8_t *>((str).data()), (str).size()};
 
-HintFile::HintFile(std::string path) {
+HintFile::HintFile(const std::string& path) {
   std::ofstream file{path};
   file.close();
 
@@ -162,5 +161,4 @@ absl::Status ParseHintFile(
   }
   return absl::OkStatus();
 }
-}  // namespace hint
 }  // namespace karu

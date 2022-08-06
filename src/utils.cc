@@ -5,8 +5,7 @@
 
 #include "karu.h"
 
-namespace karu {
-namespace utils {
+namespace karu::utils {
 std::vector<std::string> files_with_extension(
     std::string_view ext, std::string_view directory) noexcept {
   std::vector<std::string> result;
@@ -27,9 +26,9 @@ absl::StatusOr<file_id_t> parse_file_id(std::string_view path) noexcept {
   file_id_t id = 0;
 
   // TODO: not so scuffed in the future plese
-  for (size_t i = 0; i < path.size(); ++i) {
-    if (std::isdigit(path[i])) {
-      id += path[i] - '0';  // add the number and a zero the rhs of the number.
+  for (char i : path) {
+    if (std::isdigit(i)) {
+      id += i - '0';  // add the number and a zero the rhs of the number.
       id *= 10;
 
       last = id;
@@ -46,5 +45,4 @@ file_id_t generate_file_id() noexcept {
              std::chrono::system_clock::now().time_since_epoch())
       .count();
 }
-}  // namespace utils
 }  // namespace karu

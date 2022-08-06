@@ -13,14 +13,13 @@
 #include "hint.h"
 #include "types.h"
 
-namespace karu {
-namespace sstable {
+namespace karu::sstable {
 
 #define STRING_TO_SPAN(str)       \
   absl::Span<const std::uint8_t>{ \
-      reinterpret_cast<const std::uint8_t *>(str.data()), str.size()};
+      reinterpret_cast<const std::uint8_t *>((str).data()), (str).size()};
 
-SSTable::SSTable(std::string fname, std::int64_t id)
+SSTable::SSTable(const std::string& fname, std::int64_t id)
     : id_(id),
       reader_(nullptr),
       write_(nullptr),
@@ -167,7 +166,7 @@ absl::Status SSTable::BuildFromBTree(
     absl::Span<const std::uint8_t> key_span = STRING_TO_SPAN(entry.first);
     absl::Span<const std::uint8_t> value_span = STRING_TO_SPAN(entry.second);
 
-    if (key_span.size() == 0 || key_span.size() > 0xFF) {
+    if (key_span.empty() || key_span.size() > 0xFF) {
       return absl::InternalError("invalid key length");
     }
 
@@ -211,11 +210,11 @@ absl::Status SSTable::AddEntriesToIndex(
     return absl::InternalError("reader is nullptr when reading.");
   }
 
-  struct ::stat fileStat;
+  struct ::stat fileStat{};
   if (::stat(fname_.c_str(), &fileStat) == -1) {
     return absl::InternalError("could not get filesize");
   }
-  uint32_t file_size = static_cast<uint32_t>(fileStat.st_size);
+  auto file_size = static_cast<uint32_t>(fileStat.st_size);
 
   std::uint32_t starting_offset = 0;
   while (starting_offset <= file_size) {
@@ -262,11 +261,11 @@ absl::Status SSTable::PopulateFromFile() noexcept {
     return absl::InternalError("reader is nullptr when reading.");
   }
 
-  struct ::stat fileStat;
+  struct ::stat fileStat{};
   if (::stat(fname_.c_str(), &fileStat) == -1) {
     return absl::InternalError("could not get filesize");
   }
-  uint32_t file_size = static_cast<uint32_t>(fileStat.st_size);
+  auto file_size = static_cast<uint32_t>(fileStat.st_size);
 
   std::uint32_t starting_offset = 0;
   while (starting_offset <= file_size) {
@@ -325,5 +324,4 @@ absl::StatusOr<std::unique_ptr<SSTable>> ParseSSTableFromFile(
   return sstable;
 }
 
-}  // namespace sstable
 }  // namespace karu

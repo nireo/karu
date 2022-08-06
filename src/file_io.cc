@@ -5,11 +5,11 @@
 
 #include <cerrno>
 #include <cstdint>
+#include <memory>
 
 #include "absl/status/status.h"
 
-namespace karu {
-namespace io {
+namespace karu::io {
 absl::StatusOr<std::uint32_t> FileWriter::Append(
     absl::Span<const std::uint8_t> src) noexcept {
   file_.write(reinterpret_cast<const char *>(src.data()), src.size());
@@ -31,11 +31,11 @@ void FileWriter::Sync() noexcept {
 absl::StatusOr<std::unique_ptr<FileWriter>> OpenFileWriter(
     const std::string &fname) noexcept {
   // get size of file.
-  struct ::stat fileStat;
+  struct ::stat fileStat{};
   if (::stat(fname.c_str(), &fileStat) == -1) {
     return absl::InternalError("could not get filesize");
   }
-  uint64_t file_size = static_cast<uint64_t>(fileStat.st_size);
+  auto file_size = static_cast<uint64_t>(fileStat.st_size);
 
   std::ofstream file(
       fname, std::fstream::out | std::fstream::app | std::fstream::binary);
@@ -44,8 +44,8 @@ absl::StatusOr<std::unique_ptr<FileWriter>> OpenFileWriter(
     return absl::InternalError("could not open file.");
   }
 
-  return std::unique_ptr<FileWriter>(
-      new FileWriter(fname, std::move(file), file_size));
+  return std::make_unique<FileWriter>(
+      fname, std::move(file), file_size);
 }
 
 absl::StatusOr<std::unique_ptr<FileReader>> OpenFileReader(
@@ -59,7 +59,7 @@ absl::StatusOr<std::unique_ptr<FileReader>> OpenFileReader(
 }
 
 absl::StatusOr<std::uint64_t> FileReader::ReadAt(
-    std::uint64_t offset, absl::Span<std::uint8_t> dst) noexcept {
+    std::uint64_t offset, absl::Span<std::uint8_t> dst) const noexcept {
   ssize_t size =
       ::pread(fd_, dst.data(), dst.size(), static_cast<off_t>(offset));
   if (size < 0) {
@@ -68,5 +68,4 @@ absl::StatusOr<std::uint64_t> FileReader::ReadAt(
 
   return size;
 }
-}  // namespace io
 }  // namespace karu

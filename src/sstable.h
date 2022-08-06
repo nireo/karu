@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <map>
 #include <string>
+#include <utility>
 
 #include "../third_party/parallel_hashmap/phmap.h"
 #include "absl/container/btree_map.h"
@@ -14,8 +15,7 @@
 #include "hint.h"
 #include "types.h"
 
-namespace karu {
-namespace sstable {
+namespace karu::sstable {
 
 struct EntryPosition {
   std::uint32_t pos_;
@@ -24,13 +24,13 @@ struct EntryPosition {
 
 class SSTable {
  public:
-  explicit SSTable(const std::string& fname)
-      : fname_(fname),
+  explicit SSTable(std::string  fname)
+      : fname_(std::move(fname)),
         id_(0),
         reader_(nullptr),
         write_(nullptr),
         bloom_(bloom::BloomFilter(30000, 13)){};
-  SSTable(std::string fname, std::int64_t id);
+  SSTable(const std::string& fname, std::int64_t id);
 
   SSTable& operator=(const SSTable&) = delete;
   SSTable(const SSTable&) = delete;
@@ -54,8 +54,8 @@ class SSTable {
   std::map<std::string, EntryPosition> offset_map_;
   absl::StatusOr<std::string> Find(std::uint16_t value_size,
                                    std::uint32_t pos) noexcept;
-  std::uint32_t Size() const noexcept { return size_; }
-  std::int64_t ID() const noexcept { return id_; }
+  [[nodiscard]] std::uint32_t Size() const noexcept { return size_; }
+  [[nodiscard]] std::int64_t ID() const noexcept { return id_; }
 
  private:
   std::string fname_;
@@ -73,7 +73,6 @@ class SSTable {
 
 absl::StatusOr<std::unique_ptr<SSTable>> ParseSSTableFromFile(
     const std::string& key) noexcept;
-}  // namespace sstable
 }  // namespace karu
 
 #endif

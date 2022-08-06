@@ -3,17 +3,17 @@
 
 #include <cstdint>
 #include <fstream>
+#include <utility>
 
 #include "absl/status/statusor.h"
 
-namespace karu {
-namespace io {
+namespace karu::io {
 class FileWriter {
  public:
   ~FileWriter() { file_.close(); }
-  FileWriter(const std::string &fname, std::ofstream &&file,
+  FileWriter(std::string fname, std::ofstream &&file,
              std::uint32_t offset)
-      : file_(std::move(file)), filename_(fname), offset_(offset) {}
+      : file_(std::move(file)), filename_(std::move(fname)), offset_(offset) {}
   [[nodiscard]] absl::StatusOr<std::uint32_t> Append(
       absl::Span<const std::uint8_t> src) noexcept;
   void Sync() noexcept;
@@ -27,19 +27,19 @@ class FileWriter {
  private:
   std::uint64_t last_written_ = 0;  // so we can easily append sizes
   std::ofstream file_;
-  uint32_t offset_;
+  uint32_t offset_{};
   std::string filename_;
 };
 
 class FileReader {
  public:
-  FileReader(const int fd) : fd_(fd) {}
+  explicit FileReader(const int fd) : fd_(fd) {}
   FileReader(const FileReader &) = delete;
   FileReader &operator=(const FileReader &) = delete;
   ~FileReader() { ::close(fd_); }
 
   [[nodiscard]] absl::StatusOr<std::uint64_t> ReadAt(
-      std::uint64_t offset, absl::Span<std::uint8_t> dst) noexcept;
+      std::uint64_t offset, absl::Span<std::uint8_t> dst) const noexcept;
 
  private:
   const int fd_;
@@ -50,7 +50,6 @@ absl::StatusOr<std::unique_ptr<FileWriter>> OpenFileWriter(
 absl::StatusOr<std::unique_ptr<FileReader>> OpenFileReader(
     const std::string &fname) noexcept;
 
-}  // namespace io
 }  // namespace karu
 
 #endif
