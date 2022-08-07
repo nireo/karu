@@ -68,7 +68,6 @@ absl::Status DB::InitializeSSTables() noexcept {
       std::cerr << "cannot parse id from filename\n";
       continue;
     }
-    std::cerr << "parsed file id: " << *id << '\n';
 
     auto sstable = std::make_unique<sstable::SSTable>(entry.path(), *id);
 
@@ -93,7 +92,7 @@ absl::StatusOr<std::string> DB::Get(const std::string &key) noexcept {
   sstable_mutex_.ReaderLock();
   if (value.file_id_ == current_sstable_->ID()) {
     auto status = current_sstable_->Find(value.value_size_, value.pos_);
-    if (status.ok()) {
+    if (!status.ok()) {
       sstable_mutex_.ReaderUnlock();
       return status;
     }

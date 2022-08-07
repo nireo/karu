@@ -306,9 +306,13 @@ TEST(KaruTest, HintFileStartup) {
   test_wrapper([](const std::string& test_dir) {
     // this is pretty much same as the persistance test, but we test parsing
     // hint files.
-    auto keys = generate_random_keys(500);
+    auto keys = generate_random_keys(10, 5);
+    karu::DBConfig conf{
+        .hint_files_ = true,
+        .database_directory_ = test_dir,
+    };
     {
-      karu::DB db(test_dir);
+      karu::DB db(conf);
 
       for (const auto &k : keys) {
         auto status = db.Insert(k, k);
@@ -318,11 +322,6 @@ TEST(KaruTest, HintFileStartup) {
       auto status = db.FlushMemoryTable();
       OK;
     }
-
-    karu::DBConfig conf{
-        .hint_files_ = true,
-        .database_directory_ = test_dir,
-    };
     {
       karu::DB db(conf);
 

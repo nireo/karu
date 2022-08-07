@@ -53,8 +53,10 @@ absl::Status HintFile::WriteHint(const std::string &key,
   header.SetKeyLength(klen);
   header.SetValueLength(value_size);
 
+  std::cerr << key_span.data() << '\n';
+
   // copy the key data into the buffer
-  std::memcpy(&buffer[encoder::kFullHeader], key_span.data(), key_span.size());
+  std::memcpy(&buffer[encoder::kHintHeader], key_span.data(), klen);
 
   // write to the hint file
   if (auto status = file_writer_->Append({buffer.get(), buffer_size});
